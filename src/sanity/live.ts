@@ -1,7 +1,7 @@
 import { createClient } from "next-sanity";
 import { defineLive, type DefinedFetchType } from "next-sanity/live";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "";
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
 
 type FetchFn = <T = unknown>(opts: { query: string; params?: Record<string, unknown> }) => Promise<{ data: T; sourceMap: unknown; tags: string[] }>;

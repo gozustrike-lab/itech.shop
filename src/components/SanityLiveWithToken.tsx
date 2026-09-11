@@ -10,7 +10,7 @@ export function SanityLiveWithToken({ includeDrafts }: Props) {
   const unsubRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
     const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
     const token = process.env.NEXT_PUBLIC_SANITY_API_READ_TOKEN;
     if (!projectId || !token) return;
