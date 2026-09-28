@@ -8,19 +8,13 @@ const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
 
 function getSiteUrl(): string {
-  if (typeof window !== "undefined" && window.location?.origin) {
+  if (typeof window !== "undefined" && window.location?.hostname === "localhost") {
     return window.location.origin;
   }
   if (process.env.NEXT_PUBLIC_SITE_URL) {
     return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
   }
-  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
-    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL.replace(/\/$/, "")}`;
-  }
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL.replace(/\/$/, "")}`;
-  }
-  return "http://localhost:4000";
+  return "https://www.itechperu.shop";
 }
 
 const siteUrl = getSiteUrl();
@@ -89,7 +83,7 @@ export default defineConfig({
       name: "presentation",
       title: "Vista Previa",
       previewUrl: {
-        initial: "/",
+        initial: siteUrl,
         previewMode: { enable: "/api/draft-mode/enable" },
       },
       resolve: {
