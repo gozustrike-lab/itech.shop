@@ -15,15 +15,16 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-const navLinks = [
-  { page: 'home', href: '/', label: 'Inicio' },
-  { page: 'nosotros', href: '/nosotros', label: 'Nosotros' },
-  { page: 'coleccion', href: '/coleccion', label: 'Colección' },
-  { page: 'comprar', href: '/comprar', label: 'Comprar' },
-  { page: 'contacto', href: '/contacto', label: 'Contacto' },
+const defaultNavLinks = [
+  { href: '/', url: '/', label: 'Inicio' },
+  { href: '/nosotros', url: '/nosotros', label: 'Nosotros' },
+  { href: '/coleccion', url: '/coleccion', label: 'Colección' },
+  { href: '/comprar', url: '/comprar', label: 'Comprar' },
+  { href: '/contacto', url: '/contacto', label: 'Contacto' },
 ];
 
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
+import { ve } from '@/lib/ve';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,6 +33,11 @@ export default function Navigation() {
   const router = useRouter();
   const siteConfig = useSiteConfig();
   const whatsappNumber = siteConfig.whatsapp || '51999888777';
+  const rawNavLinks = siteConfig.nav && siteConfig.nav.length > 0 ? siteConfig.nav : defaultNavLinks;
+  const navLinks = rawNavLinks.map((l: any) => ({
+    label: l.label || 'Enlace',
+    href: l.url || l.href || '/',
+  }));
 
   const isHomePage = pathname === '/';
 
@@ -46,11 +52,6 @@ export default function Navigation() {
     setIsScrolled(false);
     setIsMobileOpen(false);
   }, [pathname]);
-
-  const handleNavClick = useCallback((href: string) => {
-    setIsMobileOpen(false);
-    router.push(href);
-  }, [router]);
 
   const handleWhatsApp = useCallback(() => {
     const brand = siteConfig.title || 'iTech Peru';
@@ -83,11 +84,10 @@ export default function Navigation() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo */}
-            <motion.button
-              onClick={() => router.push('/')}
+            <Link
+              href="/"
+              {...ve('siteSettings', 'siteSettings', 'title')}
               className="flex items-center gap-1.5 group"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
               <span className={`text-xl sm:text-2xl font-extrabold tracking-tight ${showBg ? 'text-primary' : 'text-white'}`}>
                 iTech
@@ -95,13 +95,13 @@ export default function Navigation() {
               <span className={`text-xl sm:text-2xl font-extralight tracking-widest ml-0.5 ${showBg ? 'text-foreground' : 'text-white/80'}`}>
                 PERU
               </span>
-            </motion.button>
+            </Link>
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-0.5">
               {/* Search Icon */}
-              <motion.button
-                onClick={() => router.push('/buscar')}
+              <Link
+                href="/buscar"
                 className={`mr-1 p-1.5 rounded-lg transition-colors duration-300 ${
                   isActive('/buscar')
                     ? 'text-primary'
@@ -109,16 +109,15 @@ export default function Navigation() {
                       ? 'text-foreground/40 hover:text-foreground'
                       : 'text-white/60 hover:text-white'
                 }`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
                 aria-label="Buscar"
               >
                 <Search className="w-[18px] h-[18px]" strokeWidth={isActive('/buscar') ? 2.5 : 2} />
-              </motion.button>
-              {navLinks.map((link) => (
-                <motion.button
-                  key={link.page}
-                  onClick={() => handleNavClick(link.href)}
+              </Link>
+              {navLinks.map((link, i) => (
+                <Link
+                  key={link.href + i}
+                  href={link.href}
+                  {...ve('siteSettings', 'siteSettings', `nav[${i}].label`)}
                   className={`relative px-3 py-1.5 text-[13px] font-medium transition-colors duration-300 tracking-wide ${
                     isActive(link.href)
                       ? 'text-primary'
@@ -126,8 +125,6 @@ export default function Navigation() {
                         ? 'text-foreground/60 hover:text-foreground'
                         : 'text-white/70 hover:text-white'
                   }`}
-                  whileHover={{ y: -1 }}
-                  whileTap={{ y: 0 }}
                 >
                   {link.label}
                   {isActive(link.href) && (
@@ -137,12 +134,13 @@ export default function Navigation() {
                       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                     />
                   )}
-                </motion.button>
+                </Link>
               ))}
 
               {/* WhatsApp — Desktop */}
               <motion.button
                 onClick={handleWhatsApp}
+                {...ve('siteSettings', 'siteSettings', 'whatsapp')}
                 className={`ml-2 p-1.5 rounded-lg transition-colors duration-300 ${whatsappColor}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
@@ -157,6 +155,7 @@ export default function Navigation() {
               {/* WhatsApp button */}
               <motion.button
                 onClick={handleWhatsApp}
+                {...ve('siteSettings', 'siteSettings', 'whatsapp')}
                 className={`p-2 rounded-xl transition-colors duration-300 ${whatsappColor}`}
                 whileTap={{ scale: 0.9 }}
                 aria-label="WhatsApp"
@@ -199,18 +198,17 @@ export default function Navigation() {
           >
             <div className="flex flex-col items-center justify-center gap-5 py-16">
               {navLinks.map((link, i) => (
-                <motion.button
-                  key={link.page}
-                  onClick={() => handleNavClick(link.href)}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.3 }}
+                <Link
+                  key={link.href + i}
+                  href={link.href}
+                  {...ve('siteSettings', 'siteSettings', `nav[${i}].label`)}
+                  onClick={() => setIsMobileOpen(false)}
                   className={`text-xl font-semibold transition-colors tracking-wide ${
                     isActive(link.href) ? 'text-primary' : 'text-foreground/70 hover:text-primary'
                   }`}
                 >
                   {link.label}
-                </motion.button>
+                </Link>
               ))}
             </div>
           </motion.div>

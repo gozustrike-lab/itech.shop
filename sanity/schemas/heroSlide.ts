@@ -17,6 +17,8 @@ export default defineType({
     defineField({ name: "videoLoop", title: "Video en Loop", type: "boolean", initialValue: true }),
     defineField({ name: "ctaLabel", title: "Etiqueta del CTA", type: "string", validation: (R: any) => R.max(30).optional() }),
     defineField({ name: "ctaLink", title: "Enlace del CTA", type: "string", validation: (R: any) => R.max(200).optional() }),
+    defineField({ name: "secondaryCtaLabel", title: "Etiqueta del Segundo Botón", type: "string", initialValue: "Cómo Comprar" }),
+    defineField({ name: "secondaryCtaLink", title: "Enlace del Segundo Botón", type: "string", initialValue: "/comprar" }),
     defineField({ name: "ctaType", title: "Tipo de CTA", type: "string", options: { list: [
       { title: "Primario", value: "primary" },
       { title: "Secundario", value: "secondary" },

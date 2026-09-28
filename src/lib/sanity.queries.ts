@@ -44,7 +44,9 @@ export const ALL_HERO_SLIDES_QUERY = `
   _id, title, subtitle,
   "bgImage": backgroundImage.asset->url,
   "mobileImage": mobileFallbackImage.asset->url,
-  ctaLabel, ctaLink, ctaType, order
+  ctaLabel, ctaLink, ctaType,
+  secondaryCtaLabel, secondaryCtaLink,
+  order
 }`;
 
 export const ALL_TESTIMONIALS_QUERY = `
@@ -69,9 +71,12 @@ export const SITE_SETTINGS_QUERY = `
   "logo": logo.asset->url, "logoWhite": logoWhite.asset->url,
   "ogImage": ogImage.asset->url,
   phone, whatsapp, email, schedule, address, businessHours,
-  nav[] { label, url },
+  nav[] { label, url, "href": coalesce(url, href) },
   social[] { platform, url },
   facebookUrl, instagramUrl, linkedinUrl, tiktokUrl, youtubeUrl,
+  heroSecondaryCtaLabel, heroSecondaryCtaLink, heroExploreLabel,
+  featuredSection { badge, title, subtitle, ctaLabel, ctaLink },
+  productButtons { whatsappLabel, addToCartLabel, viewMoreLabel },
   mapLatitude, mapLongitude, mapZoom,
   seoTitle, seoDescription
 }`;
@@ -96,17 +101,18 @@ export const PRODUCTS_BY_CATEGORY_QUERY = `
 
 export const ABOUT_PAGE_QUERY = `
 *[_type == "aboutPage"][0] {
-  _id, title, subtitle,
+  _id, title, subtitle, headerDescription,
   "mainImage": mainImage.asset->url,
   storyParagraphs,
   features[] { icon, title, description },
-  yearsExperience, experienceLabel
+  yearsExperience, experienceLabel,
+  ctaLabel, ctaLink
 }`;
 
 export const CONTACT_PAGE_QUERY = `
 *[_type == "contactPage"][0] {
   _id, title, subtitle,
-  contactInfo[] { label, value, icon, url },
+  contactInfo[] { label, value, desc, icon, url },
   ctaTitle, ctaDescription,
   "ctaImage": ctaImage.asset->url,
   ctaButtons[] { label, url, type }
@@ -116,17 +122,22 @@ export const HOW_TO_BUY_PAGE_QUERY = `
 *[_type == "howToBuyPage"][0] {
   _id, title, subtitle,
   steps[] { stepNumber, icon, title, description },
-  paymentMethods[] { name, description, icon },
+  paymentMethods[] { name, description, icon, steps, ctaLabel, ctaLink },
+  trustSignals[] { title, desc, icon },
+  faqs[] { "q": coalesce(q, question), "a": coalesce(a, answer) },
   shippingInfo, whatsappNumber, whatsappMessage
 }`;
-
-
 
 export const FOOTER_SETTINGS_QUERY = `
 *[_type == "footerSettings"][0] {
   _id, copyright, brandDescription,
   socialLinks[] { platform, label, handle, url },
-  quickLinks[] { label, href },
+  catalogTitle,
+  catalogLinks[] { label, "href": coalesce(href, url) },
+  infoTitle,
+  quickLinks[] { label, "href": coalesce(href, url) },
+  contactTitle,
+  whatsappCtaLabel, whatsappCtaMessage,
   newsletterText, showTrustBadges,
   storytelling { badge, title, subtitle, ctaLabel, ctaLink },
   trustItems[] { label, desc }

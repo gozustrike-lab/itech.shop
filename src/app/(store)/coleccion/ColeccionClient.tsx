@@ -9,6 +9,7 @@ import { useStore } from '@/lib/store-context';
 import { formatPrice, generateWhatsAppLink } from '@/lib/store-data';
 import { ve } from '@/lib/ve';
 import GridToggle, { useGridView } from '@/components/maia/GridToggle';
+import { useSiteConfig } from '@/contexts/SiteConfigContext';
 
 interface ProductItem {
   _id: string;
@@ -33,6 +34,7 @@ interface ProductItem {
 
 interface CategoryItem {
   id: string;
+  docId?: string;
   label: string;
   slug: string;
   count: number;
@@ -49,6 +51,9 @@ export default function ColeccionClient({ products, categories, useFallback }: C
   const activeCategory = searchParams.get('categoria') || 'todos';
   const { isFavorite, toggleFavorite, addToCart } = useStore();
   const { viewMode, setViewMode } = useGridView('single');
+  const siteConfig = useSiteConfig();
+  const viewMoreLabel = siteConfig.productButtons?.viewMoreLabel || 'Ver';
+  const whatsappLabel = siteConfig.productButtons?.whatsappLabel || 'Pedir';
 
   const filteredProducts = activeCategory === 'todos'
     ? products
@@ -66,26 +71,31 @@ export default function ColeccionClient({ products, categories, useFallback }: C
     <div className="relative pt-20 pb-20 sm:pb-24">
       <div className="max-w-[1440px] mx-auto px-2 sm:px-6 lg:px-12 xl:px-16">
         <div id="coleccion-header" className="text-center mb-8 pt-4 scroll-mt-16">
-          <motion.span initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-xs font-semibold tracking-[0.2em] uppercase text-turquoise-600 mb-3 block">Catalogo Completo</motion.span>
-          <motion.h1 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }} className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-3">
-            Nuestra <span className="text-gradient-turquoise">Coleccion</span>
+          <motion.span {...ve('siteSettings', 'siteSettings', 'featuredSection.badge')} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-xs font-semibold tracking-[0.2em] uppercase text-turquoise-600 mb-3 block">Catálogo Completo</motion.span>
+          <motion.h1 {...ve('siteSettings', 'siteSettings', 'featuredSection.ctaLabel')} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }} className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-3">
+            Nuestra <span className="text-gradient-turquoise">Colección</span>
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="text-sm text-foreground/40 max-w-md mx-auto">
-            Explora nuestro catálogo de tecnología renovada y certificada. Equipos probados con 12 meses de garantía real.
+          <motion.p {...ve('siteSettings', 'siteSettings', 'description')} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="text-sm text-foreground/40 max-w-md mx-auto">
+            {siteConfig.description || 'Explora nuestro catálogo de tecnología renovada y certificada. Equipos probados con 12 meses de garantía real.'}
           </motion.p>
         </div>
 
         <motion.nav initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.15 }} className="flex items-center justify-center gap-1.5 text-xs text-foreground/40 mb-6">
           <Link href="/" className="hover:text-primary transition-colors">Inicio</Link>
           <span>/</span>
-          <span className="text-foreground/60 font-medium">Coleccion</span>
+          <span className="text-foreground/60 font-medium">Colección</span>
           {activeCategory !== 'todos' && (<><span>/</span><span className="text-primary font-medium capitalize">{activeCategory}</span></>)}
         </motion.nav>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="flex flex-wrap items-center justify-center gap-2 mb-10">
           <div className="flex flex-wrap items-center justify-center gap-2 flex-1">
             {categories.map((cat) => (
-              <Link key={cat.id} href={cat.id === 'todos' ? '/coleccion' : `/coleccion?categoria=${cat.slug}`} className={`px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 tracking-wide ${activeCategory === cat.slug ? 'bg-primary text-white shadow-lg shadow-turquoise-500/20' : 'bg-zinc-100 text-foreground/50 hover:bg-zinc-200'}`}>
+              <Link
+                key={cat.id}
+                href={cat.id === 'todos' ? '/coleccion' : `/coleccion?categoria=${cat.slug}`}
+                {...(cat.docId ? ve(cat.docId, 'category', 'name') : {})}
+                className={`px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 tracking-wide ${activeCategory === cat.slug ? 'bg-primary text-white shadow-lg shadow-turquoise-500/20' : 'bg-zinc-100 text-foreground/50 hover:bg-zinc-200'}`}
+              >
                 {cat.label}
                 <span className="ml-1 text-[10px] opacity-50">({cat.count})</span>
               </Link>
@@ -97,39 +107,47 @@ export default function ColeccionClient({ products, categories, useFallback }: C
         <div id="coleccion-productos" className={gridClass}>
           {filteredProducts.map((product, i) => (
             <motion.div key={product._id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, margin: '-40px' }} transition={{ duration: 0.35, delay: i * 0.04 }} className="product-card group cursor-pointer overflow-hidden">
-              <Link href={`/coleccion/${product.slug}`}>
-                <div {...ve(product._id, 'product', 'mainImage')} className={`relative ${aspectClass} rounded-sm sm:rounded-2xl overflow-hidden mb-2 sm:mb-2.5 bg-zinc-100`}>
+              <div {...ve(product._id, 'product', 'mainImage')} className={`relative ${aspectClass} rounded-sm sm:rounded-2xl overflow-hidden mb-2 sm:mb-2.5 bg-zinc-100`}>
+                <Link href={`/coleccion/${product.slug}`} className="absolute inset-0 z-0 block" aria-label={product.name}>
                   <img src={product.mainImage || '/images/placeholder.webp'} alt={product.name} className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105" loading="lazy" />
                   {product.secondaryImage && (
                     <img src={product.secondaryImage} alt={`${product.name} - vista alternativa`} {...ve(product._id, 'product', 'secondaryImage')} className="absolute inset-0 w-full h-full object-cover opacity-0 scale-105 transition-all duration-700 group-hover:opacity-100 group-hover:scale-100" loading="lazy" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute top-2 left-2">
-                    <span className="px-2.5 py-1 rounded-full bg-white/80 backdrop-blur-sm text-[10px] font-semibold text-turquoise-700">{product.category?.name || 'Tecnología'}</span>
-                  </div>
-                  <div className="absolute bottom-2 left-2 right-2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(generateWhatsAppLink({ name: product.name, slug: product.slug, price: product.price } as any), '_blank'); }} className="flex-1 flex items-center justify-center gap-1 bg-white/90 backdrop-blur-sm text-turquoise-600 py-2.5 rounded-xl text-xs font-semibold shadow-lg">
-                      <MessageCircle className="w-3.5 h-3.5" /> Pedir
-                    </button>
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(product._id); }} className="w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl shadow-lg">
-                      <Heart className={`w-4 h-4 ${isFavorite(product._id) ? 'text-red-500 fill-red-500' : 'text-foreground/50'}`} fill={isFavorite(product._id) ? 'currentColor' : 'none'} />
-                    </button>
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToCart({ id: product._id as any, slug: product.slug, name: product.name, price: product.price, image: product.mainImage || '', imageSecondary: product.secondaryImage || '', category: product.category?.slug || '', categoryLabel: product.category?.name || '', description: product.description || '', longDescription: product.longDescription || '', features: product.features || [], color: { name: product.color || '' }, images: (product.gallery || []).map(g => ({ original: g.url || '', thumbnail: g.url || '' })), rating: product.rating || 5, reviews: product.reviewCount || 0, sku: product.sku || '', collection: product.collection || '' } as any); }} className="w-10 h-10 flex items-center justify-center bg-primary rounded-xl shadow-lg">
-                      <ShoppingBag className="w-4 h-4 text-white" />
-                    </button>
-                  </div>
+                </Link>
+                <div className="absolute top-2 left-2 z-10 pointer-events-none">
+                  <span {...ve(product._id, 'product', 'category')} className="px-2.5 py-1 rounded-full bg-white/80 backdrop-blur-sm text-[10px] font-semibold text-turquoise-700 pointer-events-auto">{product.category?.name || 'Tecnología'}</span>
                 </div>
-                <div className="px-0.5">
-                  <h3 {...ve(product._id, 'product', 'name')} className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors mb-0.5 truncate">{product.name}</h3>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span {...ve(product._id, 'product', 'price')} className="text-base font-bold text-primary">{formatPrice(product.price)}</span>
-                      {product.compareAtPrice && product.compareAtPrice > product.price && (
-                        <span className="text-xs text-foreground/30 line-through">{formatPrice(product.compareAtPrice)}</span>
-                      )}
-                    </div>
-                    <span className="text-[11px] font-medium text-turquoise-600 inline-flex items-center gap-0.5">Ver <ArrowDown className="w-3 h-3 rotate-[-90deg]" /></span>
+                <div className="absolute bottom-2 left-2 right-2 z-10 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(generateWhatsAppLink({ name: product.name, slug: product.slug, price: product.price } as any, { phone: siteConfig.whatsapp }), '_blank');
+                    }}
+                    {...ve('siteSettings', 'siteSettings', 'productButtons.whatsappLabel')}
+                    className="flex-1 flex items-center justify-center gap-1 bg-white/90 backdrop-blur-sm text-turquoise-600 py-2.5 rounded-xl text-xs font-semibold shadow-lg"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" /> {whatsappLabel}
+                  </button>
+                  <button type="button" onClick={(e) => { e.stopPropagation(); toggleFavorite(product._id); }} className="w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl shadow-lg">
+                    <Heart className={`w-4 h-4 ${isFavorite(product._id) ? 'text-red-500 fill-red-500' : 'text-foreground/50'}`} fill={isFavorite(product._id) ? 'currentColor' : 'none'} />
+                  </button>
+                  <button type="button" onClick={(e) => { e.stopPropagation(); addToCart({ id: product._id as any, slug: product.slug, name: product.name, price: product.price, image: product.mainImage || '', imageSecondary: product.secondaryImage || '', category: product.category?.slug || '', categoryLabel: product.category?.name || '', description: product.description || '', longDescription: product.longDescription || '', features: product.features || [], color: { name: product.color || '' }, images: (product.gallery || []).map(g => ({ original: g.url || '', thumbnail: g.url || '' })), rating: product.rating || 5, reviews: product.reviewCount || 0, sku: product.sku || '', collection: product.collection || '' } as any); }} className="w-10 h-10 flex items-center justify-center bg-primary rounded-xl shadow-lg">
+                    <ShoppingBag className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              </div>
+              <Link href={`/coleccion/${product.slug}`} className="block px-0.5">
+                <h3 {...ve(product._id, 'product', 'name')} className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors mb-0.5 truncate">{product.name}</h3>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span {...ve(product._id, 'product', 'price')} className="text-base font-bold text-primary">{formatPrice(product.price)}</span>
+                    {product.compareAtPrice && product.compareAtPrice > product.price && (
+                      <span {...ve(product._id, 'product', 'compareAtPrice')} className="text-xs text-foreground/30 line-through">{formatPrice(product.compareAtPrice)}</span>
+                    )}
                   </div>
+                  <span {...ve('siteSettings', 'siteSettings', 'productButtons.viewMoreLabel')} className="text-[11px] font-medium text-turquoise-600 inline-flex items-center gap-0.5">{viewMoreLabel} <ArrowDown className="w-3 h-3 rotate-[-90deg]" /></span>
                 </div>
               </Link>
             </motion.div>
@@ -138,7 +156,7 @@ export default function ColeccionClient({ products, categories, useFallback }: C
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-foreground/30 text-base">No hay productos en esta categoria por el momento.</p>
+            <p className="text-foreground/30 text-base">No hay productos en esta categoría por el momento.</p>
           </div>
         )}
       </div>

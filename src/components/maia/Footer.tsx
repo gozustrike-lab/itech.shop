@@ -25,6 +25,19 @@ export interface FooterProps {
     brandDescription?: string;
     newsletterText?: string;
     showTrustBadges?: boolean;
+    catalogTitle?: string;
+    catalogLinks?: Array<{
+      label: string;
+      href: string;
+    }>;
+    infoTitle?: string;
+    quickLinks?: Array<{
+      label: string;
+      href: string;
+    }>;
+    contactTitle?: string;
+    whatsappCtaLabel?: string;
+    whatsappCtaMessage?: string;
     storytelling?: {
       badge?: string;
       title?: string;
@@ -35,10 +48,6 @@ export interface FooterProps {
     trustItems?: Array<{
       label: string;
       desc: string;
-    }>;
-    quickLinks?: Array<{
-      label: string;
-      href: string;
     }>;
     socialLinks?: Array<{
       platform: string;
@@ -169,17 +178,14 @@ function Storytelling({ storytelling }: { storytelling?: NonNullable<FooterProps
             {subtitle}
           </p>
 
-          <motion.button
+          <Link
+            href={ctaLink || '/coleccion'}
             {...ve('footerSettings', 'footerSettings', 'storytelling.ctaLabel')}
-            onClick={() => router.push(ctaLink)}
-            initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
             className="inline-flex items-center gap-2 bg-warm-400 hover:bg-warm-500 text-deep-800 px-7 sm:px-8 py-3.5 rounded-full text-sm font-bold shadow-lg shadow-warm-500/20 hover:shadow-warm-500/30 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
           >
             {ctaLabel}
             <ChevronRight className="w-4 h-4" />
-          </motion.button>
+          </Link>
 
           <div className="flex items-center justify-center gap-3 mt-10">
             <div className="w-12 h-px bg-warm-400/20" />
@@ -196,12 +202,33 @@ function Storytelling({ storytelling }: { storytelling?: NonNullable<FooterProps
 // FOOTER — Premium 4-column layout
 // ═══════════════════════════════════════════════════════════════
 
+const defaultCatalogLinks = [
+  { label: 'Smartphones', href: '/coleccion?categoria=smartphones' },
+  { label: 'Laptops', href: '/coleccion?categoria=laptops' },
+  { label: 'Tablets', href: '/coleccion?categoria=tablets' },
+  { label: 'Gaming', href: '/coleccion?categoria=gaming' },
+  { label: 'Audio', href: '/coleccion?categoria=audio' },
+  { label: 'Accesorios', href: '/coleccion?categoria=accesorios' },
+  { label: 'Ver Todo', href: '/coleccion' },
+];
+
+const defaultQuickLinks = [
+  { label: 'Nosotros', href: '/nosotros' },
+  { label: 'Envíos', href: '/comprar' },
+  { label: 'Contacto', href: '/contacto' },
+];
+
 function FooterContent({ footerSettings }: { footerSettings?: FooterProps['footerSettings'] }) {
   const currentYear = new Date().getFullYear();
   const siteConfig = useSiteConfig();
   const whatsappNumber = siteConfig.whatsapp || '51999888777';
   const instagramLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('instagram'))?.url || 'https://instagram.com/itechperu';
   const tiktokLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('tiktok'))?.url || 'https://tiktok.com/@itechperu';
+
+  const catalogLinks = footerSettings?.catalogLinks?.length ? footerSettings.catalogLinks : defaultCatalogLinks;
+  const quickLinks = footerSettings?.quickLinks?.length ? footerSettings.quickLinks : defaultQuickLinks;
+  const whatsappCtaLabel = footerSettings?.whatsappCtaLabel || 'Escríbenos';
+  const whatsappCtaMessage = footerSettings?.whatsappCtaMessage || 'Hola iTech Peru! Quisiera hacer una consulta';
 
   return (
     <footer id="footer" className="relative bg-deep-900 text-white scroll-mt-16">
@@ -228,15 +255,15 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 mb-12 sm:mb-14">
           {/* Column 1 — Brand */}
           <div className="col-span-2 lg:col-span-1">
-            <Link href="/" className="mb-4 block group">
+            <Link href="/" className="mb-4 block group" {...ve('siteSettings', 'siteSettings', 'title')}>
               <span className="text-2xl font-extrabold text-white group-hover:text-warm-400 transition-colors duration-300">iTech</span>
               <span className="text-2xl font-extralight tracking-[0.2em] text-warm-400 ml-1.5 group-hover:text-warm-300 transition-colors duration-300">PERU</span>
             </Link>
-            <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs" {...ve('siteSettings', 'siteSettings', 'footerText')}>
-              {siteConfig.footerText || siteConfig.description || 'Compra inteligente: tecnología de segunda mano verificada por técnicos, con garantía escrita y envío seguro a todo el Perú.'}
+            <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs" {...ve('footerSettings', 'footerSettings', 'brandDescription')}>
+              {footerSettings?.brandDescription || siteConfig.footerText || siteConfig.description || 'Compra inteligente: tecnología de segunda mano verificada por técnicos, con garantía escrita y envío seguro a todo el Perú.'}
             </p>
             {/* Social Icons */}
-            <div className="flex gap-2.5">
+            <div className="flex gap-2.5" {...ve('siteSettings', 'siteSettings', 'social')}>
               {[
                 { icon: Instagram, href: instagramLink, hoverBg: 'hover:bg-pink-500/20 hover:text-pink-300', label: 'Instagram' },
                 { icon: Music, href: tiktokLink, hoverBg: 'hover:bg-slate-400/20 hover:text-slate-300', label: 'TikTok' },
@@ -256,22 +283,17 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
             </div>
           </div>
 
-          {/* Column 2 — Tienda */}
+          {/* Column 2 — Catálogo */}
           <div>
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4">Catálogo</h4>
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4" {...ve('footerSettings', 'footerSettings', 'catalogTitle')}>
+              {footerSettings?.catalogTitle || 'Catálogo'}
+            </h4>
             <ul className="space-y-2.5">
-              {[
-                { label: 'Smartphones', href: '/coleccion?categoria=smartphones' },
-                { label: 'Laptops', href: '/coleccion?categoria=laptops' },
-                { label: 'Tablets', href: '/coleccion?categoria=tablets' },
-                { label: 'Gaming', href: '/coleccion?categoria=gaming' },
-                { label: 'Audio', href: '/coleccion?categoria=audio' },
-                { label: 'Accesorios', href: '/coleccion?categoria=accesorios' },
-                { label: 'Ver Todo', href: '/coleccion' },
-              ].map((link) => (
-                <li key={link.label}>
+              {catalogLinks.map((link, i) => (
+                <li key={link.label + i}>
                   <Link
-                    href={link.href}
+                    href={(link as any).href || (link as any).url || '/coleccion'}
+                    {...ve('footerSettings', 'footerSettings', `catalogLinks[${i}].label`)}
                     className="text-sm text-white/40 hover:text-warm-400 transition-colors duration-300 inline-flex items-center gap-1 group"
                   >
                     <span className="w-0 group-hover:w-2 h-px bg-warm-400 transition-all duration-300" />
@@ -282,18 +304,17 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
             </ul>
           </div>
 
-          {/* Column 3 — Informacion */}
+          {/* Column 3 — Información */}
           <div>
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4">Informacion</h4>
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4" {...ve('footerSettings', 'footerSettings', 'infoTitle')}>
+              {footerSettings?.infoTitle || 'Información'}
+            </h4>
             <ul className="space-y-2.5">
-              {[
-                { label: 'Nosotros', href: '/nosotros' },
-                { label: 'Envios', href: '/comprar' },
-                { label: 'Contacto', href: '/contacto' },
-              ].map((link) => (
-                <li key={link.label}>
+              {quickLinks.map((link, i) => (
+                <li key={link.label + i}>
                   <Link
-                    href={link.href}
+                    href={(link as any).href || (link as any).url || '/'}
+                    {...ve('footerSettings', 'footerSettings', `quickLinks[${i}].label`)}
                     className="text-sm text-white/40 hover:text-warm-400 transition-colors duration-300 inline-flex items-center gap-1 group"
                   >
                     <span className="w-0 group-hover:w-2 h-px bg-warm-400 transition-all duration-300" />
@@ -306,31 +327,35 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
 
           {/* Column 4 — Contacto */}
           <div className="col-span-2 sm:col-span-1">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4">Contacto</h4>
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4" {...ve('footerSettings', 'footerSettings', 'contactTitle')}>
+              {footerSettings?.contactTitle || 'Contacto'}
+            </h4>
             <ul className="space-y-3 mb-6">
               <li>
                 <a
                   href={`tel:${siteConfig.phone || '+51906431630'}`}
+                  {...ve('siteSettings', 'siteSettings', 'phone')}
                   className="flex items-center gap-2.5 text-sm text-white/40 hover:text-warm-400 transition-colors duration-300"
                 >
                   <Phone className="w-4 h-4 flex-shrink-0" />
                   {siteConfig.phone || '+51 906 431 630'}
                 </a>
               </li>
-              <li className="flex items-center gap-2.5 text-sm text-white/40">
+              <li className="flex items-center gap-2.5 text-sm text-white/40" {...ve('siteSettings', 'siteSettings', 'schedule')}>
                 <MapPin className="w-4 h-4 flex-shrink-0" />
                 {siteConfig.schedule || 'Lun a Sáb: 10:00 - 20:00'}
               </li>
             </ul>
             {/* WhatsApp quick action */}
             <a
-              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hola iTech Peru! Quisiera hacer una consulta')}`}
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappCtaMessage)}`}
               target="_blank"
               rel="noopener noreferrer"
+              {...ve('footerSettings', 'footerSettings', 'whatsappCtaLabel')}
               className="inline-flex items-center gap-2 bg-[#25D366]/10 border border-[#25D366]/20 hover:bg-[#25D366]/20 text-[#25D366] px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5"
             >
               <Phone className="w-3.5 h-3.5" />
-              Escribenos
+              {whatsappCtaLabel}
             </a>
           </div>
         </div>
@@ -339,7 +364,7 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
         <div className="pt-6 border-t border-white/5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-[11px] text-white/25 text-center sm:text-left" {...ve('footerSettings', 'footerSettings', 'copyright')}>
-              &copy; {currentYear} iTech Peru. Todos los derechos reservados.
+              {footerSettings?.copyright || `© ${currentYear} iTech Peru. Todos los derechos reservados.`}
             </p>
             {/* HARDCODED FastPagePro Credit (NEVER in CMS) */}
             <p className="text-[11px] text-white/25 text-center sm:text-right">

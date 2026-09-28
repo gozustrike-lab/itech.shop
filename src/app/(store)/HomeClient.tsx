@@ -21,6 +21,8 @@ export interface SanityHeroSlide {
   ctaLabel?: string;
   ctaLink?: string;
   ctaType?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaLink?: string;
   order?: number;
 }
 
@@ -108,10 +110,21 @@ export default function HomePage({ data }: { data: HomeData }) {
     : FALLBACK_HERO_SLIDES;
 
   const currentHeroSlide = heroSlides[currentSlide] || heroSlides[0];
+  const isRealSlide = currentHeroSlide?._id && !currentHeroSlide._id.startsWith('fallback-');
   const slideTitle = currentHeroSlide?.title || siteConfig.title || 'Tecnología que Renueva';
   const slideSubtitle = (typeof currentHeroSlide?.subtitle === 'string' ? currentHeroSlide.subtitle : null) || siteConfig.description || 'Dispositivos renovados grado A con 12 meses de garantía real. Rendimiento como nuevo y hasta 40% de ahorro en todo el Perú.';
   const slideCtaLabel = currentHeroSlide?.ctaLabel || 'Ver Catálogo';
   const slideCtaLink = currentHeroSlide?.ctaLink || '/coleccion';
+  const secondaryCtaLabel = currentHeroSlide?.secondaryCtaLabel || siteConfig.heroSecondaryCtaLabel || 'Cómo Comprar';
+  const secondaryCtaLink = currentHeroSlide?.secondaryCtaLink || siteConfig.heroSecondaryCtaLink || '/comprar';
+  const exploreLabel = siteConfig.heroExploreLabel || 'Explorar';
+
+  const featuredBadge = siteConfig.featuredSection?.badge || 'Destacados';
+  const featuredTitle = siteConfig.featuredSection?.title || 'Equipos Destacados';
+  const featuredSubtitle = siteConfig.featuredSection?.subtitle || 'Los dispositivos tecnológicos más elegidos por nuestros clientes con garantía certificada.';
+  const featuredCtaLabel = siteConfig.featuredSection?.ctaLabel || 'Ver Toda la Colección';
+  const featuredCtaLink = siteConfig.featuredSection?.ctaLink || '/coleccion';
+  const viewMoreLabel = siteConfig.productButtons?.viewMoreLabel || 'Ver más';
 
   const featured = data.featuredProducts;
   const testimonials = data.testimonials;
@@ -168,7 +181,7 @@ export default function HomePage({ data }: { data: HomeData }) {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6"
           >
             <Sparkles className="w-4 h-4 text-turquoise-300" />
-            <span {...(currentHeroSlide?._id && !currentHeroSlide._id.startsWith('fallback-') ? ve(currentHeroSlide._id, 'heroSlide', 'title') : ve('siteSettings', 'siteSettings', 'tagline'))} className="text-sm font-medium text-white/80">
+            <span {...ve('siteSettings', 'siteSettings', 'tagline')} className="text-sm font-medium text-white/80">
               {siteConfig.tagline || 'Tecnología Renovada Certificada'}
             </span>
           </motion.div>
@@ -177,7 +190,7 @@ export default function HomePage({ data }: { data: HomeData }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            {...(currentHeroSlide?._id && !currentHeroSlide._id.startsWith('fallback-') ? ve(currentHeroSlide._id, 'heroSlide', 'title') : ve('siteSettings', 'siteSettings', 'title'))}
+            {...(isRealSlide ? ve(currentHeroSlide._id, 'heroSlide', 'title') : ve('siteSettings', 'siteSettings', 'title'))}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-6 text-white"
           >
             {slideTitle}
@@ -187,7 +200,7 @@ export default function HomePage({ data }: { data: HomeData }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            {...(currentHeroSlide?._id && !currentHeroSlide._id.startsWith('fallback-') ? ve(currentHeroSlide._id, 'heroSlide', 'subtitle') : ve('siteSettings', 'siteSettings', 'description'))}
+            {...(isRealSlide ? ve(currentHeroSlide._id, 'heroSlide', 'subtitle') : ve('siteSettings', 'siteSettings', 'description'))}
             className="text-base sm:text-lg md:text-xl text-white/70 max-w-xl mx-auto mb-10 leading-relaxed"
           >
             {slideSubtitle}
@@ -199,20 +212,20 @@ export default function HomePage({ data }: { data: HomeData }) {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="flex flex-col sm:flex-row items-center gap-3"
           >
-            <motion.button
-              onClick={() => router.push(slideCtaLink)}
-              className="bg-primary text-white px-8 py-4 rounded-full text-base font-semibold shadow-xl shadow-turquoise-500/30 hover:bg-turquoise-600 transition-colors"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+            <Link
+              href={slideCtaLink || '/coleccion'}
+              {...(isRealSlide ? ve(currentHeroSlide._id, 'heroSlide', 'ctaLabel') : ve('siteSettings', 'siteSettings', 'title'))}
+              className="bg-primary text-white px-8 py-4 rounded-full text-base font-semibold shadow-xl shadow-turquoise-500/30 hover:bg-turquoise-600 transition-all duration-300 hover:scale-103 active:scale-97"
             >
               {slideCtaLabel}
-            </motion.button>
+            </Link>
             <Link
-              href="/comprar"
+              href={secondaryCtaLink || '/comprar'}
+              {...(isRealSlide && currentHeroSlide.secondaryCtaLabel ? ve(currentHeroSlide._id, 'heroSlide', 'secondaryCtaLabel') : ve('siteSettings', 'siteSettings', 'heroSecondaryCtaLabel'))}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-semibold border-2 border-white/30 text-white hover:bg-white/10 transition-all duration-300"
             >
               <ShoppingBag className="w-5 h-5" />
-              Cómo Comprar
+              {secondaryCtaLabel}
             </Link>
           </motion.div>
         </div>
@@ -223,11 +236,12 @@ export default function HomePage({ data }: { data: HomeData }) {
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
           <button
+            {...ve('siteSettings', 'siteSettings', 'heroExploreLabel')}
             onClick={() => document.getElementById('featured-products')?.scrollIntoView({ behavior: 'smooth' })}
-            className="flex flex-col items-center gap-1.5 text-white/30 hover:text-white/60 transition-colors"
-            aria-label="Explorar"
+            className="flex flex-col items-center gap-1.5 text-white/30 hover:text-white/60 transition-colors cursor-pointer"
+            aria-label={exploreLabel}
           >
-            <span className="text-[10px] font-medium tracking-widest uppercase">Explorar</span>
+            <span className="text-[10px] font-medium tracking-widest uppercase">{exploreLabel}</span>
             <ArrowDown className="w-4 h-4" />
           </button>
         </motion.div>
@@ -237,12 +251,14 @@ export default function HomePage({ data }: { data: HomeData }) {
       <section id="featured-products" className="py-20 sm:py-28 lg:py-36 scroll-mt-16">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
           <div className="text-center mb-12 sm:mb-16">
-            <span className="text-xs font-semibold tracking-[0.2em] uppercase text-turquoise-600 mb-3 block">Destacados</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-3">
-              Equipos <span className="text-gradient-turquoise">Destacados</span>
+            <span {...ve('siteSettings', 'siteSettings', 'featuredSection.badge')} className="text-xs font-semibold tracking-[0.2em] uppercase text-turquoise-600 mb-3 block">
+              {featuredBadge}
+            </span>
+            <h2 {...ve('siteSettings', 'siteSettings', 'featuredSection.title')} className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-3">
+              {featuredTitle}
             </h2>
-            <p className="text-foreground/40 text-sm max-w-md mx-auto">
-              Los dispositivos tecnológicos más elegidos por nuestros clientes con garantía certificada.
+            <p {...ve('siteSettings', 'siteSettings', 'featuredSection.subtitle')} className="text-foreground/40 text-sm max-w-md mx-auto">
+              {featuredSubtitle}
             </p>
             <div className="section-divider mx-auto mt-5" />
           </div>
@@ -257,11 +273,11 @@ export default function HomePage({ data }: { data: HomeData }) {
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 className="group cursor-pointer"
               >
-                <Link href={`/coleccion/${product.slug}`}>
-                  <div
-                    {...ve(product._id, 'product', 'mainImage')}
-                    className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-zinc-100"
-                  >
+                <div
+                  {...ve(product._id, 'product', 'mainImage')}
+                  className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-zinc-100"
+                >
+                  <Link href={`/coleccion/${product.slug}`} className="absolute inset-0 z-0 block" aria-label={product.name}>
                     <img
                       src={product.mainImage || '/images/placeholder.webp'}
                       alt={product.name}
@@ -278,45 +294,47 @@ export default function HomePage({ data }: { data: HomeData }) {
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="absolute top-3 left-3">
-                      <span className="px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm text-[11px] font-semibold text-turquoise-700">
-                        {product.category?.name || 'Tecnología'}
-                      </span>
-                    </div>
-                    <div className="absolute bottom-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <motion.button
-                        onClick={(e) => { e.preventDefault(); toggleFavorite(product._id); }}
-                        className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg"
-                        whileTap={{ scale: 0.85 }}
-                      >
-                        <Heart className={`w-5 h-5 ${isFavorite(product._id) ? 'text-red-500 fill-red-500' : 'text-foreground/60'}`} fill={isFavorite(product._id) ? 'currentColor' : 'none'} />
-                      </motion.button>
-                      <motion.button
-                        onClick={(e) => { e.preventDefault(); addToCart({ id: product._id as any, slug: product.slug, name: product.name, price: product.price, image: product.mainImage || '', imageSecondary: product.secondaryImage || '', category: product.category?.name || '', categoryLabel: product.category?.name || '', description: product.description || '', longDescription: product.longDescription || '', features: product.features || [], color: { name: product.color || '' }, images: (product.gallery || []).map(g => ({ original: g.url || '', thumbnail: g.url || '' })), rating: product.rating || 5, reviews: product.reviewCount || 0, sku: product.sku || '', collection: product.collection || '' } as any); }}
-                        className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg"
-                        whileTap={{ scale: 0.85 }}
-                      >
-                        <ShoppingBag className="w-5 h-5 text-white" />
-                      </motion.button>
-                    </div>
+                  </Link>
+                  <div className="absolute top-3 left-3 z-10 pointer-events-none">
+                    <span {...ve(product._id, 'product', 'category')} className="px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm text-[11px] font-semibold text-turquoise-700 pointer-events-auto">
+                      {product.category?.name || 'Tecnología'}
+                    </span>
                   </div>
+                  <div className="absolute bottom-3 right-3 z-10 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <motion.button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); toggleFavorite(product._id); }}
+                      className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg"
+                      whileTap={{ scale: 0.85 }}
+                    >
+                      <Heart className={`w-5 h-5 ${isFavorite(product._id) ? 'text-red-500 fill-red-500' : 'text-foreground/60'}`} fill={isFavorite(product._id) ? 'currentColor' : 'none'} />
+                    </motion.button>
+                    <motion.button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); addToCart({ id: product._id as any, slug: product.slug, name: product.name, price: product.price, image: product.mainImage || '', imageSecondary: product.secondaryImage || '', category: product.category?.name || '', categoryLabel: product.category?.name || '', description: product.description || '', longDescription: product.longDescription || '', features: product.features || [], color: { name: product.color || '' }, images: (product.gallery || []).map(g => ({ original: g.url || '', thumbnail: g.url || '' })), rating: product.rating || 5, reviews: product.reviewCount || 0, sku: product.sku || '', collection: product.collection || '' } as any); }}
+                      className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg"
+                      whileTap={{ scale: 0.85 }}
+                    >
+                      <ShoppingBag className="w-5 h-5 text-white" />
+                    </motion.button>
+                  </div>
+                </div>
 
-                  <div className="px-1">
-                    <h3 {...ve(product._id, 'product', 'name')} className="text-base font-semibold text-foreground group-hover:text-primary transition-colors mb-0.5">
-                      {product.name}
-                    </h3>
-                    <p {...ve(product._id, 'product', 'description')} className="text-xs text-foreground/40 mb-2 line-clamp-1">{product.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span {...ve(product._id, 'product', 'price')} className="text-lg font-bold text-primary">{formatPrice(product.price)}</span>
-                        {product.compareAtPrice && product.compareAtPrice > product.price && (
-                          <span className="text-sm text-foreground/30 line-through">{formatPrice(product.compareAtPrice)}</span>
-                        )}
-                      </div>
-                      <span className="text-xs font-medium text-turquoise-600 group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">
-                        Ver mas <ArrowDown className="w-3 h-3 rotate-[-90deg]" />
-                      </span>
+                <Link href={`/coleccion/${product.slug}`} className="block px-1">
+                  <h3 {...ve(product._id, 'product', 'name')} className="text-base font-semibold text-foreground group-hover:text-primary transition-colors mb-0.5">
+                    {product.name}
+                  </h3>
+                  <p {...ve(product._id, 'product', 'description')} className="text-xs text-foreground/40 mb-2 line-clamp-1">{product.description}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span {...ve(product._id, 'product', 'price')} className="text-lg font-bold text-primary">{formatPrice(product.price)}</span>
+                      {product.compareAtPrice && product.compareAtPrice > product.price && (
+                        <span {...ve(product._id, 'product', 'compareAtPrice')} className="text-sm text-foreground/30 line-through">{formatPrice(product.compareAtPrice)}</span>
+                      )}
                     </div>
+                    <span {...ve('siteSettings', 'siteSettings', 'productButtons.viewMoreLabel')} className="text-xs font-medium text-turquoise-600 group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">
+                      {viewMoreLabel} <ArrowDown className="w-3 h-3 rotate-[-90deg]" />
+                    </span>
                   </div>
                 </Link>
               </motion.div>
@@ -324,9 +342,13 @@ export default function HomePage({ data }: { data: HomeData }) {
           </div>
 
           <div className="text-center">
-            <Link href="/coleccion" className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full text-base font-semibold shadow-xl shadow-turquoise-500/20 hover:bg-turquoise-600 transition-colors">
+            <Link
+              href={featuredCtaLink}
+              {...ve('siteSettings', 'siteSettings', 'featuredSection.ctaLabel')}
+              className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full text-base font-semibold shadow-xl shadow-turquoise-500/20 hover:bg-turquoise-600 transition-colors"
+            >
               <ShoppingBag className="w-5 h-5" />
-              Ver Toda la Coleccion
+              {featuredCtaLabel}
             </Link>
           </div>
         </div>

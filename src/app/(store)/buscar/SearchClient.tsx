@@ -18,6 +18,7 @@ import {
   formatPrice,
   getProductsByCategory,
 } from '@/lib/store-data';
+import { ve } from '@/lib/ve';
 
 type SortOption = 'relevance' | 'price-asc' | 'price-desc';
 
@@ -326,7 +327,7 @@ export default function SearchClient({ initialProducts, initialCategories }: Sea
                 >
                   <div className="flex gap-3.5 sm:gap-4 p-3 sm:p-4 rounded-2xl bg-white/50 border border-zinc-100/50 hover:bg-white hover:shadow-xl hover:shadow-zinc-200/40 transition-all duration-400">
                     {/* Product Image */}
-                    <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-zinc-100 flex-shrink-0">
+                    <div {...ve(String(product.id), 'product', 'mainImage')} className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-zinc-100 flex-shrink-0">
                       <img
                         src={product.image}
                         alt={product.name}
@@ -362,18 +363,18 @@ export default function SearchClient({ initialProducts, initialCategories }: Sea
                     {/* Product Info */}
                     <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
                       <div>
-                        <h3 className="text-sm sm:text-base font-semibold text-foreground group-hover:text-primary transition-colors mb-0.5 truncate">
+                        <h3 {...ve(String(product.id), 'product', 'name')} className="text-sm sm:text-base font-semibold text-foreground group-hover:text-primary transition-colors mb-0.5 truncate">
                           {product.name}
                         </h3>
-                        <p className="text-xs text-foreground/40 leading-relaxed line-clamp-2">
+                        <p {...ve(String(product.id), 'product', 'description')} className="text-xs text-foreground/40 leading-relaxed line-clamp-2">
                           {product.description}
                         </p>
                       </div>
                       <div className="flex items-center justify-between mt-2">
-                        <span className="text-base sm:text-lg font-bold text-primary">
+                        <span {...ve(String(product.id), 'product', 'price')} className="text-base sm:text-lg font-bold text-primary">
                           {formatPrice(product.price)}
                         </span>
-                        <span className="text-[11px] sm:text-xs font-medium text-turquoise-600 inline-flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
+                        <span {...ve('siteSettings', 'siteSettings', 'productButtons.viewMoreLabel')} className="text-[11px] sm:text-xs font-medium text-turquoise-600 inline-flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
                           Ver más{' '}
                           <ChevronRight className="w-3 h-3" />
                         </span>

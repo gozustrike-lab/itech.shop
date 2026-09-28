@@ -3,7 +3,8 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
-import { Heart, Gem, HandHeart, Star } from 'lucide-react';
+import Link from 'next/link';
+import { ShoppingBag, ChevronRight } from 'lucide-react';
 import { ve } from '@/lib/ve';
 
 interface FeatureItem {
@@ -16,11 +17,14 @@ export interface AboutPageData {
   _id?: string;
   title?: string;
   subtitle?: string;
+  headerDescription?: string;
   mainImage?: string | null;
   storyParagraphs?: any[];
   features?: FeatureItem[];
   yearsExperience?: number;
   experienceLabel?: string;
+  ctaLabel?: string;
+  ctaLink?: string;
 }
 
 const defaultFeatures: FeatureItem[] = [
@@ -37,9 +41,12 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
 
   const title = data?.title || 'Nuestra Historia';
   const subtitle = data?.subtitle || 'Tecnología que Renueva';
+  const headerDescription = data?.headerDescription || 'Dispositivos tecnológicos certificados y renovados con garantía real de 12 meses en todo el Perú.';
   const displayFeatures = data?.features && data.features.length > 0 ? data.features : defaultFeatures;
   const years = data?.yearsExperience ?? 5;
   const experienceLabel = data?.experienceLabel || 'Años de Experiencia';
+  const ctaLabel = data?.ctaLabel || 'Ver Equipos Certificados';
+  const ctaLink = data?.ctaLink || '/coleccion';
 
   // Render story paragraphs: from Sanity if provided, otherwise default tech story
   const hasStoryBlocks = Array.isArray(data?.storyParagraphs) && data.storyParagraphs.length > 0;
@@ -60,8 +67,8 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
           <motion.h1 initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.05 }} className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4" {...ve('aboutPage', 'aboutPage', 'subtitle')}>
             {subtitle}
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 }} className="text-sm text-foreground/40 max-w-lg mx-auto">
-            Dispositivos tecnológicos certificados y renovados con garantía real de 12 meses en todo el Perú.
+          <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 }} className="text-sm text-foreground/40 max-w-lg mx-auto" {...ve('aboutPage', 'aboutPage', 'headerDescription')}>
+            {headerDescription}
           </motion.p>
           <div className="section-divider mx-auto mt-5" />
         </div>
@@ -69,7 +76,7 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
         {/* Content Grid */}
         <div id="nosotros-historia" className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-16">
           <div ref={imageRef} className="relative">
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-zinc-100">
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-zinc-100" {...ve('aboutPage', 'aboutPage', 'mainImage')}>
               <Image
                 src={data?.mainImage || '/images/hero-craft.jpg'}
                 alt={title}
@@ -77,7 +84,6 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority
-                {...ve('aboutPage', 'aboutPage', 'mainImage')}
               />
             </div>
             <motion.div initial={{ opacity: 0, x: -20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6, delay: 0.3 }} className="absolute -bottom-4 -right-4 sm:right-4 bg-white rounded-xl p-4 shadow-xl border border-zinc-100/60">
@@ -106,15 +112,34 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
                 </motion.p>
               </>
             )}
+
+            <div className="pt-2">
+              <Link
+                href={ctaLink}
+                {...ve('aboutPage', 'aboutPage', 'ctaLabel')}
+                className="inline-flex items-center gap-2 bg-primary hover:bg-turquoise-600 text-white px-7 py-3.5 rounded-full text-sm font-semibold shadow-lg shadow-turquoise-500/20 transition-all duration-300"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                {ctaLabel}
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Features Grid */}
-        <div id="nosotros-valores" className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 scroll-mt-16">
+        <div id="nosotros-valores" className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 scroll-mt-16" {...ve('aboutPage', 'aboutPage', 'features')}>
           {displayFeatures.map((feature, index) => {
             const isEmoji = typeof feature.icon === 'string';
             return (
-              <motion.div key={feature.title || index} initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }} className="group p-5 rounded-2xl bg-white/50 border border-zinc-100/60 backdrop-blur-sm hover:bg-white/80 transition-all duration-500">
+              <motion.div
+                key={feature.title || index}
+                {...ve('aboutPage', 'aboutPage', `features[${index}].title`)}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                className="group p-5 rounded-2xl bg-white/50 border border-zinc-100/60 backdrop-blur-sm hover:bg-white/80 transition-all duration-500 cursor-pointer"
+              >
                 <div className="w-12 h-12 rounded-xl bg-turquoise-50 flex items-center justify-center mb-3 group-hover:bg-turquoise-100 transition-colors duration-300 text-2xl">
                   {isEmoji ? (
                     <span>{feature.icon}</span>
@@ -124,8 +149,8 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
                     <span>✨</span>
                   )}
                 </div>
-                <h3 className="text-sm font-bold text-foreground mb-1.5">{feature.title}</h3>
-                <p className="text-xs text-foreground/50 leading-relaxed">{feature.description}</p>
+                <h3 className="text-sm font-bold text-foreground mb-1.5" {...ve('aboutPage', 'aboutPage', `features[${index}].title`)}>{feature.title}</h3>
+                <p className="text-xs text-foreground/50 leading-relaxed" {...ve('aboutPage', 'aboutPage', `features[${index}].description`)}>{feature.description}</p>
               </motion.div>
             );
           })}
