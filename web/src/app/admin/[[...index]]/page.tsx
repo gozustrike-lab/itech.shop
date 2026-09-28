@@ -64,7 +64,7 @@ function SanityConfigGuard() {
     );
   }
 
-  return <NextStudio config={sanityConfig} history="hash" />;
+  return <NextStudio config={sanityConfig} />;
 }
 
 export default function AdminPage() {

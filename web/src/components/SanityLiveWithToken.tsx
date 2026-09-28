@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@sanity/client";
 
 interface Props {
@@ -7,7 +8,9 @@ interface Props {
 }
 
 export function SanityLiveWithToken({ includeDrafts }: Props) {
+  const router = useRouter();
   const unsubRef = useRef<(() => void) | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
@@ -28,16 +31,22 @@ export function SanityLiveWithToken({ includeDrafts }: Props) {
       .listen(`*[!(_id in path("_.**"))]`)
       .subscribe({
         next: () => {
-          if (typeof window !== "undefined") window.location.reload();
+          if (timerRef.current) clearTimeout(timerRef.current);
+          timerRef.current = setTimeout(() => {
+            router.refresh();
+          }, 500);
         },
         error: (err: Error) => {
           console.warn("[SanityLive] Listener error:", err.message);
         },
       });
 
-    unsubRef.current = () => sub.unsubscribe();
+    unsubRef.current = () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      sub.unsubscribe();
+    };
     return () => unsubRef.current?.();
-  }, [includeDrafts]);
+  }, [includeDrafts, router]);
 
   return null;
 }

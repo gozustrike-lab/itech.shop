@@ -8,18 +8,25 @@ const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
 
 function getSiteUrl(): string {
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin;
+  }
   if (process.env.NEXT_PUBLIC_SITE_URL) {
     return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  }
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL.replace(/\/$/, "")}`;
   }
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL.replace(/\/$/, "")}`;
   }
-  return "http://localhost:3000";
+  return "http://localhost:4000";
 }
 
 const siteUrl = getSiteUrl();
 
 export default defineConfig({
+  basePath: "/admin",
   name: "maia-store-cms",
   title: STUDIO_TITLE,
   projectId,
@@ -82,7 +89,7 @@ export default defineConfig({
       name: "presentation",
       title: "Vista Previa",
       previewUrl: {
-        initial: siteUrl,
+        initial: "/",
         previewMode: { enable: "/api/draft-mode/enable" },
       },
       resolve: {
