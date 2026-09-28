@@ -11,7 +11,7 @@ export default defineType({
       name: "copyright",
       title: "Texto de Copyright",
       type: "string",
-      initialValue: "Maia Store. Todos los derechos reservados.",
+      initialValue: "iTech Peru. Todos los derechos reservados.",
       description: "El año se agrega automáticamente",
     }),
     defineField({
@@ -19,7 +19,7 @@ export default defineType({
       title: "Descripción de la Marca",
       type: "text",
       rows: 3,
-      description: "Texto breve sobre Maia Store para el footer",
+      description: "Texto breve sobre iTech Peru para el footer",
     }),
     defineField({
       name: "socialLinks",

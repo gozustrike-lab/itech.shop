@@ -7,9 +7,9 @@ export async function shareProduct(
 ): Promise<boolean> {
   const url =
     typeof window !== 'undefined'
-      ? `${window.location.origin}${window.location.pathname}#/coleccion/${slug}`
+      ? `${window.location.origin}/coleccion/${slug}`
       : '';
-  const text = `${productName} — ${price} | Maia Store`;
+  const text = `${productName} — ${price} | iTech Peru`;
 
   if (typeof navigator !== 'undefined' && navigator.share) {
     try {

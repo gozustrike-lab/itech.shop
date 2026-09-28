@@ -2455,21 +2455,21 @@ export const bankAccounts: BankAccount[] = [
     bank: 'BCP',
     accountType: 'Cuenta Corriente en Soles',
     number: '193-2845671-0-42',
-    holder: 'Maia Store E.I.R.L.',
+    holder: 'iTech Peru E.I.R.L.',
     logo: '🏦',
   },
   {
     bank: 'Interbank',
     accountType: 'Cuenta Ahorro en Soles',
     number: '2001-0056-7890-12',
-    holder: 'Maia Store E.I.R.L.',
+    holder: 'iTech Peru E.I.R.L.',
     logo: '🏦',
   },
   {
     bank: 'Banco de la Nación',
     accountType: 'Cuenta Corriente Nacional',
     number: '00-067-123456',
-    holder: 'Maia Store E.I.R.L.',
+    holder: 'iTech Peru E.I.R.L.',
     logo: '🏦',
   },
 ];
@@ -2483,7 +2483,7 @@ export const qrPayments: QRPayment[] = [
     color: '#742DB5',
     bgColor: 'bg-purple-600',
     number: '999 888 777',
-    holder: 'Maia Store E.I.R.L.',
+    holder: 'iTech Peru E.I.R.L.',
   },
   {
     id: 'plin',
@@ -2491,6 +2491,6 @@ export const qrPayments: QRPayment[] = [
     color: '#00C853',
     bgColor: 'bg-green-500',
     number: '999 888 777',
-    holder: 'Maia Store E.I.R.L.',
+    holder: 'iTech Peru E.I.R.L.',
   },
 ];

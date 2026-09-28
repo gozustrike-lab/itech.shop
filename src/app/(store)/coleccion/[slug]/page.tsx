@@ -5,7 +5,7 @@ import { products as storeProducts, getProductBySlug, formatPrice } from '@/lib/
 import ProductDetailClient from './ProductDetailClient';
 import { notFound } from 'next/navigation';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://maia-store.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.itechperu.shop';
 
 // Shared product type for passing to client
 export interface ProductData {

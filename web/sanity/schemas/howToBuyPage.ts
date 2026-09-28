@@ -17,7 +17,7 @@ export default defineType({
       name: "subtitle",
       title: "Subtítulo",
       type: "string",
-      initialValue: "Tu joya perfecta está a unos pasos",
+      initialValue: "Cómo Comprar",
     }),
     defineField({
       name: "steps",
@@ -26,6 +26,8 @@ export default defineType({
       of: [
         {
           type: "object",
+          name: "buyStep",
+          title: "Paso de Compra",
           fields: [
             { name: "stepNumber", title: "Número de Paso", type: "number" },
             { name: "icon", title: "Icono (emoji)", type: "string" },
@@ -45,10 +47,12 @@ export default defineType({
       of: [
         {
           type: "object",
+          name: "paymentMethod",
+          title: "Método de Pago",
           fields: [
             { name: "name", title: "Nombre", type: "string" },
-            { name: "description", title: "Descripción", type: "string" },
-            { name: "icon", title: "Icono (emoji)", type: "string" },
+            { name: "description", title: "Descripción", type: "text", rows: 3 },
+            { name: "icon", title: "Icono", type: "string" },
             {
               name: "steps",
               title: "Pasos del método de pago",
@@ -74,6 +78,7 @@ export default defineType({
           fields: [
             { name: "title", title: "Título", type: "string" },
             { name: "desc", title: "Descripción", type: "text", rows: 2 },
+            { name: "icon", title: "Icono", type: "string" },
           ],
           preview: {
             select: { title: "title", subtitle: "desc" },

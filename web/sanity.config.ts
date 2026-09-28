@@ -27,7 +27,7 @@ const siteUrl = getSiteUrl();
 
 export default defineConfig({
   basePath: "/admin",
-  name: "maia-store-cms",
+  name: "itech-peru-cms",
   title: STUDIO_TITLE,
   projectId,
   dataset,

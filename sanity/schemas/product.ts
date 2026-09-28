@@ -3,9 +3,9 @@ import { defineType, defineField } from "sanity";
 
 export default defineType({
   name: "product",
-  title: "Producto (Joya)",
+  title: "Producto (Equipo)",
   type: "document",
-  icon: () => "💎",
+  icon: () => "📱",
   fields: [
     defineField({
       name: "name",
@@ -24,7 +24,7 @@ export default defineType({
       name: "sku",
       title: "SKU",
       type: "string",
-      description: "Código único del producto",
+      description: "Código único del producto (ej: ITP-IP13-128-MID)",
     }),
     defineField({
       name: "category",
@@ -35,9 +35,9 @@ export default defineType({
     }),
     defineField({
       name: "collection",
-      title: "Colección",
+      title: "Marca / Línea",
       type: "string",
-      description: "Nombre de la colección (ej: Juego Botón)",
+      description: "Marca o línea del equipo (ej: Apple, Samsung, Lenovo, Sony)",
     }),
     defineField({
       name: "price",
@@ -61,42 +61,44 @@ export default defineType({
     defineField({
       name: "longDescription",
       title: "Descripción Larga",
-      type: "array",
-      of: [{ type: "block" }],
+      type: "text",
+      rows: 5,
       description: "Descripción completa para la página de detalle",
     }),
     defineField({
       name: "features",
-      title: "Características",
+      title: "Características Técnicas",
       type: "array",
       of: [{ type: "string" }],
-      description: "Lista de características del producto",
+      description: "Lista de características del equipo",
     }),
     defineField({
       name: "mainImage",
       title: "Imagen Principal",
       type: "image",
       options: { hotspot: true },
+      fields: [{ name: "alt", title: "Texto Alternativo", type: "string" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "mainImageUrl",
       title: "URL Imagen Principal (fallback)",
-      type: "url",
-      description: "URL directa para cuando no hay asset subido a Sanity",
+      type: "string",
+      description: "URL o ruta directa para cuando no hay asset subido a Sanity",
     }),
     defineField({
       name: "secondaryImage",
       title: "Imagen Secundaria (hover)",
       type: "image",
       options: { hotspot: true },
+      fields: [{ name: "alt", title: "Texto Alternativo", type: "string" }],
       description: "Se muestra al pasar el ratón sobre la tarjeta",
     }),
     defineField({
       name: "secondaryImageUrl",
       title: "URL Imagen Secundaria (fallback)",
-      type: "url",
-      description: "URL directa para cuando no hay asset subido a Sanity",
+      type: "string",
+      description: "URL o ruta directa para cuando no hay asset subido a Sanity",
     }),
     defineField({
       name: "gallery",
@@ -104,13 +106,12 @@ export default defineType({
       type: "array",
       of: [
         {
-          type: "object",
+          type: "image",
+          options: { hotspot: true },
           fields: [
-            { name: "image", title: "Imagen", type: "image", options: { hotspot: true } },
             { name: "alt", title: "Texto Alternativo", type: "string" },
-            { name: "url", title: "URL directa (fallback)", type: "url" },
+            { name: "url", title: "URL directa (fallback)", type: "string" },
           ],
-          preview: { select: { media: "image", title: "alt" } },
         },
       ],
     }),
@@ -118,19 +119,20 @@ export default defineType({
       name: "color",
       title: "Color",
       type: "string",
-      description: "Nombre del color (ej: Crema, Rosado)",
+      description: "Nombre del color (ej: Medianoche, Plata, Grafito)",
     }),
     defineField({
       name: "size",
-      title: "Tamaño (mm)",
-      type: "number",
+      title: "Tamaño / Pantalla",
+      type: "string",
+      description: "Ej: 13\", 14\", 45mm",
     }),
     defineField({
       name: "materials",
-      title: "Materiales",
+      title: "Materiales / Construcción",
       type: "array",
       of: [{ type: "string" }],
-      description: "ej: Hilo premium, Plata 925, Swarovski",
+      description: "ej: Aluminio aeroespacial, Cristal Ceramic Shield",
     }),
     defineField({
       name: "rating",

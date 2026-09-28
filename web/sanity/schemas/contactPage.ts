@@ -17,7 +17,7 @@ export default defineType({
       name: "subtitle",
       title: "Subtítulo",
       type: "string",
-      initialValue: "Lo que Dicen Nuestras Clientas",
+      initialValue: "Estamos Aquí Para Ti",
     }),
     defineField({
       name: "contactInfo",
@@ -26,11 +26,13 @@ export default defineType({
       of: [
         {
           type: "object",
+          name: "contactInfoItem",
+          title: "Canal de Contacto",
           fields: [
             { name: "label", title: "Etiqueta", type: "string" },
             { name: "value", title: "Valor", type: "string" },
             { name: "desc", title: "Descripción / Subtexto", type: "string" },
-            { name: "icon", title: "Icono (emoji)", type: "string" },
+            { name: "icon", title: "Icono", type: "string" },
             { name: "url", title: "URL / Enlace del botón", type: "string" },
           ],
           preview: {

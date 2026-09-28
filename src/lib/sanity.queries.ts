@@ -14,7 +14,7 @@ export const ALL_PRODUCTS_QUERY = `
   collection,
   "mainImage": coalesce(mainImage.asset->url, mainImageUrl),
   "secondaryImage": coalesce(secondaryImage.asset->url, secondaryImageUrl),
-  gallery[] { "url": coalesce(image.asset->url, url), alt },
+  gallery[] { "url": coalesce(asset->url, image.asset->url, url), alt },
   "category": category->{ _id, name, "slug": slug.current },
   seoTitle, seoDescription
 }`;
@@ -27,7 +27,7 @@ export const PRODUCT_BY_SLUG_QUERY = `*[_type == "product" && slug.current == $s
   collection,
   "mainImage": coalesce(mainImage.asset->url, mainImageUrl),
   "secondaryImage": coalesce(secondaryImage.asset->url, secondaryImageUrl),
-  gallery[] { "url": coalesce(image.asset->url, url), alt },
+  gallery[] { "url": coalesce(asset->url, image.asset->url, url), alt },
   "category": category->{ _id, name, "slug": slug.current },
   seoTitle, seoDescription
 }`;
@@ -90,7 +90,7 @@ export const PRODUCTS_BY_CATEGORY_QUERY = `
   collection,
   "mainImage": coalesce(mainImage.asset->url, mainImageUrl),
   "secondaryImage": coalesce(secondaryImage.asset->url, secondaryImageUrl),
-  gallery[] { "url": coalesce(image.asset->url, url), alt },
+  gallery[] { "url": coalesce(asset->url, image.asset->url, url), alt },
   "category": category->{ _id, name, "slug": slug.current },
   seoTitle, seoDescription
 }`;

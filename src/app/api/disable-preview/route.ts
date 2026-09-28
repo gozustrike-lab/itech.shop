@@ -16,12 +16,5 @@ export async function GET(request: Request) {
   const draft = await draftMode();
   draft.disable();
 
-  // Redirect to the target URL without draft mode
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    `https://${process.env.VERCEL_URL}` ||
-    "https://maia-store.vercel.app";
-  const url = new URL(redirectUrl, baseUrl);
-
-  return NextResponse.redirect(url);
+  return NextResponse.redirect(new URL(redirectUrl, request.url));
 }
