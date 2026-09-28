@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { products, categories } from '@/lib/store-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://maia-store.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.itechperu.shop';
 
   const staticPages: MetadataRoute.Sitemap = [
     {
