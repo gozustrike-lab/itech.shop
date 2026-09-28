@@ -12,6 +12,7 @@ import { shareProduct } from '@/lib/share';
 import { ve } from '@/lib/ve';
 import { getSwatchColor } from '@/lib/colors';
 import Lightbox from '@/components/maia/Lightbox';
+import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import type { ProductData } from './page';
 
 interface Props {
@@ -24,6 +25,7 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
   const router = useRouter();
   const { isFavorite, toggleFavorite, addToCart } = useStore();
   const { showToast } = useToast();
+  const siteConfig = useSiteConfig();
   const product = initialProduct;
   const pageRef = useRef<HTMLDivElement>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -91,6 +93,9 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
   const displayProduct = activeVariant || product;
   const cartItem: any = { id: displayProduct._id, slug: displayProduct.slug, name: displayProduct.name, price: displayProduct.price, image: displayProduct.mainImage, imageSecondary: displayProduct.secondaryImage || '', category: displayProduct.categorySlug, categoryLabel: displayProduct.categoryLabel, description: displayProduct.description, longDescription: displayProduct.longDescription, features: displayProduct.features, color: displayProduct.color, images: displayProduct.gallery, rating: displayProduct.rating, reviews: displayProduct.reviews, sku: displayProduct.sku, collection: displayProduct.collection };
 
+  const whatsappLabel = siteConfig.productButtons?.whatsappLabel || 'Pedir por WhatsApp';
+  const addToCartLabel = siteConfig.productButtons?.addToCartLabel || 'Agregar al Carrito';
+
   return (
     <div ref={pageRef} className="relative pt-16 pb-20 sm:pb-24">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
@@ -155,7 +160,7 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
               <div className="flex items-center gap-3 mb-4">
                 <p {...ve(displayProduct._id, 'product', 'price')} className="text-2xl font-bold text-primary">{formatPrice(displayProduct.price)}</p>
                 {displayProduct.compareAtPrice && displayProduct.compareAtPrice > displayProduct.price && (
-                  <p className="text-lg text-foreground/30 line-through">{formatPrice(displayProduct.compareAtPrice)}</p>
+                  <p {...ve(displayProduct._id, 'product', 'compareAtPrice')} className="text-lg text-foreground/30 line-through">{formatPrice(displayProduct.compareAtPrice)}</p>
                 )}
               </div>
               <p {...ve(displayProduct._id, 'product', 'longDescription')} className="text-sm text-foreground/60 leading-relaxed">{displayProduct.longDescription || displayProduct.description}</p>
@@ -179,7 +184,7 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
               </div>
             )}
 
-            <div className="detail-animate">
+            <div className="detail-animate" {...ve(displayProduct._id, 'product', 'features')}>
               <h3 className="text-sm font-bold text-foreground mb-2.5">Caracteristicas</h3>
               <ul className="space-y-2">
                 {displayProduct.features.map((feat) => (
@@ -206,11 +211,25 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
             </div>
 
             <div className="detail-animate flex flex-col sm:flex-row gap-2.5 pt-3">
-              <motion.a href={generateWhatsAppLink(cartItem, { quantity, productUrl })} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-green-500/15" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
-                <MessageCircle className="w-4 h-4" /> Pedir por WhatsApp
+              <motion.a
+                href={generateWhatsAppLink(cartItem, { quantity, productUrl, phone: siteConfig.whatsapp })}
+                target="_blank"
+                rel="noopener noreferrer"
+                {...ve('siteSettings', 'siteSettings', 'productButtons.whatsappLabel')}
+                className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-green-500/15"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <MessageCircle className="w-4 h-4" /> {whatsappLabel}
               </motion.a>
-              <motion.button onClick={() => { addToCart(cartItem); showToast('Agregado al carrito'); }} className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-turquoise-600 text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-turquoise-500/15" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
-                <ShoppingBag className="w-4 h-4" /> Agregar al Carrito
+              <motion.button
+                onClick={() => { addToCart(cartItem); showToast('Agregado al carrito'); }}
+                {...ve('siteSettings', 'siteSettings', 'productButtons.addToCartLabel')}
+                className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-turquoise-600 text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-turquoise-500/15"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <ShoppingBag className="w-4 h-4" /> {addToCartLabel}
               </motion.button>
             </div>
 

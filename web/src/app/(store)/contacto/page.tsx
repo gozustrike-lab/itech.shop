@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { sanityFetch } from '@/sanity/live';
-import { CONTACT_PAGE_QUERY } from '@/lib/sanity.queries';
+import { CONTACT_PAGE_QUERY, ALL_TESTIMONIALS_QUERY } from '@/lib/sanity.queries';
 import ContactoClient from './ContactoClient';
 
 export const dynamic = 'force-dynamic';
@@ -15,6 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactoRoute() {
-  const data = await sanityFetch<any>({ query: CONTACT_PAGE_QUERY }).then(r => r.data).catch(() => null);
-  return <ContactoClient data={data} />;
+  const [data, testimonials] = await Promise.all([
+    sanityFetch<any>({ query: CONTACT_PAGE_QUERY }).then(r => r.data).catch(() => null),
+    sanityFetch<any>({ query: ALL_TESTIMONIALS_QUERY }).then(r => r.data).catch(() => []),
+  ]);
+  return <ContactoClient data={data} sanityTestimonials={testimonials || []} />;
 }

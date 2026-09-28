@@ -13,35 +13,73 @@ import {
   Truck,
   ChevronRight,
 } from 'lucide-react';
-import { paymentMethods } from '@/lib/store-data';
+import { paymentMethods as fallbackPaymentMethods } from '@/lib/store-data';
+import { useSiteConfig } from '@/contexts/SiteConfigContext';
 
-const iconMap: Record<string, React.ElementType> = {
-  'whatsapp': MessageCircle,
-  'tarjeta': CreditCard,
-  'yape-plin': QrCode,
-  'transferencia': Building2,
-};
+const defaultIcons = [MessageCircle, CreditCard, QrCode, Building2];
 
 interface HowToBuyData {
   _id?: string;
   title?: string;
   subtitle?: string;
   shippingInfo?: string;
+  whatsappNumber?: string;
+  whatsappMessage?: string;
   steps?: Array<{ stepNumber?: number; icon?: string; title: string; description: string }>;
-  paymentMethods?: Array<{ name: string; description: string; icon?: string }>;
+  paymentMethods?: Array<{
+    name: string;
+    description: string;
+    icon?: string;
+    steps?: string[];
+    ctaLabel?: string;
+    ctaLink?: string;
+  }>;
+  trustSignals?: Array<{ title: string; desc: string }>;
+  faqs?: Array<{ q: string; a: string }>;
 }
 
-import { useSiteConfig } from '@/contexts/SiteConfigContext';
+const defaultTrustSignals = [
+  { title: 'Pago 100% Seguro', desc: 'Todas las transacciones están protegidas con encriptación SSL de 256 bits y verificación en tiempo real.' },
+  { title: 'Envío a Todo el Perú', desc: 'Realizamos envíos a través de Olva Courier y Shalom Express a todas las ciudades del país.' },
+];
+
+const defaultFaqs = [
+  { q: '¿Cuánto tiempo tarda el envío?', a: 'Los envíos a Lima metropolitana toman de 24 a 48 horas hábiles. A provincias, de 2 a 4 días hábiles mediante Olva Courier o Shalom con número de seguimiento en tiempo real.' },
+  { q: '¿Cómo funciona la garantía de los equipos?', a: 'Todos nuestros dispositivos cuentan con 12 meses de garantía real contra cualquier falla técnica o defecto de hardware. Si se presenta algún inconveniente, lo reparamos o reemplazamos sin costo.' },
+  { q: '¿Los equipos son originales y liberados?', a: 'Sí, el 100% de nuestros equipos son originales y están liberados de fábrica para cualquier operador del Perú (Claro, Movistar, Entel, Bitel), listos para usar.' },
+];
 
 export default function ComprarClient({ data }: { data?: HowToBuyData | null }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-60px' });
   const siteConfig = useSiteConfig();
-  const whatsappNum = siteConfig.whatsapp || '51999888777';
+  const whatsappNum = data?.whatsappNumber || siteConfig.whatsapp || '51999888777';
+  const defaultWaMsg = data?.whatsappMessage || 'Hola iTech Peru! Quisiera hacer un pedido';
 
   const title = data?.title || 'Métodos de Pago';
   const subtitle = data?.subtitle || 'Cómo Comprar';
   const shippingInfo = data?.shippingInfo || 'Elige el método de pago que más te convenga. Todos nuestros procesos son seguros, rápidos y confiables.';
+
+  const displayPaymentMethods = data?.paymentMethods && data.paymentMethods.length > 0
+    ? data.paymentMethods.map((m, i) => ({
+        name: m.name,
+        description: m.description,
+        icon: m.icon,
+        steps: m.steps && m.steps.length > 0 ? m.steps : (fallbackPaymentMethods[i]?.steps || []),
+        ctaLabel: m.ctaLabel || fallbackPaymentMethods[i]?.cta || 'Consultar por WhatsApp',
+        ctaLink: m.ctaLink || `https://wa.me/${whatsappNum}?text=${encodeURIComponent(`${defaultWaMsg} (${m.name})`)}`,
+      }))
+    : fallbackPaymentMethods.map((m) => ({
+        name: m.title,
+        description: m.description,
+        icon: undefined,
+        steps: m.steps,
+        ctaLabel: m.cta,
+        ctaLink: `https://wa.me/${whatsappNum}?text=${encodeURIComponent(`${defaultWaMsg} (${m.title})`)}`,
+      }));
+
+  const displayTrustSignals = data?.trustSignals && data.trustSignals.length > 0 ? data.trustSignals : defaultTrustSignals;
+  const displayFaqs = data?.faqs && data.faqs.length > 0 ? data.faqs : defaultFaqs;
 
   return (
     <div ref={sectionRef} className="relative pt-20 pb-20 sm:pb-24">
@@ -69,12 +107,15 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
         </motion.nav>
 
         {/* Payment Methods */}
-        <div className="grid sm:grid-cols-2 gap-4 mb-14">
-          {paymentMethods.map((method, index) => {
-            const Icon = iconMap[method.id] || MessageCircle;
+        <div className="grid sm:grid-cols-2 gap-4 mb-14" {...ve('howToBuyPage', 'howToBuyPage', 'paymentMethods')}>
+          {displayPaymentMethods.map((method, index) => {
+            const Icon = defaultIcons[index % defaultIcons.length];
+            const href = method.ctaLink || `https://wa.me/${whatsappNum}?text=${encodeURIComponent(defaultWaMsg)}`;
+            const isExternal = href.startsWith('http');
             return (
               <motion.div
-                key={method.id}
+                key={method.name + index}
+                {...ve('howToBuyPage', 'howToBuyPage', `paymentMethods[${index}].name`)}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, delay: 0.15 + index * 0.08 }}
@@ -85,11 +126,15 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
                     <Icon className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-foreground mb-1">{method.title}</h3>
-                    <p className="text-xs text-foreground/50 leading-relaxed">{method.description}</p>
+                    <h3 className="text-base font-bold text-foreground mb-1" {...ve('howToBuyPage', 'howToBuyPage', `paymentMethods[${index}].name`)}>
+                      {method.name}
+                    </h3>
+                    <p className="text-xs text-foreground/50 leading-relaxed" {...ve('howToBuyPage', 'howToBuyPage', `paymentMethods[${index}].description`)}>
+                      {method.description}
+                    </p>
                   </div>
                 </div>
-                <div className="space-y-2.5 mb-5">
+                <div className="space-y-2.5 mb-5" {...ve('howToBuyPage', 'howToBuyPage', `paymentMethods[${index}].steps`)}>
                   {method.steps.map((step, i) => (
                     <div key={i} className="flex items-start gap-2.5">
                       <div className="w-6 h-6 rounded-full bg-turquoise-50 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -100,12 +145,13 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
                   ))}
                 </div>
                 <a
-                  href={method.id === 'whatsapp' ? `https://wa.me/${whatsappNum}?text=${encodeURIComponent('Hola iTech Peru! Quisiera hacer un pedido')}` : method.href}
-                  target={(method.id === 'whatsapp' || method.href.startsWith('http')) ? '_blank' : undefined}
-                  rel={(method.id === 'whatsapp' || method.href.startsWith('http')) ? 'noopener noreferrer' : undefined}
+                  href={href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
+                  {...ve('howToBuyPage', 'howToBuyPage', `paymentMethods[${index}].ctaLabel`)}
                   className="inline-flex items-center gap-1.5 bg-primary hover:bg-turquoise-600 text-white px-5 py-2.5 rounded-xl text-xs font-semibold transition-colors shadow-lg shadow-turquoise-500/15"
                 >
-                  {method.cta}
+                  {method.ctaLabel}
                   <ChevronRight className="w-3.5 h-3.5" />
                 </a>
               </motion.div>
@@ -113,28 +159,29 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
           })}
         </div>
 
-{/* Trust Signals */}
-        <div className="grid sm:grid-cols-2 gap-4 mb-14">
-          {[
-            { icon: ShieldCheck, title: 'Pago 100% Seguro', desc: 'Todas las transacciones estan protegidas con encriptacion SSL de 256 bits y verificacion en tiempo real.' },
-            { icon: Truck, title: 'Envio a Todo el Peru', desc: 'Realizamos envios a traves de Olva Courier y Shalom Express a todas las ciudades del pais.' },
-          ].map((item, i) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 15 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.4 + i * 0.08 }}
-              className="flex items-start gap-3 p-5 rounded-2xl bg-turquoise-50/50 border border-turquoise-100/50"
-            >
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <item.icon className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-foreground mb-1">{item.title}</h4>
-                <p className="text-xs text-foreground/50 leading-relaxed">{item.desc}</p>
-              </div>
-            </motion.div>
-          ))}
+        {/* Trust Signals */}
+        <div className="grid sm:grid-cols-2 gap-4 mb-14" {...ve('howToBuyPage', 'howToBuyPage', 'trustSignals')}>
+          {displayTrustSignals.map((item, i) => {
+            const Icon = i % 2 === 0 ? ShieldCheck : Truck;
+            return (
+              <motion.div
+                key={item.title + i}
+                {...ve('howToBuyPage', 'howToBuyPage', `trustSignals[${i}].title`)}
+                initial={{ opacity: 0, y: 15 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: 0.4 + i * 0.08 }}
+                className="flex items-start gap-3 p-5 rounded-2xl bg-turquoise-50/50 border border-turquoise-100/50"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground mb-1" {...ve('howToBuyPage', 'howToBuyPage', `trustSignals[${i}].title`)}>{item.title}</h4>
+                  <p className="text-xs text-foreground/50 leading-relaxed" {...ve('howToBuyPage', 'howToBuyPage', `trustSignals[${i}].desc`)}>{item.desc}</p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* FAQ */}
@@ -142,14 +189,11 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
           <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-3">Preguntas Frecuentes</h2>
           <div className="section-divider mx-auto" />
         </div>
-        <div className="max-w-2xl mx-auto space-y-3">
-          {[
-            { q: '¿Cuánto tiempo tarda el envío?', a: 'Los envíos a Lima metropolitana toman de 24 a 48 horas hábiles. A provincias, de 2 a 4 días hábiles mediante Olva Courier o Shalom con número de seguimiento en tiempo real.' },
-            { q: '¿Cómo funciona la garantía de los equipos?', a: 'Todos nuestros dispositivos cuentan con 12 meses de garantía real contra cualquier falla técnica o defecto de hardware. Si se presenta algún inconveniente, lo reparamos o reemplazamos sin costo.' },
-            { q: '¿Los equipos son originales y liberados?', a: 'Sí, el 100% de nuestros equipos son originales y están liberados de fábrica para cualquier operador del Perú (Claro, Movistar, Entel, Bitel), listos para usar.' },
-          ].map((faq, i) => (
+        <div className="max-w-2xl mx-auto space-y-3" {...ve('howToBuyPage', 'howToBuyPage', 'faqs')}>
+          {displayFaqs.map((faq, i) => (
             <motion.details
               key={i}
+              {...ve('howToBuyPage', 'howToBuyPage', `faqs[${i}].q`)}
               initial={{ opacity: 0, y: 10 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.5 + i * 0.08 }}
@@ -159,7 +203,7 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
                 {faq.q}
                 <ChevronRight className="w-4 h-4 text-turquoise-400 group-open:rotate-90 transition-transform" />
               </summary>
-              <div className="px-4 pb-4 text-xs text-foreground/50 leading-relaxed">{faq.a}</div>
+              <div className="px-4 pb-4 text-xs text-foreground/50 leading-relaxed" {...ve('howToBuyPage', 'howToBuyPage', `faqs[${i}].a`)}>{faq.a}</div>
             </motion.details>
           ))}
         </div>

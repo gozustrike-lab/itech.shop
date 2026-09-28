@@ -34,10 +34,10 @@ export default async function ColeccionPage() {
 
   const cats = hasSanityData && Array.isArray(sanityCategories) && sanityCategories.length > 0
     ? [
-        { id: 'todos', label: 'Todos', slug: 'todos', count: sanityProducts.length },
-        ...sanityCategories.map((c: any) => ({ id: c.slug, label: c.name, slug: c.slug, count: c.count || 0 })),
+        { id: 'todos', docId: undefined, label: 'Todos', slug: 'todos', count: sanityProducts.length },
+        ...sanityCategories.map((c: any) => ({ id: c.slug, docId: c._id, label: c.name, slug: c.slug, count: c.count || 0 })),
       ]
-    : storeCategories.map(c => ({ id: c.id, label: c.label, slug: c.id, count: c.count }));
+    : storeCategories.map(c => ({ id: c.id, docId: undefined, label: c.label, slug: c.id, count: c.count }));
 
   return (
     <Suspense fallback={<ColeccionSkeleton />}>

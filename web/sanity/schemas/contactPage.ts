@@ -29,8 +29,9 @@ export default defineType({
           fields: [
             { name: "label", title: "Etiqueta", type: "string" },
             { name: "value", title: "Valor", type: "string" },
+            { name: "desc", title: "Descripción / Subtexto", type: "string" },
             { name: "icon", title: "Icono (emoji)", type: "string" },
-            { name: "url", title: "URL (opcional)", type: "url" },
+            { name: "url", title: "URL / Enlace del botón", type: "string" },
           ],
           preview: {
             select: { title: "label", subtitle: "value" },
@@ -42,7 +43,7 @@ export default defineType({
       name: "ctaTitle",
       title: "Título del CTA (Banner)",
       type: "string",
-      initialValue: "¿Lista para Brillar?",
+      initialValue: "¿Listo para Renovar tu Equipo?",
     }),
     defineField({
       name: "ctaDescription",
@@ -65,10 +66,10 @@ export default defineType({
           type: "object",
           fields: [
             { name: "label", title: "Texto del Botón", type: "string" },
-            { name: "url", title: "URL", type: "url" },
+            { name: "url", title: "URL / Enlace", type: "string" },
             { name: "type", title: "Tipo", type: "string", options: { list: [
-              { title: "Primario", value: "primary" },
-              { title: "Secundario", value: "secondary" },
+              { title: "Primario (WhatsApp / Principal)", value: "primary" },
+              { title: "Secundario (Outline)", value: "secondary" },
             ]}},
           ],
           preview: {
