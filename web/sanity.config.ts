@@ -4,24 +4,23 @@ import { presentationTool, defineLocations } from "sanity/presentation";
 import { schemaTypes } from "./sanity/schema";
 import { STUDIO_TITLE } from "./sanity/lib/constants";
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
 
 function getSiteUrl(): string {
-  if (typeof window !== "undefined" && window.location?.hostname === "localhost") {
-    return window.location.origin;
-  }
   if (process.env.NEXT_PUBLIC_SITE_URL) {
     return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
   }
-  return "https://www.itechperu.shop";
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL.replace(/\/$/, "")}`;
+  }
+  return "http://localhost:3000";
 }
 
 const siteUrl = getSiteUrl();
 
 export default defineConfig({
-  basePath: "/admin",
-  name: "itech-peru-cms",
+  name: "maia-store-cms",
   title: STUDIO_TITLE,
   projectId,
   dataset,

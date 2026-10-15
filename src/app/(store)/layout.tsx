@@ -9,7 +9,7 @@ import ScrollProgress from "@/components/maia/ScrollProgress";
 import { VisualEditing } from "@/components/cms/VisualEditing";
 import { SanityLiveWithToken } from "@/components/SanityLiveWithToken";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.itechperu.shop";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://maia-store.vercel.app";
 
 export const metadata: Metadata = {
   title: {

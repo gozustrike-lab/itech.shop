@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   // Health check / info
   if (!endpoint) {
     return NextResponse.json({
-      name: 'iTech Peru API',
+      name: 'Maia Store API',
       version: '1.0.0',
       endpoints: {
         products: '/api/store?endpoint=products',

@@ -29,7 +29,6 @@ function useCartDrawerOpen() {
 }
 
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
-import { ve } from '@/lib/ve';
 
 export default function CartDrawer() {
   const [open, setOpen] = useCartDrawerOpen();
@@ -193,11 +192,10 @@ export default function CartDrawer() {
                 Explora nuestro catálogo y encuentra el equipo ideal para ti
               </p>
               <button
-                onClick={() => navigateTo(siteConfig.featuredSection?.ctaLink || '/coleccion')}
-                {...ve('siteSettings', 'siteSettings', 'featuredSection.ctaLabel')}
+                onClick={() => navigateTo('/coleccion')}
                 className="px-6 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-turquoise-600 transition-colors active:scale-95"
               >
-                {siteConfig.featuredSection?.ctaLabel || 'Ver Catálogo'}
+                Ver Catálogo
               </button>
             </div>
           )}
@@ -226,11 +224,10 @@ export default function CartDrawer() {
             {/* Secondary CTA — WhatsApp */}
             <button
               onClick={handleWhatsApp}
-              {...ve('siteSettings', 'siteSettings', 'productButtons.whatsappLabel')}
               className="w-full flex items-center justify-center gap-2 bg-[#25D366]/8 hover:bg-[#25D366]/15 text-[#25D366] py-3 rounded-xl font-semibold text-[13px] transition-colors active:scale-[0.98]"
             >
               <MessageCircle className="w-4 h-4" />
-              {siteConfig.productButtons?.whatsappLabel || 'Pedir por WhatsApp'}
+              Pedir por WhatsApp
             </button>
 
             {/* Link to full cart page */}

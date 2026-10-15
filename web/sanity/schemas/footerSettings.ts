@@ -11,7 +11,7 @@ export default defineType({
       name: "copyright",
       title: "Texto de Copyright",
       type: "string",
-      initialValue: "iTech Peru. Todos los derechos reservados.",
+      initialValue: "Maia Store. Todos los derechos reservados.",
       description: "El año se agrega automáticamente",
     }),
     defineField({
@@ -19,7 +19,7 @@ export default defineType({
       title: "Descripción de la Marca",
       type: "text",
       rows: 3,
-      description: "Texto breve sobre iTech Peru para el footer",
+      description: "Texto breve sobre Maia Store para el footer",
     }),
     defineField({
       name: "socialLinks",
@@ -49,43 +49,14 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "catalogTitle",
-      title: "Título Columna Catálogo",
-      type: "string",
-      initialValue: "Catálogo",
-    }),
-    defineField({
-      name: "catalogLinks",
-      title: "Enlaces de Catálogo",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "label", title: "Texto del Botón/Enlace", type: "string" },
-            { name: "href", title: "URL", type: "string" },
-          ],
-          preview: {
-            select: { title: "label", subtitle: "href" },
-          },
-        },
-      ],
-    }),
-    defineField({
-      name: "infoTitle",
-      title: "Título Columna Información",
-      type: "string",
-      initialValue: "Información",
-    }),
-    defineField({
       name: "quickLinks",
-      title: "Enlaces de Información",
+      title: "Enlaces Rápidos",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
-            { name: "label", title: "Texto del Botón/Enlace", type: "string" },
+            { name: "label", title: "Texto", type: "string" },
             { name: "href", title: "URL", type: "string" },
           ],
           preview: {
@@ -93,24 +64,6 @@ export default defineType({
           },
         },
       ],
-    }),
-    defineField({
-      name: "contactTitle",
-      title: "Título Columna Contacto",
-      type: "string",
-      initialValue: "Contacto",
-    }),
-    defineField({
-      name: "whatsappCtaLabel",
-      title: "Texto del Botón WhatsApp del Footer",
-      type: "string",
-      initialValue: "Escríbenos",
-    }),
-    defineField({
-      name: "whatsappCtaMessage",
-      title: "Mensaje de WhatsApp del Footer",
-      type: "string",
-      initialValue: "Hola iTech Peru! Quisiera hacer una consulta",
     }),
     defineField({
       name: "newsletterText",

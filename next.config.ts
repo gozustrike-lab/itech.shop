@@ -27,8 +27,12 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: [
           {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self' https://www.itechperu.shop https://itechperu.shop https://*.vercel.app http://localhost:4000 http://localhost:3000",
+            value: "frame-ancestors 'self'",
           },
         ],
       },

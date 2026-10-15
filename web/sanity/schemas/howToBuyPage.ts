@@ -17,7 +17,7 @@ export default defineType({
       name: "subtitle",
       title: "Subtítulo",
       type: "string",
-      initialValue: "Cómo Comprar",
+      initialValue: "Tu joya perfecta está a unos pasos",
     }),
     defineField({
       name: "steps",
@@ -26,8 +26,6 @@ export default defineType({
       of: [
         {
           type: "object",
-          name: "buyStep",
-          title: "Paso de Compra",
           fields: [
             { name: "stepNumber", title: "Número de Paso", type: "number" },
             { name: "icon", title: "Icono (emoji)", type: "string" },
@@ -47,58 +45,13 @@ export default defineType({
       of: [
         {
           type: "object",
-          name: "paymentMethod",
-          title: "Método de Pago",
           fields: [
             { name: "name", title: "Nombre", type: "string" },
-            { name: "description", title: "Descripción", type: "text", rows: 3 },
-            { name: "icon", title: "Icono", type: "string" },
-            {
-              name: "steps",
-              title: "Pasos del método de pago",
-              type: "array",
-              of: [{ type: "string" }],
-            },
-            { name: "ctaLabel", title: "Texto del Botón (CTA)", type: "string" },
-            { name: "ctaLink", title: "Enlace del Botón (opcional, por defecto WhatsApp)", type: "string" },
+            { name: "description", title: "Descripción", type: "string" },
+            { name: "icon", title: "Icono (emoji)", type: "string" },
           ],
           preview: {
             select: { title: "name", subtitle: "description" },
-          },
-        },
-      ],
-    }),
-    defineField({
-      name: "trustSignals",
-      title: "Garantías y Confianza (Sección Inferior)",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "title", title: "Título", type: "string" },
-            { name: "desc", title: "Descripción", type: "text", rows: 2 },
-            { name: "icon", title: "Icono", type: "string" },
-          ],
-          preview: {
-            select: { title: "title", subtitle: "desc" },
-          },
-        },
-      ],
-    }),
-    defineField({
-      name: "faqs",
-      title: "Preguntas Frecuentes (FAQ)",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "q", title: "Pregunta", type: "string" },
-            { name: "a", title: "Respuesta", type: "text", rows: 3 },
-          ],
-          preview: {
-            select: { title: "q", subtitle: "a" },
           },
         },
       ],
@@ -120,7 +73,7 @@ export default defineType({
       name: "whatsappMessage",
       title: "Mensaje por defecto de WhatsApp",
       type: "string",
-      initialValue: "Hola iTech Peru! Quisiera información sobre cómo comprar",
+      initialValue: "Hola Maia Store! Quisiera información sobre cómo comprar",
     }),
   ],
   preview: {

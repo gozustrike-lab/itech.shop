@@ -131,12 +131,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     }
   } catch {}
 
-  // Fallback to store-data
+  // If not found in Sanity, return 404
   if (!product) {
-    const storeProduct = getProductBySlug(slug);
-    if (!storeProduct) notFound();
-    product = mapStoreProduct(storeProduct);
-    allProducts = storeProducts.map(mapStoreProduct);
+    notFound();
   }
 
   return <ProductDetailClient product={product} allProducts={allProducts} useFallback={useFallback} />;

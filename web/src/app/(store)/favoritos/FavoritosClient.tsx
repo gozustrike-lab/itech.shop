@@ -1,44 +1,17 @@
 'use client';
 
-import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Heart, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { useStore } from '@/lib/store-context';
-import { products as fallbackProducts, formatPrice } from '@/lib/store-data';
-import { ve } from '@/lib/ve';
-import { useSiteConfig } from '@/contexts/SiteConfigContext';
+import { products, formatPrice } from '@/lib/store-data';
 
-export default function FavoritosClient({ initialProducts = [] }: { initialProducts?: any[] }) {
+export default function FavoritosClient() {
   const router = useRouter();
   const { favorites, toggleFavorite, addToCart } = useStore();
-  const siteConfig = useSiteConfig();
 
-  const allProducts = useMemo(() => {
-    const sanityMapped = (initialProducts || []).map((p: any) => ({
-      id: p._id,
-      slug: p.slug,
-      name: p.name,
-      price: p.price,
-      image: p.mainImage || '/images/placeholder.webp',
-      imageSecondary: p.secondaryImage || '',
-      category: p.category?.slug || '',
-      categoryLabel: p.category?.name || 'Tecnología',
-      description: p.description || '',
-      longDescription: p.longDescription || '',
-      features: p.features || [],
-      color: { name: p.color || '' },
-      images: (p.gallery || []).map((g: any) => ({ original: g.url || '', thumbnail: g.url || '' })),
-      rating: p.rating || 5,
-      reviews: p.reviewCount || 0,
-      sku: p.sku || '',
-      collection: p.collection || '',
-    }));
-    return [...sanityMapped, ...fallbackProducts];
-  }, [initialProducts]);
-
-  const favoriteProducts = allProducts.filter((p) => favorites.includes(String(p.id)));
+  const favoriteProducts = products.filter((p) => favorites.includes(String(p.id)));
 
   return (
     <div id="favoritos-contenido" className="relative pt-20 pb-20 sm:pb-24 px-4 min-h-screen scroll-mt-16">
@@ -67,13 +40,12 @@ export default function FavoritosClient({ initialProducts = [] }: { initialProdu
               Explora el catálogo y guarda los equipos que más te interesen
             </p>
             <motion.button
-              onClick={() => router.push(siteConfig.featuredSection?.ctaLink || '/coleccion')}
-              {...ve('siteSettings', 'siteSettings', 'featuredSection.ctaLabel')}
+              onClick={() => router.push('/coleccion')}
               className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full text-sm font-semibold shadow-lg shadow-turquoise-500/20"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              <ShoppingBag className="w-4 h-4" /> {siteConfig.featuredSection?.ctaLabel || 'Ver Catálogo'}
+              <ShoppingBag className="w-4 h-4" /> Ver Catálogo
             </motion.button>
           </div>
         ) : (
@@ -88,7 +60,6 @@ export default function FavoritosClient({ initialProducts = [] }: { initialProdu
               >
                 <Link
                   href={`/coleccion/${product.slug}`}
-                  {...ve(String(product.id), 'product', 'mainImage')}
                   className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 cursor-pointer"
                 >
                   <img
@@ -100,21 +71,20 @@ export default function FavoritosClient({ initialProducts = [] }: { initialProdu
                 <div className="flex-1 min-w-0 w-0 overflow-hidden break-words">
                   <Link
                     href={`/coleccion/${product.slug}`}
-                    {...ve(String(product.id), 'product', 'name')}
                     className="block font-semibold text-sm text-foreground line-clamp-2 cursor-pointer hover:text-primary transition-colors break-words"
                   >
                     {product.name}
                   </Link>
-                  <p {...ve(String(product.id), 'product', 'description')} className="text-xs text-foreground/40 mt-0.5 line-clamp-2">
+                  <p className="text-xs text-foreground/40 mt-0.5 line-clamp-2">
                     {product.description}
                   </p>
                   <div className="flex items-center justify-between mt-3 min-w-0 gap-2">
-                    <span {...ve(String(product.id), 'product', 'price')} className="text-base font-bold text-primary">
+                    <span className="text-base font-bold text-primary">
                       {formatPrice(product.price)}
                     </span>
                     <div className="flex items-center gap-2">
                       <motion.button
-                        onClick={() => addToCart(product as any)}
+                        onClick={() => addToCart(product)}
                         className="w-8 h-8 rounded-full bg-turquoise-50 flex items-center justify-center text-primary hover:bg-turquoise-100 transition-colors"
                         whileTap={{ scale: 0.9 }}
                       >

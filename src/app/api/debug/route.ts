@@ -31,7 +31,7 @@ export async function GET() {
   } else if (process.env.VERCEL_URL) {
     computedSiteUrl = `https://${process.env.VERCEL_URL.replace(/\/$/, "")}`;
   } else {
-    computedSiteUrl = "https://www.itechperu.shop (hardcoded fallback)";
+    computedSiteUrl = "https://maia-store.vercel.app (hardcoded fallback)";
   }
 
   const result = {
@@ -46,8 +46,8 @@ export async function GET() {
     },
     schemas: [
       "siteSettings (singleton — config del sitio)",
-      "product (equipos — con categoría, precio, imágenes, galería)",
-      "productCategory (categorías — Smartphones, Laptops, Tablets, etc.)",
+      "product (joyas — con categoría, precio, imágenes, galería)",
+      "productCategory (categorías — Pulseras, Aretes, Collares, etc.)",
       "heroSlide (slides del hero)",
       "testimonial (testimonios)",
       "studioGuide (guía interna)",

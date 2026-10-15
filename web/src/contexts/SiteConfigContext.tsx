@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { createContext, useContext } from 'react';
 
@@ -13,28 +13,13 @@ export interface SiteConfig {
   schedule?: string;
   whatsapp?: string;
   email?: string;
-  nav?: Array<{ label: string; url?: string; href?: string }>;
+  nav?: Array<{ label: string; url: string }>;
   social?: Array<{ platform: string; url: string }>;
   logo?: string;
   ogImage?: string;
   instagramUrl?: string;
   tiktokUrl?: string;
   facebookUrl?: string;
-  heroSecondaryCtaLabel?: string;
-  heroSecondaryCtaLink?: string;
-  heroExploreLabel?: string;
-  featuredSection?: {
-    badge?: string;
-    title?: string;
-    subtitle?: string;
-    ctaLabel?: string;
-    ctaLink?: string;
-  };
-  productButtons?: {
-    whatsappLabel?: string;
-    addToCartLabel?: string;
-    viewMoreLabel?: string;
-  };
 }
 
 const defaultSiteConfig: SiteConfig = {

@@ -3,8 +3,7 @@ import { getClientForDraft } from "@/lib/sanity.client";
 
 export async function fetchCMS<T>(query: string): Promise<T | null> {
   try {
-    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
-    if (!projectId) return null;
+    if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) return null;
     let isDraft = false;
     try { const dm = await draftMode(); isDraft = dm.isEnabled; } catch {}
     const client = getClientForDraft(isDraft);

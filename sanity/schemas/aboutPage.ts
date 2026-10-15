@@ -17,21 +17,21 @@ export default defineType({
       name: "subtitle",
       title: "Subtítulo",
       type: "string",
-      initialValue: "Tecnología que Renueva",
+      initialValue: "Artesanía que Transforma",
     }),
     defineField({
       name: "mainImage",
       title: "Imagen Principal",
       type: "image",
       options: { hotspot: true },
-      description: "Imagen principal de Nosotros (1200x1500px recomendado)",
+      description: "Imagen de la artesana (1200x1500px recomendado)",
     }),
     defineField({
       name: "storyParagraphs",
       title: "Párrafos de la Historia",
       type: "array",
       of: [{ type: "block" }],
-      description: "La historia de iTech Peru",
+      description: "La historia de Maia Store",
     }),
     defineField({
       name: "features",
@@ -52,13 +52,6 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "headerDescription",
-      title: "Descripción Superior",
-      type: "text",
-      rows: 2,
-      initialValue: "Dispositivos tecnológicos certificados y renovados con garantía real de 12 meses en todo el Perú.",
-    }),
-    defineField({
       name: "yearsExperience",
       title: "Años de Experiencia",
       type: "number",
@@ -69,18 +62,6 @@ export default defineType({
       title: "Etiqueta de Experiencia",
       type: "string",
       initialValue: "Años de Experiencia",
-    }),
-    defineField({
-      name: "ctaLabel",
-      title: "Texto del Botón CTA",
-      type: "string",
-      initialValue: "Ver Equipos Certificados",
-    }),
-    defineField({
-      name: "ctaLink",
-      title: "Enlace del Botón CTA",
-      type: "string",
-      initialValue: "/coleccion",
     }),
   ],
   preview: {

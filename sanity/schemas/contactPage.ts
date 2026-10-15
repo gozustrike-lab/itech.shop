@@ -17,7 +17,7 @@ export default defineType({
       name: "subtitle",
       title: "Subtítulo",
       type: "string",
-      initialValue: "Estamos Aquí Para Ti",
+      initialValue: "Lo que Dicen Nuestras Clientas",
     }),
     defineField({
       name: "contactInfo",
@@ -26,14 +26,11 @@ export default defineType({
       of: [
         {
           type: "object",
-          name: "contactInfoItem",
-          title: "Canal de Contacto",
           fields: [
             { name: "label", title: "Etiqueta", type: "string" },
             { name: "value", title: "Valor", type: "string" },
-            { name: "desc", title: "Descripción / Subtexto", type: "string" },
-            { name: "icon", title: "Icono", type: "string" },
-            { name: "url", title: "URL / Enlace del botón", type: "string" },
+            { name: "icon", title: "Icono (emoji)", type: "string" },
+            { name: "url", title: "URL (opcional)", type: "url" },
           ],
           preview: {
             select: { title: "label", subtitle: "value" },
@@ -45,7 +42,7 @@ export default defineType({
       name: "ctaTitle",
       title: "Título del CTA (Banner)",
       type: "string",
-      initialValue: "¿Listo para Renovar tu Equipo?",
+      initialValue: "¿Lista para Brillar?",
     }),
     defineField({
       name: "ctaDescription",
@@ -68,10 +65,10 @@ export default defineType({
           type: "object",
           fields: [
             { name: "label", title: "Texto del Botón", type: "string" },
-            { name: "url", title: "URL / Enlace", type: "string" },
+            { name: "url", title: "URL", type: "url" },
             { name: "type", title: "Tipo", type: "string", options: { list: [
-              { title: "Primario (WhatsApp / Principal)", value: "primary" },
-              { title: "Secundario (Outline)", value: "secondary" },
+              { title: "Primario", value: "primary" },
+              { title: "Secundario", value: "secondary" },
             ]}},
           ],
           preview: {

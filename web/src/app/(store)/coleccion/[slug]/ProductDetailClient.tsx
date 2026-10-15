@@ -12,7 +12,6 @@ import { shareProduct } from '@/lib/share';
 import { ve } from '@/lib/ve';
 import { getSwatchColor } from '@/lib/colors';
 import Lightbox from '@/components/maia/Lightbox';
-import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import type { ProductData } from './page';
 
 interface Props {
@@ -25,7 +24,6 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
   const router = useRouter();
   const { isFavorite, toggleFavorite, addToCart } = useStore();
   const { showToast } = useToast();
-  const siteConfig = useSiteConfig();
   const product = initialProduct;
   const pageRef = useRef<HTMLDivElement>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -39,10 +37,8 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
   const [activeVariant, setActiveVariant] = useState<ProductData | null>(product);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  // Find variants (same collection, different color)
-  const variants = useMemo(() => {
-    return allProducts.filter(p => p.collection === product.collection && p._id !== product._id && p.color?.name !== product.color?.name);
-  }, [product, allProducts]);
+  // Variants disabled per user instruction
+  const variants: ProductData[] = [];
 
   // Gallery images
   const variantImages = useMemo(() => {
@@ -92,9 +88,6 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
 
   const displayProduct = activeVariant || product;
   const cartItem: any = { id: displayProduct._id, slug: displayProduct.slug, name: displayProduct.name, price: displayProduct.price, image: displayProduct.mainImage, imageSecondary: displayProduct.secondaryImage || '', category: displayProduct.categorySlug, categoryLabel: displayProduct.categoryLabel, description: displayProduct.description, longDescription: displayProduct.longDescription, features: displayProduct.features, color: displayProduct.color, images: displayProduct.gallery, rating: displayProduct.rating, reviews: displayProduct.reviews, sku: displayProduct.sku, collection: displayProduct.collection };
-
-  const whatsappLabel = siteConfig.productButtons?.whatsappLabel || 'Pedir por WhatsApp';
-  const addToCartLabel = siteConfig.productButtons?.addToCartLabel || 'Agregar al Carrito';
 
   return (
     <div ref={pageRef} className="relative pt-16 pb-20 sm:pb-24">
@@ -160,31 +153,15 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
               <div className="flex items-center gap-3 mb-4">
                 <p {...ve(displayProduct._id, 'product', 'price')} className="text-2xl font-bold text-primary">{formatPrice(displayProduct.price)}</p>
                 {displayProduct.compareAtPrice && displayProduct.compareAtPrice > displayProduct.price && (
-                  <p {...ve(displayProduct._id, 'product', 'compareAtPrice')} className="text-lg text-foreground/30 line-through">{formatPrice(displayProduct.compareAtPrice)}</p>
+                  <p className="text-lg text-foreground/30 line-through">{formatPrice(displayProduct.compareAtPrice)}</p>
                 )}
               </div>
               <p {...ve(displayProduct._id, 'product', 'longDescription')} className="text-sm text-foreground/60 leading-relaxed">{displayProduct.longDescription || displayProduct.description}</p>
             </div>
 
-            {variants.length > 1 && (
-              <div className="detail-animate">
-                <h3 className="text-sm font-bold text-foreground mb-3">Color: <span className="font-normal text-foreground/60">{displayProduct.color.name}</span></h3>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {variants.map((variant) => {
-                    const isActive = variant._id === displayProduct._id;
-                    const swatchColor = getSwatchColor(variant.color?.name);
-                    return (
-                      <motion.button key={variant._id} onClick={() => switchVariant(variant)} className={`relative w-10 h-10 rounded-full border-2 transition-all duration-200 flex items-center justify-center ${isActive ? 'border-primary ring-2 ring-primary/20 scale-110' : 'border-zinc-200 hover:border-primary/50 hover:scale-105'}`} whileTap={{ scale: 0.92 }} title={variant.color.name}>
-                        <span className="w-7 h-7 rounded-full block" style={{ backgroundColor: swatchColor }} />
-                        {isActive && (<motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute inset-0 flex items-center justify-center"><Check className="w-4 h-4 text-primary" strokeWidth={3} /></motion.span>)}
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
 
-            <div className="detail-animate" {...ve(displayProduct._id, 'product', 'features')}>
+
+            <div className="detail-animate">
               <h3 className="text-sm font-bold text-foreground mb-2.5">Caracteristicas</h3>
               <ul className="space-y-2">
                 {displayProduct.features.map((feat) => (
@@ -211,25 +188,11 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
             </div>
 
             <div className="detail-animate flex flex-col sm:flex-row gap-2.5 pt-3">
-              <motion.a
-                href={generateWhatsAppLink(cartItem, { quantity, productUrl, phone: siteConfig.whatsapp })}
-                target="_blank"
-                rel="noopener noreferrer"
-                {...ve('siteSettings', 'siteSettings', 'productButtons.whatsappLabel')}
-                className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-green-500/15"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <MessageCircle className="w-4 h-4" /> {whatsappLabel}
+              <motion.a href={generateWhatsAppLink(cartItem, { quantity, productUrl })} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-green-500/15" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
+                <MessageCircle className="w-4 h-4" /> Pedir por WhatsApp
               </motion.a>
-              <motion.button
-                onClick={() => { addToCart(cartItem); showToast('Agregado al carrito'); }}
-                {...ve('siteSettings', 'siteSettings', 'productButtons.addToCartLabel')}
-                className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-turquoise-600 text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-turquoise-500/15"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <ShoppingBag className="w-4 h-4" /> {addToCartLabel}
+              <motion.button onClick={() => { addToCart(cartItem); showToast('Agregado al carrito'); }} className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-turquoise-600 text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-turquoise-500/15" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
+                <ShoppingBag className="w-4 h-4" /> Agregar al Carrito
               </motion.button>
             </div>
 
