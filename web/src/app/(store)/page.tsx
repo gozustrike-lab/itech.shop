@@ -19,8 +19,13 @@ export default async function HomePage() {
   const hasSanityTestimonials = sanityTestimonials.length > 0;
 
   // Use Sanity data if available, else fall back to store-data
-  const featuredProducts: any[] = hasSanityProducts
-    ? (sanityProducts as any[]).filter(p => p.featured).slice(0, 6)
+  const filteredFeatured = hasSanityProducts
+    ? (sanityProducts as any[]).filter(p => p.featured)
+    : [];
+  const featuredProducts: any[] = filteredFeatured.length > 0
+    ? filteredFeatured.slice(0, 6)
+    : hasSanityProducts
+    ? (sanityProducts as any[]).slice(0, 6)
     : storeProducts.slice(0, 6).map((p: any) => ({
         _id: `store-${p.id}`,
         slug: p.slug,

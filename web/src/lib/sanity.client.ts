@@ -2,8 +2,7 @@ import { createClient, type SanityClient } from "@sanity/client";
 import { createImageUrlBuilder, type ImageUrlBuilder } from "@sanity/image-url";
 
 function createSanityClient(options?: { perspective?: "published" | "previewDrafts" }): SanityClient {
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-  if (!projectId) throw new Error("NEXT_PUBLIC_SANITY_PROJECT_ID is not set");
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
   const isDraft = options?.perspective === "previewDrafts";
   return createClient({
     projectId,
@@ -18,15 +17,13 @@ function createSanityClient(options?: { perspective?: "published" | "previewDraf
 
 let _publishedClient: SanityClient | null = null;
 function getPublishedClient(): SanityClient | null {
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-  if (!projectId) return null;
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
   if (!_publishedClient) _publishedClient = createSanityClient({ perspective: "published" });
   return _publishedClient;
 }
 
 function getDraftClient(): SanityClient | null {
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-  if (!projectId) return null;
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kqneikcb";
   return createSanityClient({ perspective: "previewDrafts" });
 }
 

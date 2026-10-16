@@ -79,12 +79,38 @@ const FALLBACK_MOBILE = [
   '/images/hero-slide-2-mobile.webp',
 ];
 
-const FALLBACK_HERO_SLIDES: SanityHeroSlide[] = FALLBACK_BG.map((bg, i) => ({
-  _id: 'fallback-hero-' + i,
-  bgImage: bg,
-  mobileImage: FALLBACK_MOBILE[i],
-  order: i,
-}));
+const FALLBACK_HERO_SLIDES: SanityHeroSlide[] = [
+  {
+    _id: 'fallback-hero-0',
+    title: 'Tecnología Renovada a tu Alcance',
+    subtitle: 'Laptops, MacBooks, iPads y smartphones certificados con 12 meses de garantía real en todo el Perú.',
+    bgImage: '/images/hero-craft.webp',
+    mobileImage: '/images/hero-craft-mobile.webp',
+    ctaLabel: 'Ver Catálogo',
+    ctaLink: '/coleccion',
+    order: 0,
+  },
+  {
+    _id: 'fallback-hero-1',
+    title: 'Revisión de 30 Puntos Certificada',
+    subtitle: 'Cada equipo pasa por rigurosas pruebas de batería, pantalla, puertos y rendimiento.',
+    bgImage: '/images/hero-slide-1.webp',
+    mobileImage: '/images/hero-slide-1-mobile.webp',
+    ctaLabel: 'Ver MacBooks',
+    ctaLink: '/coleccion?categoria=laptops',
+    order: 1,
+  },
+  {
+    _id: 'fallback-hero-2',
+    title: 'Garantía Real de 12 Meses',
+    subtitle: 'Compra con total tranquilidad. Respaldo técnico directo y soporte personalizado por WhatsApp.',
+    bgImage: '/images/hero-slide-2.webp',
+    mobileImage: '/images/hero-slide-2-mobile.webp',
+    ctaLabel: 'Ver iPads y Laptops',
+    ctaLink: '/coleccion',
+    order: 2,
+  },
+];
 
 
 
