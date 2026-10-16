@@ -12,6 +12,8 @@ import { shareProduct } from '@/lib/share';
 import { ve } from '@/lib/ve';
 import { getSwatchColor } from '@/lib/colors';
 import Lightbox from '@/components/maia/Lightbox';
+import ProductCardImage from '@/components/ProductCardImage';
+import { getProductImages } from '@/lib/catalog-images';
 import type { ProductData } from './page';
 
 interface Props {
@@ -40,11 +42,17 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
   // Variants disabled per user instruction
   const variants: ProductData[] = [];
 
-  // Gallery images
+  // Gallery images - resolve 3 genuine multi-angle views
   const variantImages = useMemo(() => {
     if (!activeVariant) return [];
-    const imgs = activeVariant.gallery?.length ? activeVariant.gallery : [{ original: activeVariant.mainImage, thumbnail: activeVariant.mainImage }];
-    return imgs.map(img => ({ src: img.original, alt: `${activeVariant.name}`, thumb: img.thumbnail }));
+    const imageSet = getProductImages(activeVariant);
+    const labels = ['Frontal', 'Ángulo', 'Detalle'];
+    return imageSet.all.map((url, idx) => ({
+      src: url,
+      thumb: url,
+      alt: `${activeVariant.name} - Vista ${labels[idx] || idx + 1}`,
+      label: labels[idx] || `Vista ${idx + 1}`,
+    }));
   }, [activeVariant]);
 
   const currentMainImage = variantImages[selectedImageIndex]?.src || activeVariant?.mainImage || '';
@@ -109,19 +117,20 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
         <div id="producto-detalle" className="grid lg:grid-cols-2 gap-8 lg:gap-16 mb-20 lg:mb-28 scroll-mt-16">
           {/* Image Gallery */}
           <div className="detail-animate">
-            <div ref={imageRef} {...ve(displayProduct._id, 'product', 'mainImage')} className="relative aspect-square rounded-2xl overflow-hidden bg-zinc-100 cursor-zoom-in" onClick={handleMainImageClick} onMouseEnter={() => setIsZooming(true)} onMouseLeave={() => setIsZooming(false)} onMouseMove={handleMouseMove}>
+            <div ref={imageRef} {...ve(displayProduct._id, 'product', 'mainImage')} className="relative aspect-square rounded-2xl overflow-hidden bg-white border border-zinc-200/80 p-4 flex items-center justify-center cursor-zoom-in shadow-sm" onClick={handleMainImageClick} onMouseEnter={() => setIsZooming(true)} onMouseLeave={() => setIsZooming(false)} onMouseMove={handleMouseMove}>
               <AnimatePresence mode="wait">
-                <motion.img key={currentMainImage} src={currentMainImage} alt={displayProduct.name} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="w-full h-full object-cover transition-transform duration-300" style={isZooming ? { transform: 'scale(1.8)', transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` } : { transform: 'scale(1)' }} />
+                <motion.img key={currentMainImage} src={currentMainImage} alt={displayProduct.name} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="w-full h-full object-contain transition-transform duration-300" style={isZooming ? { transform: 'scale(1.8)', transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` } : { transform: 'scale(1)' }} />
               </AnimatePresence>
-              <div className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
+              <div className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg border border-zinc-200/60">
                 <ZoomIn className="w-5 h-5 text-foreground/60" />
               </div>
             </div>
             {variantImages.length > 1 && (
-              <div className="flex items-center gap-2 mt-3 overflow-x-auto pb-1">
+              <div className="flex items-center gap-2.5 mt-3 overflow-x-auto pb-1">
                 {variantImages.map((img, i) => (
-                  <button key={i} onClick={() => handleThumbnailClick(i)} className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 ${i === selectedImageIndex ? 'border-primary ring-1 ring-primary/30' : 'border-zinc-200 opacity-50 hover:opacity-90'}`}>
-                    <img src={img.thumb || img.src} alt={img.alt} className="w-full h-full object-cover" loading="lazy" />
+                  <button key={i} onClick={() => handleThumbnailClick(i)} className={`flex-shrink-0 w-20 rounded-xl overflow-hidden border-2 bg-white p-1.5 transition-all duration-200 flex flex-col items-center justify-center ${i === selectedImageIndex ? 'border-primary ring-2 ring-primary/30 shadow-sm' : 'border-zinc-200 opacity-60 hover:opacity-100'}`}>
+                    <img src={img.thumb || img.src} alt={img.alt} className="w-full h-14 object-contain" loading="lazy" />
+                    <span className="text-[9px] font-bold text-zinc-600 block mt-0.5">{img.label}</span>
                   </button>
                 ))}
               </div>
@@ -217,10 +226,7 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
               {related.map((rp) => (
                 <motion.div key={rp._id} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }} className="group cursor-pointer">
                   <Link href={`/coleccion/${rp.slug}`}>
-                    <div className="relative aspect-square rounded-2xl overflow-hidden mb-2 bg-zinc-100">
-                      <img src={rp.mainImage} alt={rp.name} className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105" loading="lazy" />
-                      {rp.secondaryImage && <img src={rp.secondaryImage} alt={`${rp.name} - vista alternativa`} className="absolute inset-0 w-full h-full object-cover opacity-0 scale-105 transition-all duration-700 group-hover:opacity-100 group-hover:scale-100" loading="lazy" />}
-                    </div>
+                    <ProductCardImage product={rp} alt={rp.name} className="mb-2" />
                     <h4 className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate">{rp.name}</h4>
                     <p className="text-sm font-bold text-primary">{formatPrice(rp.price)}</p>
                   </Link>

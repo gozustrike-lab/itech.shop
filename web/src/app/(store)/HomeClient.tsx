@@ -10,6 +10,7 @@ import { formatPrice } from '@/lib/store-data';
 import { ve } from '@/lib/ve';
 import InfiniteMarquee from '@/components/maia/InfiniteMarquee';
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
+import ProductCardImage from '@/components/ProductCardImage';
 
 // ─── Types ─────────────────────────────────────────────────────
 export interface SanityHeroSlide {
@@ -83,7 +84,7 @@ const FALLBACK_HERO_SLIDES: SanityHeroSlide[] = [
   {
     _id: 'fallback-hero-0',
     title: 'Tecnología Renovada a tu Alcance',
-    subtitle: 'Laptops, MacBooks, iPads y smartphones certificados con 12 meses de garantía real en todo el Perú.',
+    subtitle: 'Laptops, MacBooks, iPads y accesorios 100% testeados en 30 puntos técnicos con boleta de venta en todo el Perú.',
     bgImage: '/images/hero-craft.webp',
     mobileImage: '/images/hero-craft-mobile.webp',
     ctaLabel: 'Ver Catálogo',
@@ -93,7 +94,7 @@ const FALLBACK_HERO_SLIDES: SanityHeroSlide[] = [
   {
     _id: 'fallback-hero-1',
     title: 'Revisión de 30 Puntos Certificada',
-    subtitle: 'Cada equipo pasa por rigurosas pruebas de batería, pantalla, puertos y rendimiento.',
+    subtitle: 'Cada equipo pasa por rigurosas pruebas de pantalla, cámaras, Touch ID, audio, puertos y rendimiento.',
     bgImage: '/images/hero-slide-1.webp',
     mobileImage: '/images/hero-slide-1-mobile.webp',
     ctaLabel: 'Ver MacBooks',
@@ -102,8 +103,8 @@ const FALLBACK_HERO_SLIDES: SanityHeroSlide[] = [
   },
   {
     _id: 'fallback-hero-2',
-    title: 'Garantía Real de 12 Meses',
-    subtitle: 'Compra con total tranquilidad. Respaldo técnico directo y soporte personalizado por WhatsApp.',
+    title: 'Emitimos Boleta de Venta',
+    subtitle: 'Compra con total transparencia. Equipos testeados en vivo por TikTok Live y soporte personalizado por WhatsApp.',
     bgImage: '/images/hero-slide-2.webp',
     mobileImage: '/images/hero-slide-2-mobile.webp',
     ctaLabel: 'Ver iPads y Laptops',
@@ -135,7 +136,7 @@ export default function HomePage({ data }: { data: HomeData }) {
 
   const currentHeroSlide = heroSlides[currentSlide] || heroSlides[0];
   const slideTitle = currentHeroSlide?.title || siteConfig.title || 'Tecnología que Renueva';
-  const slideSubtitle = (typeof currentHeroSlide?.subtitle === 'string' ? currentHeroSlide.subtitle : null) || siteConfig.description || 'Dispositivos renovados grado A con 12 meses de garantía real. Rendimiento como nuevo y hasta 40% de ahorro en todo el Perú.';
+  const slideSubtitle = (typeof currentHeroSlide?.subtitle === 'string' ? currentHeroSlide.subtitle : null) || siteConfig.description || 'Dispositivos tecnológicos seleccionados y probados en 30 puntos técnicos. Emitimos Boleta de Venta y enviamos a todo el Perú.';
   const slideCtaLabel = currentHeroSlide?.ctaLabel || 'Ver Catálogo';
   const slideCtaLink = currentHeroSlide?.ctaLink || '/coleccion';
 
@@ -268,7 +269,7 @@ export default function HomePage({ data }: { data: HomeData }) {
               Equipos <span className="text-gradient-turquoise">Destacados</span>
             </h2>
             <p className="text-foreground/40 text-sm max-w-md mx-auto">
-              Los dispositivos tecnológicos más elegidos por nuestros clientes con garantía certificada.
+              Los dispositivos tecnológicos testeados en 30 puntos más elegidos por nuestros clientes con boleta de venta.
             </p>
             <div className="section-divider mx-auto mt-5" />
           </div>
@@ -286,26 +287,15 @@ export default function HomePage({ data }: { data: HomeData }) {
                 <Link href={`/coleccion/${product.slug}`}>
                   <div
                     {...ve(product._id, 'product', 'mainImage')}
-                    className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-zinc-100"
+                    className="relative aspect-square rounded-2xl overflow-hidden mb-3 bg-white border border-zinc-100 p-3 flex items-center justify-center group-hover:border-turquoise-200 transition-colors"
                   >
-                    <img
-                      src={product.mainImage || '/images/placeholder.webp'}
+                    <ProductCardImage
+                      product={product}
                       alt={product.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105"
-                      loading="lazy"
+                      className="border-0 p-0"
                     />
-                    {product.secondaryImage && (
-                      <img
-                        src={product.secondaryImage}
-                        alt={`${product.name} - vista alternativa`}
-                        {...ve(product._id, 'product', 'secondaryImage')}
-                        className="absolute inset-0 w-full h-full object-cover opacity-0 scale-105 transition-all duration-700 group-hover:opacity-100 group-hover:scale-100"
-                        loading="lazy"
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="absolute top-3 left-3">
-                      <span className="px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm text-[11px] font-semibold text-turquoise-700">
+                      <span className="px-3 py-1 rounded-full bg-white/90 shadow-sm border border-zinc-100 text-[11px] font-bold text-turquoise-700">
                         {product.category?.name || 'Tecnología'}
                       </span>
                     </div>
@@ -328,8 +318,8 @@ export default function HomePage({ data }: { data: HomeData }) {
                   </div>
 
                   <div className="px-1">
-                    <h3 {...ve(product._id, 'product', 'name')} className="text-base font-semibold text-foreground group-hover:text-primary transition-colors mb-0.5">
-                      {product.name}
+                    <h3 {...ve(product._id, 'product', 'name')} className="text-base font-bold text-foreground group-hover:text-primary transition-colors mb-0.5 leading-snug">
+                      {product.name.replace(/\s*[•\-]\s*Ord:\s*[\w\-]+/gi, '').replace(/\\"/g, '"').trim()}
                     </h3>
                     <p {...ve(product._id, 'product', 'description')} className="text-xs text-foreground/40 mb-2 line-clamp-1">{product.description}</p>
                     <div className="flex items-center justify-between">

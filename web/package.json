@@ -6,7 +6,8 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "generate:catalog": "node scripts/generate-whatsapp-catalog-csv.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

@@ -143,7 +143,7 @@ export default function ColeccionPage() {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105"
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${product.imageSecondary ? 'group-hover:opacity-0' : 'group-hover:opacity-100'}`}
                     loading="lazy"
                   />
                   {/* Secondary image (revealed on hover) */}

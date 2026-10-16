@@ -452,7 +452,7 @@ export default function ProductDetailPage() {
                   onClick={() => navigate(`#/coleccion/${rp.slug}`)}
                 >
                   <div className="relative aspect-square rounded-2xl overflow-hidden mb-2 bg-zinc-100">
-                    <img src={rp.image} alt={rp.name} className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:opacity-0 group-hover:scale-105" loading="lazy" />
+                    <img src={rp.image} alt={rp.name} className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${rp.imageSecondary ? 'group-hover:opacity-0' : 'group-hover:opacity-100'}`} loading="lazy" />
                     {rp.imageSecondary && (
                       <img src={rp.imageSecondary} alt={`${rp.name} - vista alternativa`} className="absolute inset-0 w-full h-full object-cover opacity-0 scale-105 transition-all duration-700 group-hover:opacity-100 group-hover:scale-100" loading="lazy" />
                     )}

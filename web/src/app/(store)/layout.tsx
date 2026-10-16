@@ -17,11 +17,11 @@ export const metadata: Metadata = {
     template: "%s | iTech Peru",
   },
   description:
-    "Especialistas en smartphones, laptops, consolas y tecnología renovada con 12 meses de garantía real en todo el Perú. Ahorra hasta 40% con equipos certificados.",
+    "Especialistas en smartphones, laptops, MacBooks e iPads probados en 30 puntos técnicos. Emitimos Boleta de Venta en todo el Perú.",
   keywords: [
-    "tecnología renovada", "smartphones reacondicionados", "laptops seminuevas",
-    "iTech Peru", "iPhone Perú", "MacBook Perú", "garantía 12 meses",
-    "tecnología certificada", "Lima", "Perú",
+    "tecnología seminueva", "smartphones reacondicionados", "laptops seminuevas",
+    "iTech Peru", "iPhone Perú", "MacBook Perú", "boleta de venta",
+    "tecnología testeada", "Lima", "Perú",
   ],
   authors: [{ name: "iTech Peru" }],
   metadataBase: new URL(siteUrl),
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   openGraph: {
     title: "iTech Peru | Tecnología Renovada y Certificada",
-    description: "Smartphones, laptops, consolas y accesorios con 12 meses de garantía real. Envíos a todo el Perú.",
+    description: "Smartphones, laptops, iPads y accesorios testeados en 30 puntos técnicos. Emitimos Boleta de Venta.",
     type: "website", locale: "es_PE", siteName: "iTech Peru", url: siteUrl,
     images: [
       { url: "/og-image-square.jpg", width: 1200, height: 1200, alt: "iTech Peru — Tecnología Renovada", type: "image/jpeg" },
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "iTech Peru | Tecnología Renovada y Certificada",
-    description: "Smartphones, laptops y consolas con 12 meses de garantía real. Envíos a todo el Perú.",
+    description: "Smartphones, laptops e iPads testeados en 30 puntos técnicos. Emitimos Boleta de Venta.",
     images: ["/og-image.jpg"],
   },
   robots: {
