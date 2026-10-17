@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Home, Heart, ShoppingBag, Gem, Search } from 'lucide-react';
+import { Home, Heart, ShoppingBag, LayoutGrid, Search } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useStore } from '@/lib/store-context';
 
@@ -16,7 +16,7 @@ export default function BottomAppBar() {
 
   const tabs = [
     { icon: Home, label: 'Inicio', path: '/', href: '/' },
-    { icon: Gem, label: 'Colección', path: '/coleccion', href: '/coleccion' },
+    { icon: LayoutGrid, label: 'Colección', path: '/coleccion', href: '/coleccion' },
     { icon: Heart, label: 'Favoritos', path: '/favoritos', href: '/favoritos', badge: favorites.length },
     { icon: ShoppingBag, label: 'Carrito', path: '/carrito', href: '/carrito', badge: cartCount, drawer: true },
     { icon: Search, label: 'Buscar', path: '/buscar', href: '/buscar' },

@@ -70,33 +70,33 @@ export interface HomeData {
 
 // ─── Fallback hero slides (when Sanity has no heroSlides) ─────
 const FALLBACK_BG = [
-  '/images/hero-craft.webp',
-  '/images/hero-slide-1.webp',
-  '/images/hero-slide-2.webp',
+  '/images/hero-desktop.webp',
+  '/images/hero-desktop.webp',
+  '/images/hero-desktop.webp',
 ];
 const FALLBACK_MOBILE = [
-  '/images/hero-craft-mobile.webp',
-  '/images/hero-slide-1-mobile.webp',
-  '/images/hero-slide-2-mobile.webp',
+  '/images/hero-mobile.webp',
+  '/images/hero-mobile.webp',
+  '/images/hero-mobile.webp',
 ];
 
 const FALLBACK_HERO_SLIDES: SanityHeroSlide[] = [
   {
     _id: 'fallback-hero-0',
-    title: 'Tecnología Renovada a tu Alcance',
-    subtitle: 'Laptops, MacBooks, iPads y accesorios 100% testeados en 30 puntos técnicos con boleta de venta en todo el Perú.',
-    bgImage: '/images/hero-craft.webp',
-    mobileImage: '/images/hero-craft-mobile.webp',
+    title: 'Tecnología Certificada a tu Alcance',
+    subtitle: 'MacBooks, iPads y Laptops probados en 30 puntos técnicos con Boleta de Venta. Stock real y entrega inmediata en Lima y provincias.',
+    bgImage: '/images/hero-desktop.webp',
+    mobileImage: '/images/hero-mobile.webp',
     ctaLabel: 'Ver Catálogo',
     ctaLink: '/coleccion',
     order: 0,
   },
   {
     _id: 'fallback-hero-1',
-    title: 'Revisión de 30 Puntos Certificada',
-    subtitle: 'Cada equipo pasa por rigurosas pruebas de pantalla, cámaras, Touch ID, audio, puertos y rendimiento.',
-    bgImage: '/images/hero-slide-1.webp',
-    mobileImage: '/images/hero-slide-1-mobile.webp',
+    title: 'Testeado en 30 Puntos Técnicos',
+    subtitle: 'Cada equipo pasa por rigurosas pruebas de pantalla, cámaras, Touch ID, audio, puertos y batería.',
+    bgImage: '/images/hero-desktop.webp',
+    mobileImage: '/images/hero-mobile.webp',
     ctaLabel: 'Ver MacBooks',
     ctaLink: '/coleccion?categoria=laptops',
     order: 1,
@@ -104,16 +104,14 @@ const FALLBACK_HERO_SLIDES: SanityHeroSlide[] = [
   {
     _id: 'fallback-hero-2',
     title: 'Emitimos Boleta de Venta',
-    subtitle: 'Compra con total transparencia. Equipos testeados en vivo por TikTok Live y soporte personalizado por WhatsApp.',
-    bgImage: '/images/hero-slide-2.webp',
-    mobileImage: '/images/hero-slide-2-mobile.webp',
-    ctaLabel: 'Ver iPads y Laptops',
+    subtitle: 'Compra con total transparencia. 🎁 Funda portalaptop nueva de regalo en laptops y pack completo en iPads.',
+    bgImage: '/images/hero-desktop.webp',
+    mobileImage: '/images/hero-mobile.webp',
+    ctaLabel: 'Ver Catálogo',
     ctaLink: '/coleccion',
     order: 2,
   },
 ];
-
-
 
 export default function HomePage({ data }: { data: HomeData }) {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -125,12 +123,12 @@ export default function HomePage({ data }: { data: HomeData }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const siteConfig = useSiteConfig();
 
-  // Use Sanity slides if they exist; fill missing images from local fallbacks
+  // Clean slides: always use pristine, text-free mobile and desktop backgrounds
   const heroSlides = data.heroSlides.length > 0
     ? data.heroSlides.map((slide, i) => ({
         ...slide,
-        bgImage: slide.bgImage || FALLBACK_BG[i % FALLBACK_BG.length],
-        mobileImage: slide.mobileImage || FALLBACK_MOBILE[i % FALLBACK_MOBILE.length],
+        bgImage: '/images/hero-desktop.webp',
+        mobileImage: '/images/hero-mobile.webp',
       }))
     : FALLBACK_HERO_SLIDES;
 
@@ -149,30 +147,43 @@ export default function HomePage({ data }: { data: HomeData }) {
   }, [heroSlides.length]);
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 3000);
+    const timer = setInterval(nextSlide, 3500);
     return () => clearInterval(timer);
   }, [nextSlide]);
 
   return (
     <>
       {/* ═══ HERO SECTION ═══ */}
-      <section id="inicio" className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden scroll-mt-16">
+      <section id="inicio" className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden scroll-mt-16 bg-[#080C14]">
         <div className="absolute inset-0" aria-hidden="true">
           {heroSlides.map((slide, i) => (
             <div
               key={slide._id}
-              {...(slide._id.startsWith('fallback-') ? {} : ve(slide._id, 'heroSlide', 'backgroundImage'))}
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ease-in-out"
-              style={{
-                backgroundImage: `url('${slide.bgImage || ''}')`,
-                opacity: i === currentSlide ? 1 : 0,
-              }}
-            />
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                i === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+              }`}
+            >
+              {/* Desktop widescreen hero (>= 768px) */}
+              <div
+                className="hidden md:block absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{
+                  backgroundImage: `url('${slide.bgImage || '/images/hero-desktop.webp'}')`,
+                }}
+              />
+              {/* Mobile vertical portrait hero (< 768px) */}
+              <div
+                className="block md:hidden absolute inset-0 bg-cover bg-bottom bg-no-repeat"
+                style={{
+                  backgroundImage: `url('${slide.mobileImage || '/images/hero-mobile.webp'}')`,
+                }}
+              />
+            </div>
           ))}
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/60" />
-        <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-background/60 to-transparent" />
+        {/* Ambient Dark Scrim for High-Contrast Readable Typography */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/80 via-black/40 to-black/85 md:from-black/65 md:via-black/30 md:to-black/75 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-10 z-10 bg-gradient-to-t from-background to-transparent pointer-events-none" />
 
         <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
           {heroSlides.map((slide, i) => (

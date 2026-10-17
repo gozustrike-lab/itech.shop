@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, MessageCircle, ShoppingBag, Star, Check, Heart, Truck, ShieldCheck, ChevronRight, Share2, ZoomIn, Minus, Plus } from 'lucide-react';
+import { ArrowLeft, MessageCircle, ShoppingBag, Star, Check, CheckCircle2, Heart, Truck, ShieldCheck, ChevronRight, Share2, ZoomIn, Minus, Plus } from 'lucide-react';
 import { useStore } from '@/lib/store-context';
 import { useToast } from '@/lib/toast-context';
 import { formatPrice, generateWhatsAppLink } from '@/lib/store-data';
@@ -158,7 +158,9 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
                 <span className="text-xs text-foreground/40">{displayProduct.rating} ({displayProduct.reviews} resenas)</span>
               </div>
 
-              <h1 {...ve(displayProduct._id, 'product', 'name')} className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">{displayProduct.name}</h1>
+              <h1 {...ve(displayProduct._id, 'product', 'name')} className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
+                {(displayProduct.name || '').replace(/\\"/g, '"')}
+              </h1>
               <div className="flex items-center gap-3 mb-4">
                 <p {...ve(displayProduct._id, 'product', 'price')} className="text-2xl font-bold text-primary">{formatPrice(displayProduct.price)}</p>
                 {displayProduct.compareAtPrice && displayProduct.compareAtPrice > displayProduct.price && (
@@ -168,16 +170,19 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
               <p {...ve(displayProduct._id, 'product', 'longDescription')} className="text-sm text-foreground/60 leading-relaxed">{displayProduct.longDescription || displayProduct.description}</p>
             </div>
 
-
-
             <div className="detail-animate">
               <h3 className="text-sm font-bold text-foreground mb-2.5">Caracteristicas</h3>
               <ul className="space-y-2">
-                {displayProduct.features.map((feat) => (
-                  <li key={feat} className="flex items-start gap-2.5 text-xs text-foreground/60">
-                    <Check className="w-4 h-4 text-turquoise-500 flex-shrink-0 mt-0.5" />{feat}
-                  </li>
-                ))}
+                {displayProduct.features.map((feat) => {
+                  const cleanedFeat = /garant[ií]a/i.test(feat)
+                    ? 'Emitimos Boleta de Venta • Testeado en 30 puntos técnicos'
+                    : feat.replace(/\\"/g, '"');
+                  return (
+                    <li key={feat} className="flex items-start gap-2.5 text-xs text-foreground/60">
+                      <Check className="w-4 h-4 text-turquoise-500 flex-shrink-0 mt-0.5" />{cleanedFeat}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
@@ -206,7 +211,7 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
             </div>
 
             <div className="detail-animate grid grid-cols-3 gap-2 pt-3">
-              {[{ icon: ShieldCheck, label: 'Pago Seguro' }, { icon: Truck, label: 'Envio a Todo Peru' }, { icon: Heart, label: 'Hecho con Amor' }].map(({ icon: Icon, label }) => (
+              {[{ icon: ShieldCheck, label: 'Pago Seguro' }, { icon: Truck, label: 'Envio a Todo Peru' }, { icon: CheckCircle2, label: 'Boleta de Venta' }].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex flex-col items-center text-center p-2.5 rounded-xl bg-turquoise-50/60">
                   <Icon className="w-5 h-5 text-turquoise-600 mb-1" />
                   <span className="text-[10px] font-medium text-foreground/50">{label}</span>
