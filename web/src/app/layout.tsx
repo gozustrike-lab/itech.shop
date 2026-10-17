@@ -14,6 +14,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.itechperu.shop'),
+  title: {
+    default: "iTech Perú | Catálogo Oficial • Laptops, MacBooks & iPads Certificados",
+    template: "%s | iTech Perú",
+  },
+  description:
+    "Especialistas en MacBooks, iPads y laptops testeados en 30 puntos técnicos con Boleta de Venta. Entrega inmediata en Lima y envíos a todo el Perú.",
   icons: {
     icon: [
       { url: "/favicon-32x32.webp", sizes: "32x32", type: "image/webp" },
@@ -23,22 +29,34 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
+    siteName: "iTech Perú",
+    locale: "es_PE",
+    type: "website",
+    title: "iTech Perú | Catálogo Oficial de Tecnología Certificada",
+    description:
+      "Laptops, MacBooks e iPads probados en 30 puntos técnicos. Emitimos Boleta de Venta. 🎁 Obsequios incluidos en cada compra.",
     images: [
       {
         url: "/og-image-square.jpg",
         width: 1200,
         height: 1200,
-        alt: "iTech Peru — Tecnología Renovada",
+        alt: "iTech Perú — Logo Oficial y Catálogo de Tecnología Certificada",
         type: "image/jpeg",
       },
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "iTech Peru — Tecnología Renovada",
+        alt: "iTech Perú — Laptops, MacBooks & iPads Certificados",
         type: "image/jpeg",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "iTech Perú | Catálogo Oficial de Tecnología Certificada",
+    description: "MacBooks, iPads y laptops testeados en 30 puntos técnicos con Boleta de Venta.",
+    images: ["/og-image.jpg"],
   },
 };
 

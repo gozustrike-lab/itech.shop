@@ -13,33 +13,33 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.itechperu.shop"
 
 export const metadata: Metadata = {
   title: {
-    default: "iTech Peru | Tecnología Renovada y Certificada",
-    template: "%s | iTech Peru",
+    default: "iTech Perú | Catálogo Oficial de Laptops, MacBooks & iPads Certificados",
+    template: "%s | iTech Perú",
   },
   description:
-    "Especialistas en smartphones, laptops, MacBooks e iPads probados en 30 puntos técnicos. Emitimos Boleta de Venta en todo el Perú.",
+    "Laptops, MacBooks, iPads y tecnología testeada en 30 puntos técnicos con Boleta de Venta. 🎁 Obsequios incluidos: fundas portalaptop y lápices táctiles. Envíos inmediatos en Lima y todo el Perú.",
   keywords: [
-    "tecnología seminueva", "smartphones reacondicionados", "laptops seminuevas",
-    "iTech Peru", "iPhone Perú", "MacBook Perú", "boleta de venta",
-    "tecnología testeada", "Lima", "Perú",
+    "iTech Perú", "laptops seminuevas Lima", "MacBook Pro Perú", "iPad baratos Perú",
+    "laptops con boleta", "MacBook Pro 16", "Dell Latitude", "tecnología certificada",
+    "comprar MacBook Lima", "laptops probadas", "itechperu.shop", "Lima", "Perú",
   ],
-  authors: [{ name: "iTech Peru" }],
+  authors: [{ name: "iTech Perú" }],
   metadataBase: new URL(siteUrl),
   alternates: { canonical: siteUrl },
   manifest: "/manifest.json",
   openGraph: {
-    title: "iTech Peru | Tecnología Renovada y Certificada",
-    description: "Smartphones, laptops, iPads y accesorios testeados en 30 puntos técnicos. Emitimos Boleta de Venta.",
-    type: "website", locale: "es_PE", siteName: "iTech Peru", url: siteUrl,
+    title: "iTech Perú | Catálogo Oficial de Laptops, MacBooks & iPads",
+    description: "Equipos testeados en 30 puntos técnicos con Boleta de Venta. 🎁 Funda portalaptop o pack de accesorios de regalo. Stock real con envío inmediato.",
+    type: "website", locale: "es_PE", siteName: "iTech Perú", url: siteUrl,
     images: [
-      { url: "/og-image-square.jpg", width: 1200, height: 1200, alt: "iTech Peru — Tecnología Renovada", type: "image/jpeg" },
-      { url: "/og-image.jpg", width: 1200, height: 630, alt: "iTech Peru — Tecnología Renovada", type: "image/jpeg" },
+      { url: "/og-image-square.jpg", width: 1200, height: 1200, alt: "iTech Perú — Logo Oficial y Catálogo", type: "image/jpeg" },
+      { url: "/og-image.jpg", width: 1200, height: 630, alt: "iTech Perú — Laptops, MacBooks & iPads Certificados", type: "image/jpeg" },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "iTech Peru | Tecnología Renovada y Certificada",
-    description: "Smartphones, laptops e iPads testeados en 30 puntos técnicos. Emitimos Boleta de Venta.",
+    title: "iTech Perú | Catálogo Oficial de Tecnología Certificada",
+    description: "MacBooks, iPads y laptops testeados en 30 puntos técnicos con Boleta de Venta.",
     images: ["/og-image.jpg"],
   },
   robots: {

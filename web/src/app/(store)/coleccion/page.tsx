@@ -6,9 +6,25 @@ import { products as storeProducts, categories as storeCategories } from '@/lib/
 import ColeccionClient from './ColeccionClient';
 
 export const metadata: Metadata = {
-  title: 'Catálogo de Tecnología | iTech Peru',
-  description: 'Explora nuestra selección completa de tecnología renovada y certificada: smartphones, laptops, consolas y accesorios con 12 meses de garantía real.',
-  openGraph: { title: 'Catálogo | iTech Peru', description: 'Explora nuestra selección completa de tecnología renovada y certificada.', type: 'website', images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'iTech Peru — Catálogo' }] },
+  title: 'Catálogo Oficial de MacBooks, iPads & Laptops | iTech Perú',
+  description: 'Catálogo oficial de laptops, MacBooks e iPads probados en 30 puntos técnicos con Boleta de Venta. 🎁 Accesorios y fundas de regalo. Stock real disponible.',
+  openGraph: {
+    title: 'Catálogo Oficial | iTech Perú — Laptops, MacBooks & iPads',
+    description: 'Tecnología testeada en 30 puntos técnicos con Boleta de Venta. 🎁 Funda portalaptop o pack iPad de regalo. Envíos a todo el Perú.',
+    type: 'website',
+    locale: 'es_PE',
+    siteName: 'iTech Perú',
+    images: [
+      { url: '/og-image-square.jpg', width: 1200, height: 1200, alt: 'Catálogo Oficial iTech Perú' },
+      { url: '/og-image.jpg', width: 1200, height: 630, alt: 'iTech Perú — Laptops y MacBooks' },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Catálogo Oficial | iTech Perú',
+    description: 'MacBooks, iPads y laptops testeados en 30 puntos técnicos con Boleta de Venta.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export const dynamic = 'force-dynamic';
