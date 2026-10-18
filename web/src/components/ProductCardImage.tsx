@@ -46,7 +46,7 @@ export default function ProductCardImage({
 
   return (
     <div
-      className={`relative aspect-square w-full rounded-xl bg-white border border-zinc-100 p-3 flex items-center justify-center overflow-hidden group/image transition-all ${className}`}
+      className={`relative aspect-square w-full rounded-xl bg-white border border-zinc-100 flex items-center justify-center overflow-hidden group/image transition-all ${className}`}
       onMouseEnter={() => setIsCardHovered(true)}
       onMouseLeave={() => {
         setIsCardHovered(false);
@@ -62,7 +62,7 @@ export default function ProductCardImage({
             key={`${view.url}-${idx}`}
             src={view.url}
             alt={`${title} - Vista ${view.label}`}
-            className={`absolute inset-0 w-full h-full object-contain p-3 transition-all duration-300 ${
+            className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ${
               isCurrent
                 ? 'opacity-100 scale-100 z-10'
                 : 'opacity-0 scale-95 pointer-events-none z-0'
@@ -84,17 +84,39 @@ export default function ProductCardImage({
         </span>
       </div>
 
-      {/* Interactive 3-View Switcher Pills */}
+      {/* Interactive 3-View Switcher (Mobile dots + Desktop pills) */}
       {views.length > 1 && (
         <div
-          className="absolute bottom-2 inset-x-0 z-20 flex items-center justify-center gap-1.5 px-3 py-1 transition-all duration-200 opacity-0 group-hover/image:opacity-100"
+          className="absolute bottom-2 inset-x-0 z-20 flex items-center justify-center gap-1.5 px-3 py-1 pointer-events-auto"
           onClick={(e) => {
-            // Prevent navigating away when clicking thumbnail dots
             e.preventDefault();
             e.stopPropagation();
           }}
         >
-          <div className="bg-white/90 backdrop-blur-md border border-zinc-200/80 shadow-md px-2 py-1 rounded-full flex items-center gap-1.5">
+          {/* Mobile Touch Indicator Dots */}
+          <div className="flex md:hidden items-center gap-1.5 bg-black/45 backdrop-blur-md px-2.5 py-1 rounded-full shadow-sm">
+            {views.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setManualViewSelected(true);
+                  setActiveView(idx);
+                }}
+                className={`transition-all duration-200 ${
+                  idx === currentViewIndex
+                    ? 'w-3.5 h-1.5 rounded-full bg-white shadow-sm'
+                    : 'w-1.5 h-1.5 rounded-full bg-white/45'
+                }`}
+                aria-label={`Vista ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Desktop Hover Pill Bar */}
+          <div className="hidden md:flex bg-white/95 backdrop-blur-md border border-zinc-200/80 shadow-md px-2 py-1 rounded-full items-center gap-1.5 transition-all duration-200 opacity-0 group-hover/image:opacity-100">
             {views.map((view, idx) => {
               const isSelected = idx === currentViewIndex;
               return (

@@ -154,7 +154,7 @@ export default function HomePage({ data }: { data: HomeData }) {
   return (
     <>
       {/* ═══ HERO SECTION ═══ */}
-      <section id="inicio" className="relative h-[100svh] min-h-[600px] max-h-[1000px] overflow-hidden scroll-mt-16 bg-[#080C14]">
+      <section id="inicio" className="relative h-[100dvh] min-h-[560px] max-h-[1000px] overflow-hidden scroll-mt-16 bg-[#080C14]">
         <div className="absolute inset-0" aria-hidden="true">
           {heroSlides.map((slide, i) => (
             <div
@@ -182,10 +182,10 @@ export default function HomePage({ data }: { data: HomeData }) {
         </div>
 
         {/* Ambient Dark Scrim for High-Contrast Readable Typography */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/80 via-black/40 to-black/85 md:from-black/65 md:via-black/30 md:to-black/75 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-10 z-10 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/85 via-black/35 via-45% to-transparent md:from-black/75 md:via-black/30 md:to-black/70 pointer-events-none" />
+        <div className="hidden md:block absolute bottom-0 left-0 right-0 h-10 z-10 bg-gradient-to-t from-background to-transparent pointer-events-none" />
 
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        <div className="absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 md:left-16 lg:left-24 md:translate-x-0 z-20 flex items-center gap-2">
           {heroSlides.map((slide, i) => (
             <button
               key={slide._id}
@@ -198,15 +198,15 @@ export default function HomePage({ data }: { data: HomeData }) {
           ))}
         </div>
 
-        <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
+        <div className="relative z-10 flex flex-col items-center justify-start pt-20 sm:pt-24 md:justify-center md:items-start md:text-left md:pt-0 h-full px-5 sm:px-8 md:pl-16 lg:pl-24 max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-3 sm:mb-6"
           >
-            <Sparkles className="w-4 h-4 text-turquoise-300" />
-            <span {...(currentHeroSlide?._id && !currentHeroSlide._id.startsWith('fallback-') ? ve(currentHeroSlide._id, 'heroSlide', 'title') : ve('siteSettings', 'siteSettings', 'tagline'))} className="text-sm font-medium text-white/80">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-turquoise-300" />
+            <span {...(currentHeroSlide?._id && !currentHeroSlide._id.startsWith('fallback-') ? ve(currentHeroSlide._id, 'heroSlide', 'title') : ve('siteSettings', 'siteSettings', 'tagline'))} className="text-xs sm:text-sm font-medium text-white/85">
               {siteConfig.tagline || 'Tecnología Renovada Certificada'}
             </span>
           </motion.div>
@@ -216,7 +216,7 @@ export default function HomePage({ data }: { data: HomeData }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             {...(currentHeroSlide?._id && !currentHeroSlide._id.startsWith('fallback-') ? ve(currentHeroSlide._id, 'heroSlide', 'title') : ve('siteSettings', 'siteSettings', 'title'))}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-6 text-white"
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.08] tracking-tight mb-2.5 sm:mb-5 text-white max-w-sm sm:max-w-2xl md:max-w-xl text-center md:text-left"
           >
             {slideTitle}
           </motion.h1>
@@ -226,7 +226,7 @@ export default function HomePage({ data }: { data: HomeData }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
             {...(currentHeroSlide?._id && !currentHeroSlide._id.startsWith('fallback-') ? ve(currentHeroSlide._id, 'heroSlide', 'subtitle') : ve('siteSettings', 'siteSettings', 'description'))}
-            className="text-base sm:text-lg md:text-xl text-white/70 max-w-xl mx-auto mb-10 leading-relaxed"
+            className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80 max-w-xs sm:max-w-md md:max-w-xl mx-auto md:mx-0 mb-5 sm:mb-8 leading-relaxed text-center md:text-left"
           >
             {slideSubtitle}
           </motion.p>
@@ -235,11 +235,11 @@ export default function HomePage({ data }: { data: HomeData }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex flex-col sm:flex-row items-center gap-3"
+            className="flex flex-row items-center justify-center md:justify-start gap-2.5 sm:gap-3 w-full max-w-xs sm:max-w-sm md:max-w-none"
           >
             <motion.button
               onClick={() => router.push(slideCtaLink)}
-              className="bg-primary text-white px-8 py-4 rounded-full text-base font-semibold shadow-xl shadow-turquoise-500/30 hover:bg-turquoise-600 transition-colors"
+              className="flex-1 sm:flex-initial bg-primary text-white px-5 sm:px-8 py-3 sm:py-4 rounded-full text-xs sm:text-base font-bold shadow-xl shadow-turquoise-500/30 hover:bg-turquoise-600 transition-colors whitespace-nowrap"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -247,16 +247,16 @@ export default function HomePage({ data }: { data: HomeData }) {
             </motion.button>
             <Link
               href="/comprar"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-semibold border-2 border-white/30 text-white hover:bg-white/10 transition-all duration-300"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-full text-xs sm:text-base font-semibold border border-white/25 bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all whitespace-nowrap"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
               Cómo Comprar
             </Link>
           </motion.div>
         </div>
 
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
@@ -298,7 +298,7 @@ export default function HomePage({ data }: { data: HomeData }) {
                 <Link href={`/coleccion/${product.slug}`}>
                   <div
                     {...ve(product._id, 'product', 'mainImage')}
-                    className="relative aspect-square rounded-2xl overflow-hidden mb-3 bg-white border border-zinc-100 p-3 flex items-center justify-center group-hover:border-turquoise-200 transition-colors"
+                    className="relative aspect-square rounded-2xl overflow-hidden mb-3 bg-white border border-zinc-100 flex items-center justify-center group-hover:border-turquoise-200 transition-colors"
                   >
                     <ProductCardImage
                       product={product}

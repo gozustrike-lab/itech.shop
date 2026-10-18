@@ -1,33 +1,42 @@
 {
-  "name": "iTech Perú",
+  "name": "iTech Perú | Catálogo Oficial",
   "short_name": "iTech Perú",
   "description": "Catálogo Oficial de MacBooks, iPads y Laptops testeadas en 30 puntos técnicos con Boleta de Venta.",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#090D16",
-  "theme_color": "#0D9488",
+  "theme_color": "#090D16",
   "orientation": "portrait-primary",
-  "lang": "es",
-  "categories": ["shopping", "technology"],
+  "lang": "es-PE",
+  "categories": ["shopping", "technology", "business"],
   "icons": [
     {
-      "src": "/favicon-64x64.webp",
-      "sizes": "64x64",
-      "type": "image/webp"
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/favicon-32x32.webp",
-      "sizes": "32x32",
-      "type": "image/webp"
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/favicon-16x16.webp",
-      "sizes": "16x16",
-      "type": "image/webp"
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/apple-touch-icon.png",
       "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
       "type": "image/png"
     }
   ]

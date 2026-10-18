@@ -44,9 +44,14 @@ async function main() {
   console.log('Fetching live products from Sanity...');
   const res = await fetch(sanityUrl);
   const data = await res.json();
-  const items = data.result || [];
+  const allItems = data.result || [];
+  const items = allItems.filter(p => {
+    const name = (p.name || '').toLowerCase();
+    if (name.includes('pantalla') || name.includes('display')) return false;
+    return true;
+  });
 
-  console.log(`Fetched ${items.length} products.`);
+  console.log(`Fetched ${allItems.length} products, exporting ${items.length} complete equipment products.`);
 
   const headers = [
     'id',

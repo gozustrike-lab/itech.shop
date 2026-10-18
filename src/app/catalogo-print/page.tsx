@@ -62,10 +62,15 @@ interface GroupedProduct {
 
 // Clean internal order suffixes like " • Ord: 01205" or " - Ord: 950-1"
 function cleanProductTitle(rawName: string): string {
-  return rawName
+  let title = rawName
     .replace(/\s*[•\-]\s*Ord:\s*[\w\-]+/gi, '')
     .replace(/\\"/g, '"')
     .trim();
+
+  if (title.toLowerCase().includes('cargador') && title.toLowerCase().includes('96w')) {
+    title = 'Cargador Rápido 96W USB-C Power Adapter (Nuevo)';
+  }
+  return title;
 }
 
 // Generate structured specs based on product details
@@ -277,7 +282,11 @@ export default function CatalogoPrintPage() {
       .then((r) => r.json())
       .then((data) => {
         if (data.result && data.result.length > 0) {
-          const rawItems: ProductItem[] = data.result;
+          const rawItems: ProductItem[] = data.result.filter(
+            (item: ProductItem) =>
+              !item.name.toLowerCase().includes('pantalla completa') &&
+              !item.name.toLowerCase().includes('display original')
+          );
 
           // Deduplicate and group by normalized commercial identity
           const map = new Map<string, GroupedProduct>();
@@ -345,68 +354,45 @@ export default function CatalogoPrintPage() {
   const totalStockUnits = groupedProducts.reduce((acc, curr) => acc + curr.stockCount, 0);
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900 font-sans print:bg-white print:text-black">
-      {/* FLOATING ACTION BAR (HIDDEN IN PRINT) */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-2.5 bg-slate-950/95 backdrop-blur-md text-white px-4 py-2.5 rounded-full shadow-2xl border border-white/10 print:hidden">
-        <a
-          href="/"
-          className="flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-white transition-colors pr-2 border-r border-slate-700"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Volver a la Web
-        </a>
-        <button
-          onClick={() => window.print()}
-          className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 active:scale-95 cursor-pointer"
-        >
-          <Printer className="w-3.5 h-3.5" />
-          Guardar como PDF / Imprimir
-        </button>
-        <a
-          href="/api/catalog/export-whatsapp"
-          className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white transition-colors pl-2"
-        >
-          <Download className="w-3.5 h-3.5" />
-          Feed CSV Meta
-        </a>
-      </div>
-
+    <div className="min-h-screen bg-[#070B14] text-slate-100 font-sans antialiased selection:bg-teal-500 selection:text-white">
       {loading ? (
         <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-          <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm font-bold text-slate-700">
+          <div className="w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm font-bold text-slate-300">
             Cargando catálogo oficial iTech Perú...
           </p>
         </div>
       ) : (
-        <div className="max-w-[1100px] mx-auto p-4 sm:p-8 print:p-0 print:max-w-none space-y-8 print:space-y-6">
+        <div className="w-full max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-10">
           {/* ═══════════════════════════════════════════════════════════════════ */}
-          {/* COVER PAGE (PAGE 1) */}
+          {/* COVER PAGE: FULL-WIDTH EDGE-TO-EDGE DELUXE DIGITAL SHOWROOM */}
           {/* ═══════════════════════════════════════════════════════════════════ */}
-          <div className="page-break-after bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white rounded-3xl p-8 sm:p-14 mb-8 print:mb-0 print:rounded-none print:min-h-[290mm] flex flex-col justify-between shadow-2xl print:shadow-none border border-emerald-500/30">
+          <div className="w-full rounded-2xl sm:rounded-3xl p-5 sm:p-10 lg:p-12 mb-8 bg-gradient-to-br from-[#0B1220] via-[#0D1B2A] to-[#042427] border border-teal-500/30 shadow-2xl">
             <div>
               {/* Cover Top Header */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-black text-slate-950 text-3xl shadow-xl shadow-emerald-500/30">
-                    iT
-                  </div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/10 pb-6 mb-8 gap-4">
+                <div className="flex items-center gap-3.5 sm:gap-4">
+                  <img
+                    src="/icon.png"
+                    alt="iTech Perú"
+                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl shadow-xl shadow-teal-500/20 object-contain bg-slate-900 border border-teal-500/40 p-1 shrink-0"
+                  />
                   <div>
-                    <h1 className="text-3xl font-black tracking-tight text-white flex items-center gap-2">
-                      iTech <span className="text-emerald-400 font-light">PERÚ</span>
+                    <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white flex items-center gap-2">
+                      iTech <span className="text-teal-400 font-light">PERÚ</span>
                     </h1>
-                    <p className="text-[11px] text-emerald-300 font-bold tracking-widest uppercase">
+                    <p className="text-[10px] sm:text-[11px] text-teal-300 font-bold tracking-widest uppercase">
                       Tecnología Renovada Certificada • Importaciones Directas USA
                     </p>
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <span className="inline-block bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3.5 py-1.5 rounded-full border border-emerald-500/30">
+                <div className="text-left sm:text-right">
+                  <span className="inline-block bg-teal-500/20 text-teal-300 text-xs font-bold px-3.5 py-1.5 rounded-full border border-teal-500/30">
                     CATÁLOGO OFICIAL • {new Date().getFullYear()}
                   </span>
                   <p className="text-xs text-slate-400 mt-1.5">
-                    Inventario: <strong>{totalStockUnits} Equipos en Stock Físico</strong>
+                    Inventario: <strong className="text-white">{totalStockUnits} Equipos en Stock Físico</strong>
                   </p>
                 </div>
               </div>
@@ -527,23 +513,23 @@ export default function CatalogoPrintPage() {
           {/* SECTION: LAPTOPS & APPLE MACBOOKS */}
           {/* ═══════════════════════════════════════════════════════════════════ */}
           {laptops.length > 0 && (
-            <div className="mb-12 print:mb-8">
-              <div className="flex items-center justify-between border-b-2 border-emerald-600 pb-3 mb-6">
+            <div className="mb-12">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-teal-500 pb-3 mb-6 gap-2">
                 <div>
-                  <h3 className="text-xl font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-emerald-600" />
+                  <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-teal-400 animate-pulse" />
                     Laptops & Apple MacBooks ({laptops.length} Modelos • {laptops.reduce((a, b) => a + b.stockCount, 0)} Unidades)
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Equipos de alto rendimiento para programación, diseño, oficina y universidad
                   </p>
                 </div>
-                <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">
+                <span className="text-xs font-bold text-teal-300 bg-teal-950/80 px-3 py-1 rounded-full border border-teal-700/60 self-start sm:self-auto">
                   🎁 Incluye Funda Portalaptop de Regalo
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {laptops.map((item) => (
                   <CatalogProductCard key={item.groupKey} item={item} />
                 ))}
@@ -555,23 +541,23 @@ export default function CatalogoPrintPage() {
           {/* SECTION: APPLE IPADS & TABLETS */}
           {/* ═══════════════════════════════════════════════════════════════════ */}
           {tablets.length > 0 && (
-            <div className="mb-12 print:mb-8">
-              <div className="flex items-center justify-between border-b-2 border-teal-600 pb-3 mb-6">
+            <div className="mb-12">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-teal-500 pb-3 mb-6 gap-2">
                 <div>
-                  <h3 className="text-xl font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-teal-600" />
+                  <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-teal-400 animate-pulse" />
                     Apple iPads & Tablets ({tablets.length} Modelos • {tablets.reduce((a, b) => a + b.stockCount, 0)} Unidades)
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Pantallas Retina ultranítidas para estudio, diseño digital, streaming y productividad
                   </p>
                 </div>
-                <span className="text-xs font-bold text-teal-800 bg-teal-100 px-3 py-1 rounded-full border border-teal-200">
+                <span className="text-xs font-bold text-teal-300 bg-teal-950/80 px-3 py-1 rounded-full border border-teal-700/60 self-start sm:self-auto">
                   🎁 Incluye Pack: Lápiz + Soporte + Cable
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {tablets.map((item) => (
                   <CatalogProductCard key={item.groupKey} item={item} />
                 ))}
@@ -583,23 +569,23 @@ export default function CatalogoPrintPage() {
           {/* SECTION: ACCESSORIES & HARDWARE */}
           {/* ═══════════════════════════════════════════════════════════════════ */}
           {otherItems.length > 0 && (
-            <div className="mb-12 print:mb-8">
-              <div className="flex items-center justify-between border-b-2 border-slate-700 pb-3 mb-6">
+            <div className="mb-12">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-slate-700 pb-3 mb-6 gap-2">
                 <div>
-                  <h3 className="text-xl font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-slate-700" />
-                    Accesorios & Repuestos Originales ({otherItems.length} Artículos)
+                  <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-slate-400" />
+                    Accesorios & Cargadores ({otherItems.length} Artículos)
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Cargadores rápidos certificados y componentes garantizados
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Cargadores rápidos certificados y componentes de alta calidad
                   </p>
                 </div>
-                <span className="text-xs font-bold text-slate-700 bg-slate-200 px-3 py-1 rounded-full">
-                  100% Nuevos y Garantizados
+                <span className="text-xs font-bold text-slate-300 bg-slate-800 px-3 py-1 rounded-full border border-slate-700 self-start sm:self-auto">
+                  100% Nuevos en Caja
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {otherItems.map((item) => (
                   <CatalogProductCard key={item.groupKey} item={item} />
                 ))}
@@ -608,26 +594,26 @@ export default function CatalogoPrintPage() {
           )}
 
           {/* ═══════════════════════════════════════════════════════════════════ */}
-          {/* PRINT FOOTER */}
+          {/* DELUXE DIGITAL FOOTER */}
           {/* ═══════════════════════════════════════════════════════════════════ */}
-          <div className="border-t-2 border-slate-300 pt-8 mt-12 text-center text-xs text-slate-600 print:text-[10px] space-y-2">
-            <div className="flex flex-wrap items-center justify-center gap-4 font-bold text-slate-800">
-              <a href="https://www.itechperu.shop" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-600">
+          <div className="border-t border-slate-800 pt-8 mt-12 text-center text-xs text-slate-400 space-y-2.5">
+            <div className="flex flex-wrap items-center justify-center gap-4 font-bold text-slate-300">
+              <a href="https://www.itechperu.shop" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors">
                 🌐 www.itechperu.shop
               </a>
               <span>•</span>
-              <a href="https://wa.me/51907674693" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-600">
+              <a href="https://wa.me/51907674693" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors">
                 📲 WhatsApp Ventas: +51 907 674 693 / +51 924 967 876
               </a>
               <span>•</span>
-              <a href="https://www.tiktok.com/@itechperu" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-600">
+              <a href="https://www.tiktok.com/@itechperu" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors">
                 🎵 TikTok Live: @itechperu
               </a>
             </div>
             <p className="text-slate-500">
-              iTech Perú • RUC 20608546193 • Importaciones Directas USA • Precios en Soles (PEN) sujetos a disponibilidad de inventario.
+              iTech Perú • Importaciones Directas USA • Precios en Soles (PEN) sujetos a disponibilidad de inventario.
             </p>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-500">
               Los enlaces y números de este catálogo son interactivos. Haz clic en cualquier producto o botón de WhatsApp para separar tu equipo en vivo.
             </p>
           </div>
@@ -646,44 +632,46 @@ function CatalogProductCard({ item }: { item: GroupedProduct }) {
   const webUrl = `https://www.itechperu.shop/coleccion/${item.slug}`;
 
   return (
-    <div className="catalog-print-card bg-white rounded-2xl border-2 border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between print:rounded-xl print:border-slate-300 print:shadow-none print:break-inside-avoid">
+    <div className="bg-[#0D1525] text-white rounded-2xl border border-slate-800/90 hover:border-teal-500/50 p-4 sm:p-5 shadow-xl flex flex-col justify-between transition-all duration-300">
       <div className="space-y-4">
         {/* Top Badges: Category & Real Stock Count */}
-        <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-0.5 rounded-full">
+        <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
+          <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-teal-300 bg-teal-950/80 border border-teal-800/60 px-3 py-0.5 rounded-full">
             {item.categoryName}
           </span>
 
           <span
             className={`inline-flex items-center gap-1.5 text-xs font-extrabold px-3 py-0.5 rounded-full border ${
               item.stockCount > 1
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                : 'bg-amber-50 text-amber-800 border-amber-300'
+                ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800/60'
+                : 'bg-amber-950/80 text-amber-300 border-amber-800/60'
             }`}
           >
             <span
               className={`w-2 h-2 rounded-full ${
-                item.stockCount > 1 ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                item.stockCount > 1 ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
               }`}
             />
             {item.stockCount > 1
-              ? `Stock: ${item.stockCount} unidades disponibles`
-              : '¡Última unidad disponible!'}
+              ? `Stock: ${item.stockCount} unid.`
+              : '¡Última unidad!'}
           </span>
         </div>
 
-        {/* Big Product Image Container: 1080x1080 Aspect Ratio (No Cuts) */}
-        <div className="relative aspect-square w-full max-h-72 bg-white rounded-xl border border-slate-100 p-3 flex items-center justify-center overflow-hidden shadow-inner group">
-          <img
-            src={
-              item.mainImage ||
-              'https://cdn.sanity.io/images/kqneikcb/production/1189f3e9e0778c529d6fb8c59b5227fad2dc161d-800x800.png'
-            }
-            alt={item.cleanTitle}
-            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-            loading="lazy"
-            crossOrigin="anonymous"
-          />
+        {/* Full-Frame Product Image: 1:1 Aspect Ratio edge-to-edge */}
+        <div className="relative aspect-square w-full bg-white rounded-2xl border border-slate-700/80 overflow-hidden shadow-lg group">
+          <a href={webUrl} target="_blank" rel="noopener noreferrer" className="w-full h-full block">
+            <img
+              src={
+                item.mainImage ||
+                'https://cdn.sanity.io/images/kqneikcb/production/1189f3e9e0778c529d6fb8c59b5227fad2dc161d-800x800.png'
+              }
+              alt={item.cleanTitle}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+              crossOrigin="anonymous"
+            />
+          </a>
         </div>
 
         {/* Commercial Title (Clickable Hyperlink to Web) */}
@@ -692,80 +680,80 @@ function CatalogProductCard({ item }: { item: GroupedProduct }) {
             href={webUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-extrabold text-base text-slate-900 leading-snug hover:text-emerald-600 transition-colors block"
+            className="font-extrabold text-base text-white leading-snug hover:text-teal-300 transition-colors block line-clamp-2"
           >
             {item.cleanTitle}
           </a>
         </div>
 
         {/* Detailed Technical Specifications Grid (Zero Truncation) */}
-        <div className="space-y-2 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+        <div className="space-y-2 text-xs bg-[#090F1C] p-3.5 rounded-xl border border-slate-800/80">
           <div className="flex items-start gap-2">
-            <span className="font-bold text-slate-600 shrink-0 flex items-center gap-1">
-              <Monitor className="w-3.5 h-3.5 text-emerald-600" /> Pantalla:
+            <span className="font-bold text-slate-400 shrink-0 flex items-center gap-1">
+              <Monitor className="w-3.5 h-3.5 text-teal-400" /> Pantalla:
             </span>
-            <span className="text-slate-800 font-medium leading-tight">
+            <span className="text-slate-200 font-medium leading-tight">
               {item.specs.display}
             </span>
           </div>
 
           <div className="flex items-start gap-2">
-            <span className="font-bold text-slate-600 shrink-0 flex items-center gap-1">
-              <Cpu className="w-3.5 h-3.5 text-emerald-600" /> Procesador:
+            <span className="font-bold text-slate-400 shrink-0 flex items-center gap-1">
+              <Cpu className="w-3.5 h-3.5 text-teal-400" /> Procesador:
             </span>
-            <span className="text-slate-800 font-medium leading-tight">
+            <span className="text-slate-200 font-medium leading-tight">
               {item.specs.cpu}
             </span>
           </div>
 
           {item.specs.graphics && (
             <div className="flex items-start gap-2">
-              <span className="font-bold text-slate-600 shrink-0 flex items-center gap-1">
-                <Layers className="w-3.5 h-3.5 text-emerald-600" /> Gráficos:
+              <span className="font-bold text-slate-400 shrink-0 flex items-center gap-1">
+                <Layers className="w-3.5 h-3.5 text-teal-400" /> Gráficos:
               </span>
-              <span className="text-slate-900 font-bold leading-tight">
+              <span className="text-white font-bold leading-tight">
                 {item.specs.graphics}
               </span>
             </div>
           )}
 
           <div className="flex items-start gap-2">
-            <span className="font-bold text-slate-600 shrink-0 flex items-center gap-1">
-              <Layers className="w-3.5 h-3.5 text-emerald-600" /> Memoria RAM:
+            <span className="font-bold text-slate-400 shrink-0 flex items-center gap-1">
+              <Layers className="w-3.5 h-3.5 text-teal-400" /> Memoria RAM:
             </span>
-            <span className="text-slate-900 font-extrabold leading-tight">
+            <span className="text-white font-extrabold leading-tight">
               {item.specs.ram}
             </span>
           </div>
 
           <div className="flex items-start gap-2">
-            <span className="font-bold text-slate-600 shrink-0 flex items-center gap-1">
-              <HardDrive className="w-3.5 h-3.5 text-emerald-600" /> Disco / SSD:
+            <span className="font-bold text-slate-400 shrink-0 flex items-center gap-1">
+              <HardDrive className="w-3.5 h-3.5 text-teal-400" /> Disco / SSD:
             </span>
-            <span className="text-slate-900 font-extrabold leading-tight">
+            <span className="text-white font-extrabold leading-tight">
               {item.specs.storage}
             </span>
           </div>
 
           <div className="flex items-start gap-2">
-            <span className="font-bold text-slate-600 shrink-0 flex items-center gap-1">
+            <span className="font-bold text-slate-400 shrink-0 flex items-center gap-1">
               📶 Red:
             </span>
-            <span className="text-slate-800 font-medium leading-tight">
+            <span className="text-slate-200 font-medium leading-tight">
               {item.specs.connectivity}
             </span>
           </div>
 
           {/* Gift Bundle Badge */}
-          <div className="flex items-start gap-2 pt-1 border-t border-slate-200">
-            <span className="text-emerald-800 font-extrabold bg-emerald-100/70 px-2 py-0.5 rounded text-[11px] leading-tight w-full">
+          <div className="flex items-start gap-2 pt-1.5 border-t border-slate-800">
+            <span className="text-teal-300 font-extrabold bg-teal-950/80 border border-teal-800/60 px-2 py-0.5 rounded text-[11px] leading-tight w-full">
               {item.specs.gift}
             </span>
           </div>
 
           {/* Warranty & Condition */}
           <div className="flex items-start gap-2">
-            <span className="text-slate-600 font-medium text-[11px]">
+            <span className="text-slate-400 font-medium text-[11px]">
               ✨ {item.specs.condition} • 🛡️ {item.specs.warranty}
             </span>
           </div>
@@ -773,7 +761,7 @@ function CatalogProductCard({ item }: { item: GroupedProduct }) {
       </div>
 
       {/* Pricing & Interactive Hyperlinks */}
-      <div className="pt-4 border-t border-slate-200 mt-4 space-y-3">
+      <div className="pt-4 border-t border-slate-800/80 mt-4 space-y-3">
         <div className="flex items-baseline justify-between">
           <div>
             {item.compareAtPrice && item.compareAtPrice > item.price && (
@@ -782,18 +770,18 @@ function CatalogProductCard({ item }: { item: GroupedProduct }) {
               </span>
             )}
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-emerald-700">
+              <span className="text-2xl font-black text-teal-400">
                 S/ {Number(item.price || 0).toLocaleString('es-PE')}
               </span>
-              <span className="text-xs font-black text-slate-500 uppercase">
+              <span className="text-xs font-black text-slate-400 uppercase">
                 PEN (Oferta)
               </span>
             </div>
           </div>
 
           <div className="text-right">
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-md">
-              <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-teal-300 bg-teal-950/80 border border-teal-800/60 px-2.5 py-1 rounded-md">
+              <CheckCircle2 className="h-3 w-3 text-teal-400" />
               Emitimos Boleta
             </span>
           </div>
@@ -804,9 +792,9 @@ function CatalogProductCard({ item }: { item: GroupedProduct }) {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs tracking-wide shadow-md shadow-emerald-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] print:bg-emerald-700 print:text-white"
+          className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20BD5A] text-white font-black text-xs tracking-wide shadow-lg shadow-green-500/15 transition-all hover:scale-[1.02] active:scale-[0.98]"
         >
-          <MessageCircle className="w-4 h-4" />
+          <MessageCircle className="w-4 h-4 flex-shrink-0" />
           <span>📲 Separar por WhatsApp (+51 907 674 693)</span>
         </a>
 
@@ -815,7 +803,7 @@ function CatalogProductCard({ item }: { item: GroupedProduct }) {
           href={webUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-1 text-[11px] text-slate-500 hover:text-emerald-600 font-semibold text-center hover:underline transition-colors"
+          className="flex items-center justify-center gap-1 text-[11px] text-slate-400 hover:text-teal-400 font-semibold text-center hover:underline transition-colors py-0.5"
         >
           <span>🌐 Ver ficha en web www.itechperu.shop</span>
           <ExternalLink className="w-3 h-3" />

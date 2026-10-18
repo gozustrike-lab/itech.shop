@@ -117,8 +117,8 @@ export default function ColeccionClient({ products, categories, useFallback }: C
 
   const gridClass =
     viewMode === 'single'
-      ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 lg:gap-8'
-      : 'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6';
+      ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-8'
+      : 'grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6';
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -174,21 +174,21 @@ export default function ColeccionClient({ products, categories, useFallback }: C
           )}
         </motion.nav>
 
-        {/* Filter Categories Pill Bar */}
+        {/* Filter Categories Pill Bar & Grid Mode Switcher */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap items-center justify-center gap-2 mb-10"
+          className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-8"
         >
-          <div className="flex flex-wrap items-center justify-center gap-2 flex-1">
+          <div className="w-full sm:w-auto flex items-center gap-2 overflow-x-auto no-scrollbar py-1 px-1 flex-1">
             {categories.map((cat) => (
               <Link
                 key={cat.id}
                 href={cat.id === 'todos' ? '/coleccion' : `/coleccion?categoria=${cat.slug}`}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 tracking-wide ${
+                className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-semibold transition-all duration-300 tracking-wide whitespace-nowrap flex-shrink-0 ${
                   activeCategory === cat.slug
-                    ? 'bg-primary text-white shadow-lg shadow-turquoise-500/20'
+                    ? 'bg-primary text-white shadow-md shadow-turquoise-500/20'
                     : 'bg-zinc-100 text-foreground/60 hover:bg-zinc-200'
                 }`}
               >
@@ -196,7 +196,9 @@ export default function ColeccionClient({ products, categories, useFallback }: C
               </Link>
             ))}
           </div>
-          <GridToggle value={viewMode} onChange={setViewMode} />
+          <div className="flex-shrink-0 self-end sm:self-auto">
+            <GridToggle value={viewMode} onChange={setViewMode} />
+          </div>
         </motion.div>
 
         {/* Product Cards Grid */}
@@ -214,17 +216,17 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.35, delay: i * 0.04 }}
-                className="product-card group cursor-pointer bg-white rounded-2xl border border-zinc-200/80 p-3 sm:p-4 hover:shadow-xl hover:border-turquoise-500/40 transition-all duration-300 flex flex-col justify-between"
+                className="product-card group cursor-pointer bg-white rounded-2xl border border-zinc-200/90 p-3 sm:p-4 hover:shadow-xl hover:border-turquoise-500/40 transition-all duration-300 flex flex-col justify-between relative"
               >
                 <div>
                   {/* Top Badges: Category & Real Stock Count */}
                   <div className="flex items-center justify-between gap-1.5 mb-2.5">
-                    <span className="px-2.5 py-0.5 rounded-full bg-zinc-100 text-[10px] font-bold text-foreground/70 uppercase tracking-wider">
-                      {product.category?.name || 'Tecnología'}
+                    <span className="px-2.5 py-0.5 rounded-full bg-zinc-100 text-[9.5px] sm:text-[10px] font-bold text-zinc-700 uppercase tracking-wider truncate max-w-[90px]">
+                      {product.category?.name || 'Equipo'}
                     </span>
 
                     <span
-                      className={`inline-flex items-center gap-1 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${
+                      className={`inline-flex items-center gap-1 text-[9.5px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border whitespace-nowrap ${
                         product.stockCount > 1
                           ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                           : 'bg-amber-50 text-amber-800 border-amber-300'
@@ -236,24 +238,46 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                         }`}
                       />
                       {product.stockCount > 1
-                        ? `Stock: ${product.stockCount} unid.`
-                        : '¡Última unidad!'}
+                        ? `${product.stockCount} en stock`
+                        : 'Última unid.'}
                     </span>
                   </div>
 
                   {/* Big Square 1:1 Product Image with Interactive 3-Angle Switcher */}
-                  <Link href={`/coleccion/${product.slug}`} className="block mb-3">
-                    <ProductCardImage
-                      product={product}
-                      alt={product.cleanName}
-                      className="group-hover:border-turquoise-200"
-                    />
-                  </Link>
+                  <div className="relative mb-2.5">
+                    <Link href={`/coleccion/${product.slug}`} className="block">
+                      <ProductCardImage
+                        product={product}
+                        alt={product.cleanName}
+                        className="group-hover:border-turquoise-200"
+                      />
+                    </Link>
+
+                    {/* Floating Glass Heart Favorite Button */}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleFavorite(product._id);
+                      }}
+                      className="absolute top-2 right-2 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md shadow-sm border border-zinc-200/80 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+                      aria-label="Guardar favorito"
+                    >
+                      <Heart
+                        className={`w-3.5 h-3.5 transition-colors ${
+                          isFavorite(product._id)
+                            ? 'text-red-500 fill-red-500'
+                            : 'text-zinc-400 hover:text-red-500'
+                        }`}
+                        fill={isFavorite(product._id) ? 'currentColor' : 'none'}
+                      />
+                    </button>
+                  </div>
 
                   {/* Gift Tag if Applicable */}
                   {product.giftBadge && (
                     <div className="mb-2">
-                      <span className="inline-block text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-md">
+                      <span className="inline-flex items-center gap-1 text-[9.5px] sm:text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md leading-tight">
                         {product.giftBadge}
                       </span>
                     </div>
@@ -263,7 +287,7 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                   <Link href={`/coleccion/${product.slug}`}>
                     <h3
                       {...ve(product._id, 'product', 'name')}
-                      className="text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-snug line-clamp-2 mb-2"
+                      className="text-xs sm:text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-snug line-clamp-2 min-h-[2.25rem] mb-1.5"
                     >
                       {product.cleanName}
                     </h3>
@@ -271,31 +295,31 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                 </div>
 
                 {/* Card Bottom: Pricing & Quick Actions */}
-                <div className="pt-3 border-t border-zinc-100 mt-2 space-y-2.5">
-                  <div className="flex items-baseline justify-between">
-                    <div>
-                      {product.compareAtPrice && product.compareAtPrice > product.price && (
-                        <span className="text-[11px] text-foreground/40 line-through block font-medium">
-                          {formatPrice(product.compareAtPrice)}
-                        </span>
-                      )}
+                <div className="pt-2.5 border-t border-zinc-100 mt-1 space-y-2">
+                  <div className="flex items-baseline justify-between gap-1">
+                    <div className="flex items-baseline gap-1.5 flex-wrap">
                       <span
                         {...ve(product._id, 'product', 'price')}
-                        className="text-lg font-black text-primary"
+                        className="text-base sm:text-lg font-black text-primary tracking-tight whitespace-nowrap"
                       >
                         {formatPrice(product.price)}
                       </span>
+                      {product.compareAtPrice && product.compareAtPrice > product.price && (
+                        <span className="text-[10px] sm:text-[11px] text-zinc-400 line-through font-semibold whitespace-nowrap">
+                          {formatPrice(product.compareAtPrice)}
+                        </span>
+                      )}
                     </div>
 
                     <Link
                       href={`/coleccion/${product.slug}`}
-                      className="text-[11px] font-bold text-turquoise-600 inline-flex items-center gap-1 hover:underline"
+                      className="text-[10.5px] sm:text-xs font-bold text-turquoise-600 inline-flex items-center gap-0.5 hover:underline whitespace-nowrap flex-shrink-0"
                     >
-                      Ver Detalle <ArrowRight className="w-3 h-3" />
+                      Detalle <ArrowRight className="w-3 h-3 ml-0.5" />
                     </Link>
                   </div>
 
-                  {/* Quick WhatsApp Action Button */}
+                  {/* Quick Action Buttons */}
                   <div className="flex items-center gap-1.5">
                     <button
                       onClick={(e) => {
@@ -303,29 +327,10 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                         e.stopPropagation();
                         window.open(waUrl, '_blank');
                       }}
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-xl text-xs font-bold shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      className="flex-1 flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20BD5A] text-white py-2 sm:py-2.5 px-2 rounded-xl text-xs font-bold shadow-sm transition-all hover:scale-[1.01] active:scale-[0.98]"
                     >
-                      <MessageCircle className="w-3.5 h-3.5" />
-                      Pedir por WhatsApp
-                    </button>
-
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleFavorite(product._id);
-                      }}
-                      className="w-9 h-9 flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 rounded-xl transition-colors"
-                      aria-label="Guardar favorito"
-                    >
-                      <Heart
-                        className={`w-4 h-4 ${
-                          isFavorite(product._id)
-                            ? 'text-red-500 fill-red-500'
-                            : 'text-foreground/50'
-                        }`}
-                        fill={isFavorite(product._id) ? 'currentColor' : 'none'}
-                      />
+                      <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span className="whitespace-nowrap"><span className="hidden sm:inline">Pedir </span>WhatsApp</span>
                     </button>
 
                     <button
@@ -355,10 +360,10 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                           collection: product.collection || '',
                         } as any);
                       }}
-                      className="w-9 h-9 flex items-center justify-center bg-primary hover:bg-turquoise-600 rounded-xl transition-colors text-white"
+                      className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center bg-primary hover:bg-turquoise-600 rounded-xl transition-all text-white shadow-sm hover:scale-105 active:scale-95"
                       aria-label="Agregar al carrito"
                     >
-                      <ShoppingBag className="w-4 h-4" />
+                      <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </button>
                   </div>
                 </div>

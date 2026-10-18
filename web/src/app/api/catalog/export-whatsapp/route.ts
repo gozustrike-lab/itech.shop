@@ -35,7 +35,13 @@ export async function GET() {
       return `"${val}"`;
     };
 
-    const rows = items.map((p: any) => {
+    const validItems = items.filter((p: any) => {
+      const name = (p.name || '').toLowerCase();
+      if (name.includes('pantalla') || name.includes('display')) return false;
+      return true;
+    });
+
+    const rows = validItems.map((p: any) => {
       const isMacBook =
         p.name.toLowerCase().includes('macbook') || p.name.toLowerCase().includes('apple');
       const isDell = p.name.toLowerCase().includes('dell');

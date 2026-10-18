@@ -13,38 +13,26 @@ interface GridToggleProps {
 
 export default function GridToggle({ value, onChange }: GridToggleProps) {
   return (
-    <div className="relative flex items-center gap-1 p-1 rounded-full bg-zinc-100">
-      <motion.div
-        layoutId="grid-toggle-indicator"
-        className="absolute top-1 bottom-1 rounded-full bg-primary shadow-sm"
-        style={{
-          left: value === 'single' ? 4 : '50%',
-          width: 'calc(50% - 4px)',
-          transition: 'left 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
-        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-      />
+    <div className="relative flex items-center gap-1 p-1 rounded-xl bg-zinc-100 border border-zinc-200/80 shadow-sm">
       <button
         onClick={() => onChange('single')}
-        className="relative z-10 flex items-center justify-center w-9 h-8 rounded-full transition-colors duration-200"
-        title="Vista 1 columna"
+        className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+          value === 'single' ? 'bg-primary text-white shadow-sm' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+        }`}
+        title="Vista Grande (1 Columna)"
       >
-        <Rows3
-          className={`w-4 h-4 transition-colors duration-200 ${
-            value === 'single' ? 'text-white' : 'text-foreground/40'
-          }`}
-        />
+        <Rows3 className="w-3.5 h-3.5" />
+        <span className="text-[11px]">Grande</span>
       </button>
       <button
         onClick={() => onChange('double')}
-        className="relative z-10 flex items-center justify-center w-9 h-8 rounded-full transition-colors duration-200"
-        title="Vista 2 columnas"
+        className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+          value === 'double' ? 'bg-primary text-white shadow-sm' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+        }`}
+        title="Vista Cuadrícula (2 Columnas)"
       >
-        <LayoutGrid
-          className={`w-4 h-4 transition-colors duration-200 ${
-            value === 'double' ? 'text-white' : 'text-foreground/40'
-          }`}
-        />
+        <LayoutGrid className="w-3.5 h-3.5" />
+        <span className="text-[11px]">Cuadrícula</span>
       </button>
     </div>
   );
@@ -52,7 +40,7 @@ export default function GridToggle({ value, onChange }: GridToggleProps) {
 
 // ─── Hook for persisted grid view ─────────────────────────────
 
-const STORAGE_KEY = 'maia_grid_view';
+const STORAGE_KEY = 'itech_grid_view_v2';
 
 export function useGridView(defaultMode: ViewMode = 'single'): {
   viewMode: ViewMode;
