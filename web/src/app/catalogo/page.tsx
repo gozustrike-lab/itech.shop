@@ -74,6 +74,22 @@ function cleanProductTitle(rawName: string): string {
   if (title.toLowerCase().includes('cargador') && title.toLowerCase().includes('96w')) {
     title = 'Cargador Rápido 96W USB-C Power Adapter (Nuevo)';
   }
+
+  // Ensure iPad Air 3 256GB is always the 4G LTE Chip version as instructed
+  if (title.toLowerCase().includes('air 3') && title.toLowerCase().includes('256gb')) {
+    title = 'Apple iPad Air 3ra Gen 10.5" Retina 256GB (WiFi + 4G LTE Con Chip)';
+  }
+
+  // Ensure iPad Pro 10.5 512GB WiFi clean title
+  if (
+    (title.toLowerCase().includes('10.5') || title.toLowerCase().includes('pro 10.5')) &&
+    title.toLowerCase().includes('512gb') &&
+    !title.toLowerCase().includes('chip') &&
+    !title.toLowerCase().includes('4g')
+  ) {
+    title = 'Apple iPad Pro 10.5" Retina 120Hz ProMotion 512GB (WiFi)';
+  }
+
   return title;
 }
 
@@ -176,15 +192,13 @@ function extractDetailedSpecs(item: ProductItem): GroupedProduct['specs'] {
 
   // iPad Air 3ra Gen 10.5"
   if (name.includes('air 3') || desc.includes('air 3')) {
-    const isCellular = name.includes('4g') || name.includes('chip') || desc.includes('4g') || desc.includes('cellular');
+    const is64Gb = name.includes('64gb') || desc.includes('64gb');
     return {
       display: 'Retina 10.5" True Tone Laminada con gama amplia P3 (2224 x 1668)',
       cpu: 'Chip Apple A12 Bionic con arquitectura de 64 bits y Neural Engine',
       ram: '3 GB RAM',
-      storage: '256 GB de Almacenamiento interno',
-      connectivity: isCellular
-        ? 'WiFi Dual Band + 4G LTE con ranura para chip (Libre para cualquier operador)'
-        : 'WiFi 802.11ac Dual Band de alta velocidad',
+      storage: is64Gb ? '64 GB de Almacenamiento interno' : '256 GB de Almacenamiento interno',
+      connectivity: 'WiFi Dual Band + 4G LTE con ranura para chip (Libre para cualquier operador)',
       condition: 'Seminuevo Grado A • Compatible con Apple Pencil y Smart Keyboard',
       gift: '🎁 PACK REGALO: Lápiz Óptico + Soporte Ajustable Vertical/Horizontal + Cable Nuevos',
       warranty: 'Emitimos Boleta de Venta • 100% probado en 30 puntos (WiFi, chip 4G, cámaras, audio, Touch ID y pantalla operativos). Si tiene algún detalle se informa en observación.',
