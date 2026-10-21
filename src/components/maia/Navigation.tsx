@@ -19,6 +19,7 @@ const navLinks = [
   { page: 'home', href: '/', label: 'Inicio' },
   { page: 'nosotros', href: '/nosotros', label: 'Nosotros' },
   { page: 'coleccion', href: '/coleccion', label: 'Colección' },
+  { page: 'catalogo', href: '/catalogo', label: 'Catálogo' },
   { page: 'comprar', href: '/comprar', label: 'Comprar' },
   { page: 'contacto', href: '/contacto', label: 'Contacto' },
 ];

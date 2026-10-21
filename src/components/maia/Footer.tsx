@@ -65,8 +65,8 @@ const defaultTrustItems = [
     desc: 'Olva Courier y Shalom',
   },
   {
-    label: 'Garantía 12 Meses',
-    desc: 'Respaldo técnico directo',
+    label: 'Emitimos Boleta',
+    desc: 'Comprobante legal por tu compra',
   },
   {
     label: 'Pago Seguro',
@@ -267,6 +267,7 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
                 { label: 'Gaming', href: '/coleccion?categoria=gaming' },
                 { label: 'Audio', href: '/coleccion?categoria=audio' },
                 { label: 'Accesorios', href: '/coleccion?categoria=accesorios' },
+                { label: 'Catálogo Digital (Showroom)', href: '/catalogo' },
                 { label: 'Ver Todo', href: '/coleccion' },
               ].map((link) => (
                 <li key={link.label}>
