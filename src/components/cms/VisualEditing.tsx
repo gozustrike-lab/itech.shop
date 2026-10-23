@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 export function VisualEditing() {
   const [showHint, setShowHint] = useState(true);
   const [isInIframe, setIsInIframe] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     try {
@@ -13,14 +14,21 @@ export function VisualEditing() {
     } catch {
       setIsInIframe(true);
     }
+    setMounted(true);
     const timer = setTimeout(() => setShowHint(false), 5000);
     return () => clearTimeout(timer);
   }, []);
 
+  // Strictly gate visual editing: only active inside the Studio iframe (for authorized developers)
+  // Outside the Studio iframe, on the public website, never mount the overlay or "Open in Studio" badges
+  if (!mounted || !isInIframe) {
+    return null;
+  }
+
   return (
     <>
       <SanityVisualEditing portal={true} />
-      {isInIframe && showHint && (
+      {showHint && (
         <div
           style={{
             position: "fixed",
@@ -45,7 +53,7 @@ export function VisualEditing() {
           }}
         >
           <span style={{ fontSize: 16 }}>✏️</span>
-          <span>Modo Edici&oacute;n &mdash; Haz clic en cualquier elemento para editarlo</span>
+          <span>Modo Edición — Haz clic en cualquier elemento para editarlo</span>
           <button
             onClick={() => setShowHint(false)}
             style={{

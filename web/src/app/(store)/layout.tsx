@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import { Providers } from "@/components/maia/Providers";
 import Navigation from "@/components/maia/Navigation";
 import Footer from "@/components/maia/Footer";
@@ -60,6 +61,8 @@ export default async function StoreLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isEnabled: isDraftMode } = await draftMode();
+
   const [siteConfig, footerSettings] = await Promise.all([
     sanityFetch<any>({ query: SITE_SETTINGS_QUERY }).then((r) => r.data).catch(() => null),
     sanityFetch<any>({ query: FOOTER_SETTINGS_QUERY }).then((r) => r.data).catch(() => null),
@@ -75,8 +78,12 @@ export default async function StoreLayout({
         <CartDrawer />
         <ScrollToTop />
         <ScrollProgress />
-        <SanityLiveWithToken includeDrafts />
-        <VisualEditing />
+        {isDraftMode && (
+          <>
+            <SanityLiveWithToken includeDrafts />
+            <VisualEditing />
+          </>
+        )}
       </SiteConfigProvider>
     </Providers>
   );
