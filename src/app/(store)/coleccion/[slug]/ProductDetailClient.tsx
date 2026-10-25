@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, MessageCircle, ShoppingBag, Star, Check, CheckCircle2, Heart, Truck, ShieldCheck, ChevronRight, Share2, ZoomIn, Minus, Plus } from 'lucide-react';
+import { ArrowLeft, MessageCircle, ShoppingBag, Star, Check, CheckCircle2, Heart, Truck, ShieldCheck, ChevronRight, Share2, ZoomIn, Minus, Plus, Bell, AlertTriangle } from 'lucide-react';
 import { useStore } from '@/lib/store-context';
 import { useToast } from '@/lib/toast-context';
 import { formatPrice, generateWhatsAppLink } from '@/lib/store-data';
@@ -157,6 +157,20 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
                 </div>
                 <span className="text-xs text-foreground/40">{displayProduct.rating} ({displayProduct.reviews} resenas)</span>
               </div>
+
+              {displayProduct.inStock === false && (
+                <div className="bg-rose-50 border border-rose-200/90 rounded-2xl p-4 mb-4 flex items-start gap-3 text-rose-900 shadow-sm">
+                  <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-extrabold text-rose-800">
+                      🔴 Equipo Temporalmente Fuera de Stock / Agotado
+                    </h4>
+                    <p className="text-xs text-rose-700 mt-1 leading-relaxed">
+                      Este modelo se ha agotado en nuestro almacén. Estamos preparando el próximo lote de importación directa desde USA. Puedes solicitar ser notificado o separar tu unidad con antelación vía WhatsApp.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               <h1 {...ve(displayProduct._id, 'product', 'name')} className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                 {(displayProduct.name || '').replace(/\\"/g, '"')}

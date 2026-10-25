@@ -21,6 +21,8 @@ import {
   MessageCircle,
   Home,
   CheckCheck,
+  Bell,
+  AlertTriangle,
 } from 'lucide-react';
 import { getProductImages } from '@/lib/catalog-images';
 
@@ -35,6 +37,7 @@ interface ProductItem {
   mainImage: string;
   category?: { name: string; slug: string };
   features?: string[];
+  inStock?: boolean;
 }
 
 interface GroupedProduct {
@@ -50,6 +53,7 @@ interface GroupedProduct {
   compareAtPrice?: number;
   description: string;
   stockCount: number;
+  isOutOfStock: boolean;
   skus: string[];
   specs: {
     display: string;
@@ -295,7 +299,8 @@ export default function CatalogoShowroomPage() {
       price, compareAtPrice, description,
       "mainImage": coalesce(mainImage.asset->url, mainImageUrl),
       gallery[] { "url": coalesce(image.asset->url, url), alt },
-      "category": category->{ _id, name, "slug": slug.current }
+      "category": category->{ _id, name, "slug": slug.current },
+      inStock
     }`);
 
     const sanityUrl = `https://kqneikcb.api.sanity.io/v2025-01-01/data/query/production?query=${query}`;
@@ -319,6 +324,7 @@ export default function CatalogoShowroomPage() {
             const specs = extractDetailedSpecs(item);
             const groupKey = `${cleanTitle}-${item.price}`;
 
+            const isItemInStock = item.inStock !== false;
             const existing = map.get(groupKey);
             const imageSet = getProductImages(item);
             if (!existing) {
@@ -334,12 +340,16 @@ export default function CatalogoShowroomPage() {
                 price: item.price,
                 compareAtPrice: item.compareAtPrice,
                 description: item.description,
-                stockCount: 1,
+                stockCount: isItemInStock ? 1 : 0,
+                isOutOfStock: !isItemInStock,
                 skus: [item.sku],
                 specs,
               });
             } else {
-              existing.stockCount += 1;
+              if (isItemInStock) {
+                existing.stockCount += 1;
+                existing.isOutOfStock = false;
+              }
               existing.skus.push(item.sku);
             }
           }
@@ -897,16 +907,28 @@ function CatalogProductCard({ item }: { item: GroupedProduct }) {
           </span>
         </div>
 
-        {/* WhatsApp Order Button */}
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-green-950/30 transition-all hover:scale-[1.01] active:scale-[0.98]"
-        >
-          <MessageCircle className="w-4 h-4 shrink-0" />
-          <span>Separar por WhatsApp (+51 907 674 693)</span>
-        </a>
+        {/* WhatsApp Order / Reservation Button */}
+        {item.isOutOfStock ? (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-amber-950/30 transition-all hover:scale-[1.01] active:scale-[0.98]"
+          >
+            <Bell className="w-4 h-4 shrink-0" />
+            <span>🔔 Consultar Próximo Lote / Reservar</span>
+          </a>
+        ) : (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-green-950/30 transition-all hover:scale-[1.01] active:scale-[0.98]"
+          >
+            <MessageCircle className="w-4 h-4 shrink-0" />
+            <span>Separar por WhatsApp (+51 907 674 693)</span>
+          </a>
+        )}
 
         {/* Link to Official Web Store Product Page */}
         <a

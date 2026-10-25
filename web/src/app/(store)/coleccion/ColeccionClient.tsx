@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { MessageCircle, ShoppingBag, Heart, ArrowRight, Sparkles, Gift } from 'lucide-react';
+import { MessageCircle, ShoppingBag, Heart, ArrowRight, Sparkles, Gift, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { useStore } from '@/lib/store-context';
 import { formatPrice } from '@/lib/store-data';
@@ -35,6 +35,7 @@ interface ProductItem {
 interface GroupedProductItem extends ProductItem {
   cleanName: string;
   stockCount: number;
+  isOutOfStock: boolean;
   isLaptop: boolean;
   isTablet: boolean;
   giftBadge: string;
@@ -93,18 +94,23 @@ export default function ColeccionClient({ products, categories, useFallback }: C
         giftBadge = '🎁 Pack: Lápiz + Soporte + Cable';
       }
 
+      const isItemInStock = p.inStock !== false;
       const existing = map.get(groupKey);
       if (!existing) {
         map.set(groupKey, {
           ...p,
           cleanName,
-          stockCount: 1,
+          stockCount: isItemInStock ? 1 : 0,
+          isOutOfStock: !isItemInStock,
           isLaptop,
           isTablet,
           giftBadge,
         });
       } else {
-        existing.stockCount += 1;
+        if (isItemInStock) {
+          existing.stockCount += 1;
+          existing.isOutOfStock = false;
+        }
       }
     }
 
@@ -225,22 +231,29 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                       {product.category?.name || 'Equipo'}
                     </span>
 
-                    <span
-                      className={`inline-flex items-center gap-1 text-[9.5px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border whitespace-nowrap ${
-                        product.stockCount > 1
-                          ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                          : 'bg-amber-50 text-amber-800 border-amber-300'
-                      }`}
-                    >
+                    {product.isOutOfStock ? (
+                      <span className="inline-flex items-center gap-1 text-[9.5px] sm:text-[10px] font-black px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300 whitespace-nowrap shadow-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping" />
+                        FUERA DE STOCK
+                      </span>
+                    ) : (
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          product.stockCount > 1 ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                        className={`inline-flex items-center gap-1 text-[9.5px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border whitespace-nowrap ${
+                          product.stockCount > 1
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : 'bg-amber-50 text-amber-800 border-amber-300'
                         }`}
-                      />
-                      {product.stockCount > 1
-                        ? `${product.stockCount} en stock`
-                        : 'Última unid.'}
-                    </span>
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            product.stockCount > 1 ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
+                          }`}
+                        />
+                        {product.stockCount > 1
+                          ? `${product.stockCount} en stock`
+                          : 'Última unid.'}
+                      </span>
+                    )}
                   </div>
 
                   {/* Big Square 1:1 Product Image with Interactive 3-Angle Switcher */}
@@ -249,8 +262,20 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                       <ProductCardImage
                         product={product}
                         alt={product.cleanName}
-                        className="group-hover:border-turquoise-200"
+                        className={`group-hover:border-turquoise-200 ${
+                          product.isOutOfStock ? 'grayscale-[20%] opacity-85' : ''
+                        }`}
                       />
+                      {product.isOutOfStock && (
+                        <div className="absolute inset-0 bg-slate-950/50 backdrop-blur-[1px] flex flex-col items-center justify-center p-2 rounded-2xl pointer-events-none">
+                          <span className="bg-rose-600 text-white font-extrabold text-[10px] sm:text-xs px-2.5 py-1 rounded-md shadow-lg mb-1">
+                            AGOTADO
+                          </span>
+                          <span className="text-[9px] text-white/90 bg-black/60 px-2 py-0.5 rounded">
+                            Próximo lote en camino
+                          </span>
+                        </div>
+                      )}
                     </Link>
 
                     {/* Floating Glass Heart Favorite Button */}
@@ -321,50 +346,81 @@ export default function ColeccionClient({ products, categories, useFallback }: C
 
                   {/* Quick Action Buttons */}
                   <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        window.open(waUrl, '_blank');
-                      }}
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20BD5A] text-white py-2 sm:py-2.5 px-2 rounded-xl text-xs font-bold shadow-sm transition-all hover:scale-[1.01] active:scale-[0.98]"
-                    >
-                      <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span className="whitespace-nowrap"><span className="hidden sm:inline">Pedir </span>WhatsApp</span>
-                    </button>
+                    {product.isOutOfStock ? (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.open(
+                              `https://wa.me/51907674693?text=${encodeURIComponent(
+                                `Hola iTech Perú! Vi en la web que el equipo *${product.cleanName}* está fuera de stock. ¿Cuándo llega el próximo lote desde USA o cómo puedo reservarlo con anticipación?`
+                              )}`,
+                              '_blank'
+                            );
+                          }}
+                          className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white py-2 sm:py-2.5 px-2 rounded-xl text-xs font-bold shadow-sm transition-all hover:scale-[1.01] active:scale-[0.98]"
+                        >
+                          <Bell className="w-3.5 h-3.5 flex-shrink-0" />
+                          <span className="whitespace-nowrap">Reservar Próximo Lote</span>
+                        </button>
 
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        addToCart({
-                          id: product._id as any,
-                          slug: product.slug,
-                          name: product.cleanName,
-                          price: product.price,
-                          image: product.mainImage || '',
-                          imageSecondary: product.secondaryImage || '',
-                          category: product.category?.slug || '',
-                          categoryLabel: product.category?.name || '',
-                          description: product.description || '',
-                          longDescription: product.longDescription || '',
-                          features: product.features || [],
-                          color: { name: product.color || '' },
-                          images: (product.gallery || []).map((g) => ({
-                            original: g.url || '',
-                            thumbnail: g.url || '',
-                          })),
-                          rating: product.rating || 5,
-                          reviews: product.reviewCount || 0,
-                          sku: product.sku || '',
-                          collection: product.collection || '',
-                        } as any);
-                      }}
-                      className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center bg-primary hover:bg-turquoise-600 rounded-xl transition-all text-white shadow-sm hover:scale-105 active:scale-95"
-                      aria-label="Agregar al carrito"
-                    >
-                      <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </button>
+                        <button
+                          disabled
+                          className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center bg-zinc-200 text-zinc-400 rounded-xl cursor-not-allowed"
+                          title="Equipo temporalmente fuera de stock"
+                        >
+                          <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.open(waUrl, '_blank');
+                          }}
+                          className="flex-1 flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20BD5A] text-white py-2 sm:py-2.5 px-2 rounded-xl text-xs font-bold shadow-sm transition-all hover:scale-[1.01] active:scale-[0.98]"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                          <span className="whitespace-nowrap"><span className="hidden sm:inline">Pedir </span>WhatsApp</span>
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            addToCart({
+                              id: product._id as any,
+                              slug: product.slug,
+                              name: product.cleanName,
+                              price: product.price,
+                              image: product.mainImage || '',
+                              imageSecondary: product.secondaryImage || '',
+                              category: product.category?.slug || '',
+                              categoryLabel: product.category?.name || '',
+                              description: product.description || '',
+                              longDescription: product.longDescription || '',
+                              features: product.features || [],
+                              color: { name: product.color || '' },
+                              images: (product.gallery || []).map((g) => ({
+                                original: g.url || '',
+                                thumbnail: g.url || '',
+                              })),
+                              rating: product.rating || 5,
+                              reviews: product.reviewCount || 0,
+                              sku: product.sku || '',
+                              collection: product.collection || '',
+                            } as any);
+                          }}
+                          className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center bg-primary hover:bg-turquoise-600 rounded-xl transition-all text-white shadow-sm hover:scale-105 active:scale-95"
+                          aria-label="Agregar al carrito"
+                        >
+                          <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </motion.div>
