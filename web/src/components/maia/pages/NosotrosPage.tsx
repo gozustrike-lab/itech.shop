@@ -27,7 +27,7 @@ const defaultFeatures: FeatureItem[] = [
   { icon: '🛡️', title: 'Revisión de 30 Puntos', description: 'Protocolo de inspección técnica certificado: pantalla, cámaras, botones, parlantes, sensores y conectividad.' },
   { icon: '🔋', title: 'Baterías Certificadas', description: 'Medimos y publicamos la salud real de cada batería. Si está bajo el estándar, la reemplazamos por una nueva.' },
   { icon: '🔧', title: 'Renovación Profesional', description: 'Limpieza interna profunda, pasta térmica nueva, firmware actualizado y desbloqueo verificado.' },
-  { icon: '🚚', title: 'Garantía y Envío Seguro', description: '12 meses de garantía real y envíos protegidos a todo el Perú con embalaje reforzado.' },
+  { icon: '🚚', title: 'Boleta de Venta y Envío Seguro', description: 'Equipos 100% testeados y envíos protegidos a todo el Perú con embalaje reforzado.' },
 ];
 
 export default function NosotrosPage({ data }: { data?: AboutPageData | null }) {
@@ -61,7 +61,7 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
             {subtitle}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 }} className="text-sm text-foreground/40 max-w-lg mx-auto">
-            Dispositivos tecnológicos certificados y renovados con garantía real de 12 meses en todo el Perú.
+            Dispositivos tecnológicos certificados y renovados con testeados al 100% de 12 meses en todo el Perú.
           </motion.p>
           <div className="section-divider mx-auto mt-5" />
         </div>
@@ -96,13 +96,13 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
             ) : (
               <>
                 <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.15 }} className="text-sm text-foreground/60 leading-relaxed" {...ve('aboutPage', 'aboutPage', 'storyParagraphs')}>
-                  En <strong className="text-foreground">iTech Peru</strong>, somos especialistas en tecnología renovada y certificada de alta gama. Nuestra misión es democratizar el acceso a los mejores smartphones, laptops, consolas y accesorios con calidad impecable, garantía y precios transparentes.
+                  En <strong className="text-foreground">iTech Peru</strong>, somos especialistas en tecnología renovada y certificada de alta gama. Nuestra misión es democratizar el acceso a los mejores smartphones, laptops, consolas y accesorios con calidad impecable, boleta de venta y precios transparentes.
                 </motion.p>
                 <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.2 }} className="text-sm text-foreground/60 leading-relaxed" {...ve('aboutPage', 'aboutPage', 'storyParagraphs')}>
-                  Cada dispositivo atraviesa un riguroso protocolo de diagnóstico en 30 puntos clave: evaluamos salud de batería, rendimiento de CPU/GPU, pantalla original, cámaras, conectividad y estado estético para garantizar que recibas una experiencia como nueva.
+                  Cada dispositivo atraviesa un riguroso protocolo de diagnóstico en 30 puntos clave: evaluamos salud de batería, rendimiento de CPU/GPU, pantalla original, cámaras, conectividad y estado estético para asegurar que recibas una experiencia como nueva.
                 </motion.p>
                 <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.25 }} className="text-sm text-foreground/60 leading-relaxed" {...ve('aboutPage', 'aboutPage', 'storyParagraphs')}>
-                  Apostamos por la economía circular y la tecnología responsable. Todos nuestros equipos cuentan con 12 meses de garantía directa y soporte postventa especializado en todo el Perú.
+                  Apostamos por la economía circular y la tecnología responsable. Todos nuestros equipos cuentan con Equipos testeados al 100% y soporte postventa especializado en todo el Perú.
                 </motion.p>
               </>
             )}

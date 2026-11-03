@@ -37,7 +37,7 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-60px' });
   const siteConfig = useSiteConfig();
-  const whatsappNum = siteConfig.whatsapp || '51999888777';
+  const whatsappNum = siteConfig.whatsapp || '51907674693';
 
   const title = data?.title || 'Métodos de Pago';
   const subtitle = data?.subtitle || 'Cómo Comprar';
@@ -145,7 +145,7 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
         <div className="max-w-2xl mx-auto space-y-3">
           {[
             { q: '¿Cuánto tiempo tarda el envío?', a: 'Los envíos a Lima metropolitana toman de 24 a 48 horas hábiles. A provincias, de 2 a 4 días hábiles mediante Olva Courier o Shalom con número de seguimiento en tiempo real.' },
-            { q: '¿Cómo funciona la garantía de los equipos?', a: 'Todos nuestros dispositivos cuentan con 12 meses de garantía real contra cualquier falla técnica o defecto de hardware. Si se presenta algún inconveniente, lo reparamos o reemplazamos sin costo.' },
+            { q: '¿Cómo es el control de calidad de los equipos?', a: 'Todos nuestros dispositivos cuentan testeado en 30 puntos técnicos contra cualquier falla técnica o defecto de hardware. Si se presenta algún inconveniente, lo reparamos o reemplazamos sin costo.' },
             { q: '¿Los equipos son originales y liberados?', a: 'Sí, el 100% de nuestros equipos son originales y están liberados de fábrica para cualquier operador del Perú (Claro, Movistar, Entel, Bitel), listos para usar.' },
           ].map((faq, i) => (
             <motion.details

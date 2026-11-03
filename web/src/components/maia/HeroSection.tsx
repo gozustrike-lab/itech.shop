@@ -145,7 +145,7 @@ export default function HeroSection() {
           </motion.a>
 
           <motion.a
-            href="https://wa.me/51977333858?text=Hola%20Maia%20Store!%20Quisiera%20hacer%20un%20pedido"
+            href="https://wa.me/51907674693?text=Hola%20Maia%20Store!%20Quisiera%20hacer%20un%20pedido"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-lg font-semibold border-2 border-primary/20 text-primary hover:bg-turquoise-50 transition-all duration-300"

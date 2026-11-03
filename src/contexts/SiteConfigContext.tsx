@@ -25,12 +25,12 @@ export interface SiteConfig {
 const defaultSiteConfig: SiteConfig = {
   title: 'iTech Peru',
   companyName: 'iTech Peru',
-  tagline: 'Tecnología renovada con garantía',
-  description: 'iTech Peru es la tienda de tecnología de segunda mano certificada: laptops, smartphones, audio y gaming revisados por técnicos y con garantía real.',
-  footerText: 'Compra inteligente: tecnología de segunda mano verificada por técnicos, con garantía escrita y envío seguro a todo el Perú.',
-  phone: '+51906431630',
+  tagline: 'Tecnología renovada 100% operativo',
+  description: 'iTech Peru es la tienda de tecnología de segunda mano certificada: laptops, smartphones, audio y gaming revisados por técnicos y con testeados al 100%.',
+  footerText: 'Compra inteligente: tecnología de segunda mano verificada por técnicos, con boleta de venta y testeado al 100% y envío seguro a todo el Perú.',
+  phone: '+51 907 674 693',
   schedule: 'Lun a Sáb: 10:00 - 20:00',
-  whatsapp: '51999888777',
+  whatsapp: '51907674693',
   email: 'hola@itechperu.shop',
   social: [
     { platform: 'instagram', url: 'https://instagram.com/itechperu' },

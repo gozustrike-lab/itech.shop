@@ -35,7 +35,7 @@ export default function CartDrawer() {
   const { cart, cartCount, cartTotal, updateQuantity, removeFromCart, clearCart } = useStore();
   const router = useRouter();
   const siteConfig = useSiteConfig();
-  const whatsappNum = siteConfig.whatsapp || '51999888777';
+  const whatsappNum = siteConfig.whatsapp || '51907674693';
 
   const handleCheckout = () => {
     setOpen(false);

@@ -93,13 +93,13 @@ export const paymentMethods: PaymentMethod[] = [
     description:
       'Haz tu pedido directamente por WhatsApp y recibe atención personalizada. Te enviamos fotos y videos del equipo, estado de batería y confirmación inmediata.',
     cta: 'Chatear Ahora',
-    href: 'https://wa.me/51999888777?text=Hola%20iTech%20Peru!%20Quisiera%20hacer%20un%20pedido',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Peru!%20Quisiera%20hacer%20un%20pedido',
     steps: [
-      'Escríbenos por WhatsApp al +51 999 888 777',
+      'Escríbenos por WhatsApp al +51 907 674 693',
       'Cuéntanos qué equipo o accesorio te interesa',
       'Te enviamos fotos reales, salud de batería y detalles',
       'Confirma tu pedido y método de pago',
-      'Recibe tu equipo en la puerta de tu casa con garantía',
+      'Recibe tu equipo en la puerta de tu casa 100% operativo',
     ],
   },
   {
@@ -138,7 +138,7 @@ export const paymentMethods: PaymentMethod[] = [
     description:
       'Realiza tu pago por transferencia bancaria a nuestras cuentas en BCP, Interbank o Banco de la Nación. Una vez confirmada la transferencia, envíanos el comprobante por WhatsApp para procesar tu pedido.',
     cta: 'Ver Cuentas',
-    href: 'https://wa.me/51999888777?text=Hola!%20Necesito%20los%20datos%20para%20transferencia%20bancaria',
+    href: 'https://wa.me/51907674693?text=Hola!%20Necesito%20los%20datos%20para%20transferencia%20bancaria',
     steps: [
       'Solicita los datos bancarios por WhatsApp',
       'Realiza la transferencia desde tu banca',
@@ -192,28 +192,44 @@ export function formatPrice(price: number): string {
 
 export function generateWhatsAppLink(
   product: Product,
-  options?: { quantity?: number; productUrl?: string; phone?: string },
+  options?: { quantity?: number; productUrl?: string; phone?: string; inStock?: boolean },
 ): string {
   const quantity = options?.quantity ?? 1;
   const productUrl = options?.productUrl || (typeof window !== 'undefined' ? window.location.href : '');
-  const phone = (options?.phone || '51999888777').replace(/\D/g, '');
+  const phone = (options?.phone || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '51907674693').replace(/\D/g, '');
+  const cleanTitle = (product.name || product.fullName || '')
+    .replace(/\s*[•\-]\s*Ord:\s*[\w\-]+/gi, '')
+    .replace(/\\"/g, '"')
+    .trim();
 
-  const message = [
-    `🛍️ Producto: ${product.name || product.fullName}`,
-    `💰 Precio: ${formatPrice(product.price)}`,
-    `🔢 Cantidad: ${quantity}`,
-    ``,
-    `🔗 ${productUrl}`,
-    ``,
-    `¡Hola iTech Peru! Estoy interesado en este equipo con garantía. ¿Tienen disponibilidad?`,
-  ].join('\n');
+  const isOutOfStock = options?.inStock === false || (product as any)?.inStock === false;
 
-  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  const lines = isOutOfStock
+    ? [
+        '¡Hola iTech Perú! Vi en la web que este equipo está temporalmente fuera de stock:',
+        '',
+        `*Producto:* ${cleanTitle}`,
+        productUrl ? `*Enlace:* ${productUrl}` : '',
+        '',
+        '¿Cuándo llega el próximo lote desde USA o cómo puedo reservarlo con antelación?',
+      ]
+    : [
+        '¡Hola iTech Perú! Deseo comprar el siguiente equipo:',
+        '',
+        `*Producto:* ${cleanTitle}`,
+        `*Precio:* ${formatPrice(product.price)}`,
+        `*Cantidad:* ${quantity}`,
+        productUrl ? `*Enlace:* ${productUrl}` : '',
+        '',
+        '¿Tienen stock disponible para coordinar el pago y envío?',
+      ];
+
+  return `https://wa.me/${phone}?text=${encodeURIComponent(lines.filter(Boolean).join('\n'))}`;
 }
 
-export function generateWhatsAppGeneral(phone: string = '51999888777'): string {
+export function generateWhatsAppGeneral(phone: string = '51907674693'): string {
   const cleanPhone = phone.replace(/\D/g, '');
-  return `https://wa.me/${cleanPhone}?text=${encodeURIComponent('Hola iTech Peru! Quisiera hacer una consulta')}`;
+  return `https://wa.me/${cleanPhone}?text=${encodeURIComponent('¡Hola iTech Perú! Quisiera hacer una consulta sobre sus equipos.')}`;
 }
 
 // ─── Bank Accounts ────────────────────────────────────────────
@@ -250,7 +266,7 @@ export const qrPayments: QRPayment[] = [
     label: 'Yape',
     color: '#742DB5',
     bgColor: 'bg-purple-600',
-    number: '999 888 777',
+    number: '907 674 693',
     holder: 'iTech Peru E.I.R.L.',
   },
   {
@@ -258,7 +274,7 @@ export const qrPayments: QRPayment[] = [
     label: 'Plin',
     color: '#00C853',
     bgColor: 'bg-green-500',
-    number: '999 888 777',
+    number: '907 674 693',
     holder: 'iTech Peru E.I.R.L.',
   },
 ];

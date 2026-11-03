@@ -503,7 +503,7 @@ export default function CheckoutPage() {
                     <motion.button onClick={() => navigate('#/')} className="inline-flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-semibold text-sm" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                       Volver al Inicio
                     </motion.button>
-                    <motion.a href="https://wa.me/51977333858?text=Hola!%20Acabo%20de%20realizar%20un%20pago%20en%20Maia%20Store" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-full font-semibold text-sm" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                    <motion.a href="https://wa.me/51907674693?text=Hola!%20Acabo%20de%20realizar%20un%20pago%20en%20Maia%20Store" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-full font-semibold text-sm" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                       <MessageCircle className="w-4 h-4" /> WhatsApp
                     </motion.a>
                   </div>

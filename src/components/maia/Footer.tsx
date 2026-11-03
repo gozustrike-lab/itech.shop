@@ -122,8 +122,8 @@ function Storytelling({ storytelling }: { storytelling?: NonNullable<FooterProps
   const router = useRouter();
 
   const badge = storytelling?.badge || 'TECNOLOGÍA CERTIFICADA EN PERÚ';
-  const title = storytelling?.title || 'Cada equipo iTech Peru es probado y garantizado';
-  const subtitle = storytelling?.subtitle || 'Dispositivos renovados grado A con 12 meses de garantía real. Rendimiento como nuevo y hasta 40% de ahorro.';
+  const title = storytelling?.title || 'Cada equipo iTech Peru es probado y 100% operativo';
+  const subtitle = storytelling?.subtitle || 'Dispositivos renovados grado A testeado en 30 puntos técnicos. Rendimiento como nuevo y hasta 40% de ahorro.';
   const ctaLabel = storytelling?.ctaLabel || 'Explorar Catálogo';
   const ctaLink = storytelling?.ctaLink || '/coleccion';
 
@@ -199,7 +199,7 @@ function Storytelling({ storytelling }: { storytelling?: NonNullable<FooterProps
 function FooterContent({ footerSettings }: { footerSettings?: FooterProps['footerSettings'] }) {
   const currentYear = new Date().getFullYear();
   const siteConfig = useSiteConfig();
-  const whatsappNumber = siteConfig.whatsapp || '51999888777';
+  const whatsappNumber = siteConfig.whatsapp || '51907674693';
   const instagramLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('instagram'))?.url || 'https://instagram.com/itechperu';
   const tiktokLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('tiktok'))?.url || 'https://tiktok.com/@itechperu';
 
@@ -233,7 +233,7 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
               <span className="text-2xl font-extralight tracking-[0.2em] text-warm-400 ml-1.5 group-hover:text-warm-300 transition-colors duration-300">PERU</span>
             </Link>
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs" {...ve('siteSettings', 'siteSettings', 'footerText')}>
-              {siteConfig.footerText || siteConfig.description || 'Compra inteligente: tecnología de segunda mano verificada por técnicos, con garantía escrita y envío seguro a todo el Perú.'}
+              {siteConfig.footerText || siteConfig.description || 'Compra inteligente: tecnología de segunda mano verificada por técnicos, con boleta de venta y testeado al 100% y envío seguro a todo el Perú.'}
             </p>
             {/* Social Icons */}
             <div className="flex gap-2.5">
@@ -311,11 +311,11 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
             <ul className="space-y-3 mb-6">
               <li>
                 <a
-                  href={`tel:${siteConfig.phone || '+51906431630'}`}
+                  href={`tel:${siteConfig.phone || '+51 907 674 693'}`}
                   className="flex items-center gap-2.5 text-sm text-white/40 hover:text-warm-400 transition-colors duration-300"
                 >
                   <Phone className="w-4 h-4 flex-shrink-0" />
-                  {siteConfig.phone || '+51 906 431 630'}
+                  {siteConfig.phone || '+51 907 674 693'}
                 </a>
               </li>
               <li className="flex items-center gap-2.5 text-sm text-white/40">

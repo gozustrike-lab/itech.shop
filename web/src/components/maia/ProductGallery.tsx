@@ -125,7 +125,7 @@ export default function ProductGallery() {
 
     console.log('[WhatsApp Debug] ProductGallery message:', message);
 
-    const url = `https://wa.me/51977333858?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/51907674693?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
 
@@ -283,7 +283,7 @@ export default function ProductGallery() {
           className="text-center mt-12"
         >
           <a
-            href="https://wa.me/51977333858?text=Hola%20Maia%20Store!%20Quisiera%20ver%20toda%20la%20colección%20completa"
+            href="https://wa.me/51907674693?text=Hola%20Maia%20Store!%20Quisiera%20ver%20toda%20la%20colección%20completa"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl shadow-turquoise-500/25 hover:shadow-turquoise-500/40 transition-all duration-300"

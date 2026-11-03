@@ -38,7 +38,7 @@ export default function CheckoutClient() {
   const { cart, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart } = useStore();
   const { showToast } = useToast();
   const siteConfig = useSiteConfig();
-  const whatsappNum = siteConfig.whatsapp || '51999888777';
+  const whatsappNum = siteConfig.whatsapp || '51907674693';
 
   const [step, setStep] = useState<PaymentStep>('method');
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethodType | null>(null);

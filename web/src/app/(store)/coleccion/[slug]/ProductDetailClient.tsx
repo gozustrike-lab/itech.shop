@@ -216,12 +216,22 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
             </div>
 
             <div className="detail-animate flex flex-col sm:flex-row gap-2.5 pt-3">
-              <motion.a href={generateWhatsAppLink(cartItem, { quantity, productUrl })} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-green-500/15" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
-                <MessageCircle className="w-4 h-4" /> Pedir por WhatsApp
+              <motion.a
+                href={generateWhatsAppLink(cartItem, { quantity, productUrl, phone: '51907674693', inStock: displayProduct.inStock })}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex-1 flex items-center justify-center gap-2 ${displayProduct.inStock === false ? 'bg-amber-600 hover:bg-amber-700' : 'bg-[#25D366] hover:bg-[#20BD5A]'} text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg`}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <MessageCircle className="w-4 h-4" />
+                {displayProduct.inStock === false ? 'Reservar Próximo Lote por WhatsApp' : 'Pedir por WhatsApp'}
               </motion.a>
-              <motion.button onClick={() => { addToCart(cartItem); showToast('Agregado al carrito'); }} className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-turquoise-600 text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-turquoise-500/15" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
-                <ShoppingBag className="w-4 h-4" /> Agregar al Carrito
-              </motion.button>
+              {displayProduct.inStock !== false && (
+                <motion.button onClick={() => { addToCart(cartItem); showToast('Agregado al carrito'); }} className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-turquoise-600 text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-turquoise-500/15" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
+                  <ShoppingBag className="w-4 h-4" /> Agregar al Carrito
+                </motion.button>
+              )}
             </div>
 
             <div className="detail-animate grid grid-cols-3 gap-2 pt-3">

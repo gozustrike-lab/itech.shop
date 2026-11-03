@@ -32,7 +32,7 @@ export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
   const siteConfig = useSiteConfig();
-  const whatsappNumber = siteConfig.whatsapp || '51999888777';
+  const whatsappNumber = siteConfig.whatsapp || '51907674693';
 
   const isHomePage = pathname === '/';
 

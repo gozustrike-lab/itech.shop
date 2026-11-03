@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const data = await sanityFetch<any>({ query: ABOUT_PAGE_QUERY }).then(r => r.data).catch(() => null);
   return {
     title: data?.title || 'Nosotros',
-    description: data?.subtitle || 'Conoce nuestra historia y compromiso con la tecnología renovada garantizada.',
+    description: data?.subtitle || 'Conoce nuestra historia y compromiso con la Tecnología seminueva 100% testeada.',
   };
 }
 

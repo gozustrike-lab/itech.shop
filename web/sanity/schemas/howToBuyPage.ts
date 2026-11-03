@@ -67,13 +67,13 @@ export default defineType({
       name: "whatsappNumber",
       title: "Número de WhatsApp para consultas",
       type: "string",
-      description: "Ej: 51977333858",
+      description: "Ej: 51907674693",
     }),
     defineField({
       name: "whatsappMessage",
       title: "Mensaje por defecto de WhatsApp",
       type: "string",
-      initialValue: "Hola Maia Store! Quisiera información sobre cómo comprar",
+      initialValue: "Hola iTech Peru! Quisiera información sobre cómo comprar",
     }),
   ],
   preview: {

@@ -717,7 +717,7 @@ export default function CatalogoShowroomPage() {
                 rel="noopener noreferrer"
                 className="hover:text-teal-400 transition-colors"
               >
-                📲 WhatsApp Ventas: +51 907 674 693 / +51 924 967 876
+                📲 WhatsApp Ventas: +51 907 674 693
               </a>
               <span>•</span>
               <a
@@ -733,7 +733,7 @@ export default function CatalogoShowroomPage() {
               iTech Perú • Importaciones Directas USA • Precios en Soles (PEN) sujetos a disponibilidad de inventario.
             </p>
             <p className="text-[11px] text-slate-500">
-              Este catálogo digital interactivo sustituye los archivos PDF pesados, garantizando stock y precios 100% actualizados en todo momento.
+              Este catálogo digital interactivo sustituye los archivos PDF pesados, asegurando stock y precios 100% actualizados en todo momento.
             </p>
           </footer>
         </main>

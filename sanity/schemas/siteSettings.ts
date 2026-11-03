@@ -14,7 +14,7 @@ export default defineType({
     defineField({ name: "footerText", title: "Texto del Footer", type: "text", rows: 2 }),
     defineField({ name: "phone", title: "Teléfono", type: "string" }),
     defineField({ name: "schedule", title: "Horario de Atención", type: "string" }),
-    defineField({ name: "whatsapp", title: "WhatsApp", type: "string", description: "Número con código de país, sin +. Ej: 51999888777" }),
+    defineField({ name: "whatsapp", title: "WhatsApp", type: "string", description: "Número con código de país, sin +. Ej: 51907674693" }),
     defineField({ name: "email", title: "Email", type: "string" }),
     defineField({
       name: "nav",

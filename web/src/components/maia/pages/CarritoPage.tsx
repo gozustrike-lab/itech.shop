@@ -25,9 +25,9 @@ export default function CarritoPage() {
       )
       .join('\n');
     const message = encodeURIComponent(
-      `Hola Maia Store! Quisiera hacer el siguiente pedido:\n\n${items}\n\nTotal: ${formatPrice(cartTotal)}`
+      `Hola iTech Peru! Quisiera hacer el siguiente pedido:\n\n${items}\n\nTotal: ${formatPrice(cartTotal)}`
     );
-    window.open(`https://wa.me/51977333858?text=${message}`, '_blank');
+    window.open(`https://wa.me/51907674693?text=${message}`, '_blank');
   }, [cart, cartTotal]);
 
   return (

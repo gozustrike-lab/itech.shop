@@ -77,8 +77,8 @@ export default defineType({
       type: "object",
       fields: [
         { name: "badge", title: "Insignia Superior", type: "string", initialValue: "TECNOLOGÍA CERTIFICADA EN PERÚ" },
-        { name: "title", title: "Título Principal", type: "string", initialValue: "Cada equipo iTech Peru es probado y garantizado" },
-        { name: "subtitle", title: "Subtítulo / Descripción", type: "text", rows: 3, initialValue: "Dispositivos renovados grado A con 12 meses de garantía real. Rendimiento como nuevo y hasta 40% de ahorro." },
+        { name: "title", title: "Título Principal", type: "string", initialValue: "Cada equipo iTech Peru es probado y 100% operativo" },
+        { name: "subtitle", title: "Subtítulo / Descripción", type: "text", rows: 3, initialValue: "Dispositivos renovados grado A testeado en 30 puntos técnicos. Rendimiento como nuevo y hasta 40% de ahorro." },
         { name: "ctaLabel", title: "Texto del Botón", type: "string", initialValue: "Explorar Catálogo" },
         { name: "ctaLink", title: "Enlace del Botón", type: "string", initialValue: "/coleccion" },
       ],

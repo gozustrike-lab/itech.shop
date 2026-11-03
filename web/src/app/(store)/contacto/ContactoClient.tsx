@@ -36,8 +36,8 @@ export default function ContactoClient({ data }: { data?: ContactPageData | null
 
   const title = data?.title || 'Contactanos';
   const subtitle = data?.subtitle || 'Estamos Aqui Para Ti';
-  const whatsappNum = siteConfig.whatsapp || '51999888777';
-  const phoneNum = siteConfig.phone || '+51906431630';
+  const whatsappNum = siteConfig.whatsapp || '51907674693';
+  const phoneNum = siteConfig.phone || '+51 907 674 693';
   const scheduleText = siteConfig.schedule || 'Lun a Sáb: 10:00 - 20:00';
   const instagramLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('instagram'))?.url || 'https://instagram.com/itechperu';
   const tiktokLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('tiktok'))?.url || 'https://tiktok.com/@itechperu';
@@ -130,13 +130,13 @@ export default function ContactoClient({ data }: { data?: ContactPageData | null
         {/* CTA Banner */}
         <motion.div id="contacto-cta" initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: 0.3 }} className="relative rounded-2xl overflow-hidden scroll-mt-16">
           <div className="absolute inset-0">
-            <Image src="/images/collection.jpg" alt="Tecnología renovada garantizada" fill className="object-cover" sizes="100vw" />
+            <Image src="/images/collection.jpg" alt="Tecnología seminueva 100% testeada" fill className="object-cover" sizes="100vw" />
             <div className="absolute inset-0 bg-gradient-to-r from-turquoise-900/90 to-turquoise-700/80" />
           </div>
           <div className="relative z-10 px-6 sm:px-12 py-14 sm:py-16 text-center">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3" {...ve('contactPage', 'contactPage', 'ctaTitle')}>¿Listo para Renovar tu Equipo?</h3>
             <p className="text-sm text-turquoise-100/90 max-w-md mx-auto mb-6" {...ve('contactPage', 'contactPage', 'ctaDescription')}>
-              Encuentra el dispositivo ideal con la mejor tecnología y garantía. Contáctanos hoy y recibe asesoría técnica especializada.
+              Encuentra el dispositivo ideal con la mejor tecnología y respaldo técnico. Contáctanos hoy y recibe asesoría personalizada.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a href={`https://wa.me/${whatsappNum}?text=Hola%20iTech%20Peru!`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-primary px-6 py-3 rounded-full text-sm font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">

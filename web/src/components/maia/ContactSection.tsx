@@ -10,22 +10,22 @@ const socialLinks = [
   {
     icon: Instagram,
     label: 'Instagram',
-    handle: '@maia_store81',
-    href: 'https://instagram.com/maia_store81',
+    handle: '@itechperu',
+    href: 'https://instagram.com/itechperu',
     color: 'hover:bg-pink-50 hover:border-pink-200 hover:text-pink-600',
   },
   {
     icon: Music,
     label: 'TikTok',
-    handle: 'maia_store81',
-    href: 'https://tiktok.com/@maia_store81',
+    handle: 'itechperu',
+    href: 'https://tiktok.com/@itechperu',
     color: 'hover:bg-slate-50 hover:border-slate-200 hover:text-slate-800',
   },
   {
     icon: Phone,
     label: 'WhatsApp',
-    handle: '+51 977 333 858',
-    href: 'https://wa.me/51977333858',
+    handle: '+51 907 674 693',
+    href: 'https://wa.me/51907674693',
     color: 'hover:bg-green-50 hover:border-green-200 hover:text-green-600',
   },
 ];
@@ -157,7 +157,7 @@ export default function ContactSection() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://wa.me/51977333858?text=Hola%20Maia%20Store!%20Quisiera%20asesoría%20personalizada"
+                href="https://wa.me/51907674693?text=Hola%20Maia%20Store!%20Quisiera%20asesoría%20personalizada"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-full text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
@@ -166,7 +166,7 @@ export default function ContactSection() {
                 Escribir por WhatsApp
               </a>
               <a
-                href="https://instagram.com/maia_store81"
+                href="https://instagram.com/itechperu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white px-8 py-4 rounded-full text-lg font-semibold border border-white/25 hover:bg-white/25 transition-all duration-300"

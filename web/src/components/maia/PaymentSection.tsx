@@ -18,7 +18,7 @@ const paymentMethods = [
     description:
       'Haz tu pedido directamente por WhatsApp y recibe atención personalizada. Te enviamos fotos, precios y confirmación al instante.',
     cta: 'Chatear Ahora',
-    href: 'https://wa.me/51977333858?text=Hola%20Maia%20Store!%20Quisiera%20hacer%20un%20pedido',
+    href: 'https://wa.me/51907674693?text=Hola%20Maia%20Store!%20Quisiera%20hacer%20un%20pedido',
     color: 'bg-green-50 text-green-600 hover:bg-green-100 border-green-100 hover:border-green-200',
     iconBg: 'bg-green-100',
   },
@@ -48,7 +48,7 @@ const paymentMethods = [
     description:
       'Realiza tu pago por transferencia bancaria a nuestras cuentas en BCP, Interbank o Banco de la Nación. Envíanos el comprobante por WhatsApp.',
     cta: 'Ver Cuentas',
-    href: 'https://wa.me/51977333858?text=Hola!%20Necesito%20los%20datos%20para%20transferencia%20bancaria',
+    href: 'https://wa.me/51907674693?text=Hola!%20Necesito%20los%20datos%20para%20transferencia%20bancaria',
     color: 'bg-amber-50 text-amber-600 hover:bg-amber-100 border-amber-100 hover:border-amber-200',
     iconBg: 'bg-amber-100',
   },

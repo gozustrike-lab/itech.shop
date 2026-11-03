@@ -12,7 +12,7 @@ export default defineType({
     defineField({ name: "tagline", title: "Tagline / Frase Corta", type: "string" }),
     defineField({ name: "description", title: "Descripción del Sitio", type: "text", rows: 3 }),
     defineField({ name: "phone", title: "Teléfono", type: "string" }),
-    defineField({ name: "whatsapp", title: "WhatsApp", type: "string", description: "Número con código de país. Ej: 51999888777" }),
+    defineField({ name: "whatsapp", title: "WhatsApp", type: "string", description: "Número con código de país. Ej: 51907674693" }),
     defineField({ name: "email", title: "Email de Contacto", type: "string" }),
     defineField({
       name: "nav",

@@ -15,7 +15,7 @@ export default function CarritoClient() {
   const { cart, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount } = useStore();
   const { showToast } = useToast();
   const siteConfig = useSiteConfig();
-  const whatsappNum = siteConfig.whatsapp || '51999888777';
+  const whatsappNum = siteConfig.whatsapp || '51907674693';
 
   const handleCheckout = useCallback(() => {
     router.push('/checkout');

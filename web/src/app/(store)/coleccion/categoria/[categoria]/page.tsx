@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${label} | Catálogo — iTech Peru`,
-    description: `Descubre nuestra selección de ${label.toLowerCase()} certificados y renovados. Equipos con 12 meses de garantía real en todo el Perú.`,
+    description: `Descubre nuestra selección de ${label.toLowerCase()} certificados y renovados. Equipos testeado en 30 puntos técnicos en todo el Perú.`,
   };
 }
 

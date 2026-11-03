@@ -49,9 +49,9 @@ export default function ContactoPage() {
         {/* Contact Cards */}
 <div className="grid sm:grid-cols-4 gap-4 lg:gap-6 mb-16 sm:mb-20">
           {[
-            { icon: Phone, title: 'WhatsApp', detail: '+51 977 333 858', desc: 'Respuesta inmediata. Lunes a Sabado de 9am a 8pm.', href: 'https://wa.me/51977333858?text=Hola%20Maia%20Store!', color: 'bg-green-50 border-green-100' },
-            { icon: Instagram, title: 'Instagram', detail: '@maia_store81', desc: 'Siguenos para nuevas colecciones y ofertas exclusivas.', href: 'https://instagram.com/maia_store81', color: 'bg-pink-50 border-pink-100' },
-            { icon: TikTokIcon, title: 'TikTok', detail: '@maia_store81', desc: 'Nuestra red social oficial. Videos de nuestras joyas y contenido exclusivo.', href: 'https://tiktok.com/@maia_store81', color: 'bg-slate-50 border-slate-100' },
+            { icon: Phone, title: 'WhatsApp', detail: '+51 907 674 693', desc: 'Respuesta inmediata. Lunes a Sabado de 9am a 8pm.', href: 'https://wa.me/51907674693?text=Hola%20Maia%20Store!', color: 'bg-green-50 border-green-100' },
+            { icon: Instagram, title: 'Instagram', detail: '@itechperu', desc: 'Siguenos para nuevas colecciones y ofertas exclusivas.', href: 'https://instagram.com/itechperu', color: 'bg-pink-50 border-pink-100' },
+            { icon: TikTokIcon, title: 'TikTok', detail: '@itechperu', desc: 'Nuestra red social oficial. Videos de nuestras joyas y contenido exclusivo.', href: 'https://tiktok.com/@itechperu', color: 'bg-slate-50 border-slate-100' },
             { icon: MapPin, title: 'Ubicacion', detail: 'Peru', desc: 'Envios a todo el pais a traves de Olva Courier y Shalom Express.', href: '#', color: 'bg-turquoise-50 border-turquoise-100' },
           ].map((card, i) => (
             <motion.a
@@ -121,10 +121,10 @@ export default function ContactoPage() {
               Encuentra la joya perfecta que hable de ti. Contactanos hoy y recibe asesoria personalizada.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a href="https://wa.me/51977333858?text=Hola%20Maia%20Store!" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-primary px-6 py-3 rounded-full text-sm font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              <a href="https://wa.me/51907674693?text=Hola%20Maia%20Store!" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-primary px-6 py-3 rounded-full text-sm font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                 <Phone className="w-4 h-4" /> Escribir por WhatsApp
               </a>
-              <a href="https://instagram.com/maia_store81" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-semibold border border-white/25 hover:bg-white/25 transition-all duration-300">
+              <a href="https://instagram.com/itechperu" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-semibold border border-white/25 hover:bg-white/25 transition-all duration-300">
                 <Instagram className="w-4 h-4" /> Seguir en Instagram
               </a>
             </div>
