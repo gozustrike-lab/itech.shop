@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
   MessageCircle,
-  CreditCard,
+  Landmark,
   QrCode,
   Building2,
   ShieldCheck,
@@ -16,9 +16,10 @@ import { paymentMethods } from '@/lib/store-data';
 
 const iconMap: Record<string, React.ElementType> = {
   'whatsapp': MessageCircle,
-  'tarjeta': CreditCard,
   'yape-plin': QrCode,
+  'bcp': Building2,
   'transferencia': Building2,
+  'interbancaria': Landmark,
 };
 
 export default function ComprarPage() {

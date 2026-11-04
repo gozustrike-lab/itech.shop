@@ -10,6 +10,7 @@ import { formatPrice } from '@/lib/store-data';
 import { ve } from '@/lib/ve';
 import GridToggle, { useGridView } from '@/components/maia/GridToggle';
 import ProductCardImage from '@/components/ProductCardImage';
+import OfficialWhatsAppIcon from '@/components/OfficialWhatsAppIcon';
 
 interface ProductItem {
   _id: string;
@@ -234,18 +235,37 @@ export default function ColeccionClient({ products, categories, useFallback }: C
         {/* Product Cards Grid */}
         <div id="coleccion-productos" className={gridClass}>
           {filteredProducts.map((product, i) => {
-            const whatsappText = encodeURIComponent(
-              `Hola iTech Perú! Deseo información y separar el equipo: *${product.cleanName}* (Precio: S/ ${product.price} PEN). ¿Tienen stock disponible para coordinar?`
-            );
-            const waUrl = `https://wa.me/51907674693?text=${whatsappText}`;
+            const productUrl = `https://www.itechperu.shop/coleccion/${product.slug}`;
+            const giftLine = product.giftBadge ? `🎁 *Obsequio incluido:* ${product.giftBadge}` : '';
+            const categoryLine = product.category?.name ? `🏷️ *Categoría:* ${product.category.name}` : '';
+            const statusEmoji = product.isOutOfStock ? '⏳' : '⚡';
+            const statusText = product.isOutOfStock ? 'Sin Stock (Reserva disponible)'
+              : 'En stock para entrega inmediata';
+
+            const waLines = [
+              '¡Hola iTech Perú! 🇵🇪 Vengo de su catálogo oficial web.',
+              'Deseo coordinar la compra de este equipo:',
+              '',
+              `💻 *Equipo:* ${product.cleanName}`,
+              `💰 *Precio:* S/ ${product.price}.00 PEN`,
+              categoryLine,
+              giftLine,
+              `${statusEmoji} *Disponibilidad:* ${statusText}`,
+              '📦 *Despacho:* Envío 100% seguro por Shalom a todo el Perú con Boleta de Venta',
+              '',
+              `🔗 *Ficha oficial:* ${productUrl}`,
+              '',
+              '¿Me confirman stock y datos de pago para coordinar la entrega o envío Shalom? ¡Gracias!'
+            ].filter(Boolean);
+
+            const waUrl = `https://wa.me/51907674693?text=${encodeURIComponent(waLines.join('\n'))}`;
 
             const isApple = /apple|ipad|macbook|mac/i.test(product.cleanName);
             const isDell = /dell|latitude/i.test(product.cleanName);
             const brandLabel = isApple ? 'APPLE' : isDell ? 'DELL' : (product.category?.name || 'TECH').toUpperCase();
 
             // Refined single stock badge text
-            const stockBadgeText = product.isOutOfStock
-              ? 'Próximo lote'
+            const stockBadgeText = product.isOutOfStock ? 'Sin Stock'
               : product.cleanName.toLowerCase().includes('dell latitude') || product.cleanName.toLowerCase().includes('3330')
               ? '⚡ Solo 2 unidades'
               : product.cleanName.toLowerCase().includes('ipad 9')
@@ -367,30 +387,27 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        window.open(
-                          `https://wa.me/51907674693?text=${encodeURIComponent(
-                            `Hola iTech Perú! Vi en la web que el equipo *${product.cleanName}* está fuera de stock. ¿Cuándo llega el próximo lote desde USA o cómo puedo reservarlo con anticipación?`
-                          )}`,
-                          '_blank'
-                        );
+                        window.open(waUrl, '_blank');
                       }}
-                      className="inline-flex items-center gap-1.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 py-1.5 px-3 rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95"
+                      className="inline-flex items-center gap-1.5 bg-zinc-900 hover:bg-black text-white py-1.5 px-2.5 sm:px-3 rounded-full text-[11px] sm:text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-sm"
+                      title="Reservar por WhatsApp (Sin Stock)"
                     >
-                      <Bell className="w-3.5 h-3.5 text-zinc-500" />
+                      <OfficialWhatsAppIcon className="w-3.5 h-3.5 fill-current flex-shrink-0" />
                       <span>Reservar</span>
                     </button>
                   ) : (
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1 sm:gap-1.5">
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           window.open(waUrl, '_blank');
                         }}
-                        className="inline-flex items-center gap-1 bg-[#25D366] hover:bg-[#20BD5A] text-white py-1.5 px-3 rounded-full text-xs font-bold shadow-sm transition-all hover:scale-105 active:scale-95"
+                        className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20BD5A] text-white py-1.5 px-2.5 sm:px-3 rounded-full text-[11px] sm:text-xs font-bold shadow-sm transition-all hover:scale-105 active:scale-95"
+                        title="Pedir por WhatsApp"
                       >
-                        <MessageCircle className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">Pedir</span>
+                        <OfficialWhatsAppIcon className="w-3.5 h-3.5 fill-current flex-shrink-0" />
+                        <span>WhatsApp</span>
                       </button>
 
                       <button
@@ -420,7 +437,7 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                             collection: product.collection || '',
                           } as any);
                         }}
-                        className="w-8 h-8 rounded-full bg-zinc-900 hover:bg-black text-white flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-sm"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-zinc-900 hover:bg-black text-white flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-sm flex-shrink-0"
                         aria-label="Agregar al carrito"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />

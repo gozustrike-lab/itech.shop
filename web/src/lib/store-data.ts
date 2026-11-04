@@ -91,60 +91,60 @@ export const paymentMethods: PaymentMethod[] = [
     id: 'whatsapp',
     title: 'WhatsApp Directo',
     description:
-      'Haz tu pedido directamente por WhatsApp y recibe atención personalizada. Te enviamos fotos y videos del equipo, estado de batería y confirmación inmediata.',
-    cta: 'Chatear Ahora',
-    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Peru!%20Quisiera%20hacer%20un%20pedido',
+      'Coordina tu pedido de forma personalizada. Te enviamos fotos reales en alta resolución del equipo, video test y confirmación inmediata con tu asesor asignado.',
+    cta: 'Chatear por WhatsApp',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Per%C3%BA!%20Quisiera%20hacer%20un%20pedido',
     steps: [
-      'Escríbenos por WhatsApp al +51 907 674 693',
-      'Cuéntanos qué equipo o accesorio te interesa',
-      'Te enviamos fotos reales, salud de batería y detalles',
-      'Confirma tu pedido y método de pago',
-      'Recibe tu equipo en la puerta de tu casa 100% operativo',
-    ],
-  },
-  {
-    id: 'tarjeta',
-    title: 'Tarjeta de Crédito/Débito',
-    description:
-      'Paga de forma segura con tu tarjeta Visa, Mastercard o American Express a través de nuestra pasarela de pagos en línea certificada con encriptación SSL de 256 bits. Tus datos están 100% protegidos.',
-    cta: 'Pagar en Línea',
-    href: '#',
-    steps: [
-      'Selecciona el equipo que deseas comprar',
-      'Elige "Pagar con Tarjeta" como método',
-      'Ingresa los datos de tu tarjeta de forma segura',
-      'Recibe confirmación de pago al instante',
-      'Preparamos tu envío de inmediato',
+      'Escríbenos al WhatsApp oficial (+51 907 674 693)',
+      'Cuéntanos qué equipo o accesorio deseas separar',
+      'Recibe fotos y video demostrativo del equipo exacto',
+      'Elige tu método de pago preferido (Yape o BCP)',
+      'Coordinamos tu entrega o despacho seguro por Shalom con Boleta de Venta',
     ],
   },
   {
     id: 'yape-plin',
     title: 'Yape / Plin',
     description:
-      'Transferencias instantáneas a través de Yape o Plin, las plataformas de pago móvil más populares del Perú. Solo escanea el código QR o realiza la transferencia directamente desde tu celular.',
-    cta: 'Escanear QR',
-    href: '#',
+      'Transferencias móviles inmediatas sin comisiones a nivel nacional. Escanea nuestro QR oficial o transfiere al número registrado a nombre de la empresa.',
+    cta: 'Pedir QR por WhatsApp',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Per%C3%BA!%20Deseo%20el%20c%C3%B3digo%20QR%20para%20pagar%20por%20Yape%20/%20Plin',
     steps: [
-      'Confirma tu pedido por WhatsApp',
-      'Te enviamos el código QR de Yape/Plin',
-      'Escanea y realiza la transferencia',
-      'Envíanos el comprobante por chat',
-      'Procesamos tu pedido de inmediato',
+      'Confirma tu pedido y monto final por WhatsApp',
+      'Solicita el código QR o número oficial (907 674 693)',
+      'Realiza el Yapeo o Plin desde tu aplicativo bancario',
+      'Envía la captura de tu comprobante al chat',
+      'Validamos al instante y emitimos tu Boleta de Venta',
     ],
   },
   {
-    id: 'transferencia',
-    title: 'Transferencia Bancaria',
+    id: 'bcp',
+    title: 'Transferencia BCP',
     description:
-      'Realiza tu pago por transferencia bancaria a nuestras cuentas en BCP, Interbank o Banco de la Nación. Una vez confirmada la transferencia, envíanos el comprobante por WhatsApp para procesar tu pedido.',
-    cta: 'Ver Cuentas',
-    href: 'https://wa.me/51907674693?text=Hola!%20Necesito%20los%20datos%20para%20transferencia%20bancaria',
+      'Pago directo e inmediato mediante Banca Móvil BCP, Yape a cuenta BCP o ventanilla / agente BCP a nombre de nuestra razón social oficial.',
+    cta: 'Solicitar Cuenta BCP',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Per%C3%BA!%20Por%20favor%20br%C3%ADndenme%20los%20datos%20de%20la%20Cuenta%20BCP',
     steps: [
-      'Solicita los datos bancarios por WhatsApp',
-      'Realiza la transferencia desde tu banca',
-      'Envía la captura del comprobante',
-      'Verificamos el depósito (puede tomar 1-2 horas)',
-      'Despachamos tu pedido una vez confirmado',
+      'Solicita el número de Cuenta Corriente BCP en Soles por WhatsApp',
+      'Transfiere desde tu app BCP o acércate a cualquier agente BCP',
+      'Envía la foto o captura del voucher de depósito',
+      'Verificamos el abono en minutos y generamos tu Boleta de Venta',
+      'Embalamos tu equipo con protección hermética para despacho Shalom',
+    ],
+  },
+  {
+    id: 'interbancaria',
+    title: 'Transferencia Interbancaria (CCI)',
+    description:
+      'Paga desde cualquier entidad financiera del Perú (BBVA, Interbank, Scotiabank, BanBif, Caja Piura, etc.) vía Código de Cuenta Interbancario (CCI) de forma segura.',
+    cta: 'Solicitar CCI Interbancario',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Per%C3%BA!%20Por%20favor%20br%C3%ADndenme%20el%20c%C3%B3digo%20CCI%20para%20transferencia%20interbancaria',
+    steps: [
+      'Solicita nuestro Código de Cuenta Interbancario (CCI) oficial',
+      'Realiza la transferencia desde la app o web de tu banco habitual',
+      'Envía la constancia de la transferencia interbancaria por WhatsApp',
+      'Confirmamos la acreditación interbancaria (inmediata o diferida)',
+      'Procesamos el envío Shalom con tu número de guía para seguimiento',
     ],
   },
 ];
@@ -206,22 +206,29 @@ export function generateWhatsAppLink(
 
   const lines = isOutOfStock
     ? [
-        '¡Hola iTech Perú! Vi en la web que este equipo está temporalmente fuera de stock:',
+        '¡Hola iTech Perú! 🇵🇪 Vi este equipo en su tienda oficial:',
         '',
-        `*Producto:* ${cleanTitle}`,
-        productUrl ? `*Enlace:* ${productUrl}` : '',
+        `💻 *Equipo:* ${cleanTitle}`,
+        `💰 *Precio de referencia:* ${formatPrice(product.price)}`,
+        productUrl ? `🔗 *Ficha oficial:* ${productUrl}` : '',
         '',
-        '¿Cuándo llega el próximo lote desde USA o cómo puedo reservarlo con antelación?',
+        '⏳ *Disponibilidad:* Sin Stock (Reserva disponible)',
+        '📦 *Despacho:* Envíos 100% seguros por Shalom a todo el Perú con Boleta de Venta',
+        '',
+        '¿Cuándo tendrán stock disponible o cómo puedo reservarlo con anticipación?'
       ]
     : [
-        '¡Hola iTech Perú! Deseo comprar el siguiente equipo:',
+        '¡Hola iTech Perú! 🇵🇪 Deseo coordinar la compra de este equipo:',
         '',
-        `*Producto:* ${cleanTitle}`,
-        `*Precio:* ${formatPrice(product.price)}`,
-        `*Cantidad:* ${quantity}`,
-        productUrl ? `*Enlace:* ${productUrl}` : '',
+        `💻 *Equipo:* ${cleanTitle}`,
+        `💰 *Precio:* ${formatPrice(product.price)}`,
+        quantity > 1 ? `🔢 *Cantidad:* ${quantity}` : '',
+        productUrl ? `🔗 *Ficha oficial:* ${productUrl}` : '',
         '',
-        '¿Tienen stock disponible para coordinar el pago y envío?',
+        '⚡ *Disponibilidad:* En stock para entrega inmediata',
+        '📦 *Despacho:* Envío 100% seguro por Shalom a todo el Perú con Boleta de Venta',
+        '',
+        '¿Me confirman stock y datos de pago para coordinar la entrega o despacho por Shalom?'
       ];
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(lines.filter(Boolean).join('\n'))}`;
@@ -236,25 +243,18 @@ export function generateWhatsAppGeneral(phone: string = '51907674693'): string {
 
 export const bankAccounts: BankAccount[] = [
   {
-    bank: 'BCP',
+    bank: 'Banco de Crédito del Perú (BCP)',
     accountType: 'Cuenta Corriente en Soles',
     number: '193-2845671-0-42',
-    holder: 'iTech Peru E.I.R.L.',
+    holder: 'iTech Perú E.I.R.L.',
     logo: '🏦',
   },
   {
-    bank: 'Interbank',
-    accountType: 'Cuenta Ahorro en Soles',
-    number: '2001-0056-7890-12',
-    holder: 'iTech Peru E.I.R.L.',
-    logo: '🏦',
-  },
-  {
-    bank: 'Banco de la Nación',
-    accountType: 'Cuenta Corriente Nacional',
-    number: '00-067-123456',
-    holder: 'iTech Peru E.I.R.L.',
-    logo: '🏦',
+    bank: 'Transferencia Interbancaria (Cualquier Banco)',
+    accountType: 'Código de Cuenta Interbancario (CCI Nacional)',
+    number: '002-193-002845671042-18',
+    holder: 'iTech Perú E.I.R.L.',
+    logo: '🇵🇪',
   },
 ];
 

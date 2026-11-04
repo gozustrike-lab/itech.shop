@@ -13,6 +13,7 @@ import { ve } from '@/lib/ve';
 import { getSwatchColor } from '@/lib/colors';
 import Lightbox from '@/components/maia/Lightbox';
 import ProductCardImage from '@/components/ProductCardImage';
+import OfficialWhatsAppIcon from '@/components/OfficialWhatsAppIcon';
 import { getProductImages } from '@/lib/catalog-images';
 import type { ProductData } from './page';
 
@@ -218,7 +219,7 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
                       🔴 Equipo Temporalmente Fuera de Stock / Agotado
                     </h4>
                     <p className="text-xs text-rose-700 mt-1 leading-relaxed">
-                      Este modelo se ha agotado en nuestro almacén. Estamos preparando el próximo lote de importación directa desde USA. Puedes solicitar ser notificado o separar tu unidad con antelación vía WhatsApp.
+                      Este equipo se encuentra actualmente Sin Stock en nuestro almacén. Estamos preparando nuevas unidades desde USA. Puedes solicitar ser notificado o reservar tu unidad con anticipación vía WhatsApp.
                     </p>
                   </div>
                 </div>
@@ -282,8 +283,8 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <MessageCircle className="w-4 h-4" />
-                {displayProduct.inStock === false ? 'Reservar Próximo Lote por WhatsApp' : 'Pedir por WhatsApp'}
+                <OfficialWhatsAppIcon className="w-4 h-4 fill-current flex-shrink-0" />
+                <span>{displayProduct.inStock === false ? 'Reservar por WhatsApp (Sin Stock)' : 'Pedir por WhatsApp'}</span>
               </motion.a>
               {displayProduct.inStock !== false && (
                 <motion.button onClick={() => { addToCart(cartItem); showToast('Agregado al carrito'); }} className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-turquoise-600 text-white px-5 py-3.5 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-turquoise-500/15" whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>

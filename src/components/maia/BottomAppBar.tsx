@@ -60,7 +60,7 @@ export default function BottomAppBar() {
 
   const tabs = [
     { icon: Home, label: 'Inicio', path: '/', href: '/' },
-    { icon: LayoutGrid, label: 'Colección', path: '/coleccion', href: '/coleccion' },
+    { icon: LayoutGrid, label: 'Catálogo', path: '/coleccion', href: '/coleccion' },
     { icon: Heart, label: 'Favoritos', path: '/favoritos', href: '/favoritos', badge: favorites.length },
     { icon: ShoppingBag, label: 'Carrito', path: '/carrito', href: '/carrito', badge: cartCount, drawer: true },
     { icon: Search, label: 'Buscar', path: '/buscar', href: '/buscar' },

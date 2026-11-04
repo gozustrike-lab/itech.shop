@@ -72,13 +72,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   let name = '';
   let description = '';
   let image = '';
+  let price = 0;
 
   try {
     const sanityRes = await sanityFetch<any>({ query: PRODUCT_BY_SLUG_QUERY, params: { slug } });
     if (sanityRes?.data) {
       name = sanityRes.data.name;
       description = sanityRes.data.description || sanityRes.data.longDescription || '';
-      image = sanityRes.data.mainImage?.asset?.url || '';
+      price = sanityRes.data.price || 0;
+      const rawImg = sanityRes.data.mainImage || sanityRes.data.gallery?.[0]?.url;
+      image = typeof rawImg === 'string' ? rawImg : rawImg?.asset?.url || '';
     }
   } catch {}
 
@@ -88,26 +91,46 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       name = storeProduct.name;
       description = storeProduct.longDescription || storeProduct.description;
       image = storeProduct.image;
+      price = storeProduct.price || 0;
     }
   }
 
-  if (!name) return { title: 'Producto no encontrado | iTech Peru' };
+  if (!name) return { title: 'Producto no encontrado | iTech Perú' };
+
+  // WhatsApp & Social Open Graph requires absolute URL starting with https://
+  const absoluteImageUrl = image
+    ? (image.startsWith('http') ? image : `${BASE_URL}${image.startsWith('/') ? '' : '/'}${image}`)
+    : `${BASE_URL}/images/hero-desktop.webp`;
+
+  const metaDescription = description
+    ? `${description.slice(0, 155)}... Precio: S/ ${price}.00 PEN. Boleta de Venta y envíos Shalom a todo el Perú.`
+    : `Compra ${name} en iTech Perú a S/ ${price}.00 PEN. Equipos testeados en 30 puntos, Boleta de Venta y despacho Shalom.`;
 
   return {
-    title: `${name} | iTech Peru`,
-    description,
+    title: `${name} | iTech Perú`,
+    description: metaDescription,
     openGraph: {
-      title: `${name} — iTech Peru`,
-      description,
+      title: `${name} | iTech Perú`,
+      description: metaDescription,
       type: 'website',
       url: `${BASE_URL}/coleccion/${slug}`,
-      images: image ? [{ url: image, width: 800, height: 800, alt: name }] : [],
+      siteName: 'iTech Perú',
+      locale: 'es_PE',
+      images: [
+        {
+          url: absoluteImageUrl,
+          width: 1200,
+          height: 1200,
+          alt: `${name} - iTech Perú`,
+          type: 'image/jpeg',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${name} — iTech Peru`,
-      description,
-      images: image ? [image] : [],
+      title: `${name} | iTech Perú`,
+      description: metaDescription,
+      images: [absoluteImageUrl],
     },
   };
 }

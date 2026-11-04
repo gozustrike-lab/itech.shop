@@ -17,10 +17,9 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 const navLinks = [
   { page: 'home', href: '/', label: 'Inicio' },
+  { page: 'coleccion', href: '/coleccion', label: 'Catálogo' },
+  { page: 'comprar', href: '/comprar', label: 'Cómo Comprar' },
   { page: 'nosotros', href: '/nosotros', label: 'Nosotros' },
-  { page: 'coleccion', href: '/coleccion', label: 'Colección' },
-  { page: 'catalogo', href: '/catalogo', label: 'Catálogo' },
-  { page: 'comprar', href: '/comprar', label: 'Comprar' },
   { page: 'contacto', href: '/contacto', label: 'Contacto' },
 ];
 
@@ -90,11 +89,15 @@ export default function Navigation() {
     window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
   }, [siteConfig.title, whatsappNumber]);
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/') return pathname === '/';
+    if (path === '/coleccion') return pathname === '/coleccion' || pathname.startsWith('/coleccion/') || pathname === '/catalogo';
+    return pathname === path || pathname.startsWith(path + '/');
+  };
 
   // On home page: transparent when top, blur when scrolled
   // On sub-pages: always show background for contrast
-  const showBg = !isHomePage || isScrolled;
+  const showBg = !isHomePage || isScrolled || isMobileOpen;
   const headerClass = showBg
     ? 'bg-white/85 backdrop-blur-xl border-b border-zinc-200/20 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
     : 'bg-transparent';
@@ -124,7 +127,7 @@ export default function Navigation() {
               <span className={`text-xl sm:text-2xl font-extrabold tracking-tight ${showBg ? 'text-primary' : 'text-white'}`}>
                 iTech
               </span>
-              <span className={`text-xl sm:text-2xl font-extralight tracking-widest ml-0.5 ${showBg ? 'text-foreground' : 'text-white/80'}`}>
+              <span className={`text-xl sm:text-2xl font-extralight tracking-widest ml-0.5 ${showBg ? 'text-zinc-900' : 'text-white'}`}>
                 PERU
               </span>
             </motion.button>
@@ -205,11 +208,11 @@ export default function Navigation() {
                 <AnimatePresence mode="wait">
                   {isMobileOpen ? (
                     <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                      <X className={`w-5 h-5 ${showBg ? 'text-primary' : 'text-white'}`} />
+                      <X className="w-5 h-5 text-zinc-900" />
                     </motion.div>
                   ) : (
                     <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                      <Menu className={`w-5 h-5 ${showBg ? 'text-primary' : 'text-white'}`} />
+                      <Menu className={`w-5 h-5 ${showBg ? 'text-zinc-900' : 'text-white'}`} />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -227,23 +230,39 @@ export default function Navigation() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 pt-14 bg-white/95 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-40 pt-20 pb-28 bg-white/98 backdrop-blur-2xl md:hidden flex flex-col justify-between overflow-y-auto"
           >
-            <div className="flex flex-col items-center justify-center gap-5 py-16">
+            <div className="flex flex-col items-center justify-center gap-6 py-6">
               {navLinks.map((link, i) => (
                 <motion.button
                   key={link.page}
                   onClick={() => handleNavClick(link.href)}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.3 }}
-                  className={`text-xl font-semibold transition-colors tracking-wide ${
-                    isActive(link.href) ? 'text-primary' : 'text-foreground/70 hover:text-primary'
+                  transition={{ delay: i * 0.05, duration: 0.25 }}
+                  className={`text-2xl font-bold transition-all tracking-tight ${
+                    isActive(link.href) ? 'text-primary scale-105' : 'text-zinc-800 hover:text-primary active:scale-95'
                   }`}
                 >
                   {link.label}
                 </motion.button>
               ))}
+            </div>
+
+            {/* Direct WhatsApp Action & Shalom Note in Drawer */}
+            <div className="px-6 space-y-3">
+              <a
+                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('¡Hola iTech Perú! Quisiera consultar sobre los equipos disponibles.')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white py-3.5 px-4 rounded-full font-bold text-sm shadow-md transition-all active:scale-95"
+              >
+                <WhatsAppIcon className="w-4 h-4 fill-current" />
+                <span>Hablar con un Asesor (+51 907 674 693)</span>
+              </a>
+              <p className="text-[11px] text-center text-zinc-400 font-medium">
+                📦 Envíos 100% asegurados por Shalom a todo el Perú
+              </p>
             </div>
           </motion.div>
         )}

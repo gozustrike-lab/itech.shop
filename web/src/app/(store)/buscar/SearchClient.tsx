@@ -34,7 +34,7 @@ function cleanProductTitle(rawName: string): string {
 function getSearchStockBadge(product: any) {
   if (product.inStock === false) {
     return {
-      text: '🔴 Próximo lote',
+      text: '🔴 Sin Stock',
       className: 'bg-rose-50 border border-rose-200 text-rose-700 font-bold',
       isOut: true,
     };

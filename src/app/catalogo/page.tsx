@@ -748,12 +748,12 @@ export default function CatalogoShowroomPage() {
               </a>
               <span>•</span>
               <a
-                href="https://www.tiktok.com/@itechperu"
+                href="https://www.tiktok.com/@itechperuu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-teal-400 transition-colors"
               >
-                🎵 TikTok Live: @itechperu
+                🎵 TikTok Live: @itechperuu
               </a>
             </div>
             <p className="text-slate-500">

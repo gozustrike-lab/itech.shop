@@ -61,7 +61,7 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
             {subtitle}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 }} className="text-sm text-foreground/40 max-w-lg mx-auto">
-            Dispositivos tecnológicos certificados y renovados con testeados al 100% de 12 meses en todo el Perú.
+            Dispositivos tecnológicos seleccionados y certificados con riguroso test de 30 puntos técnicos y Boleta de Venta en todo el Perú.
           </motion.p>
           <div className="section-divider mx-auto mt-5" />
         </div>

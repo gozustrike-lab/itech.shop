@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
-  CreditCard,
   QrCode,
   Building2,
   MessageCircle,
@@ -28,8 +27,8 @@ import {
   qrPayments,
 } from '@/lib/store-data';
 
-type PaymentStep = 'method' | 'card' | 'qr' | 'bank' | 'processing' | 'success' | 'error';
-type PaymentMethodType = 'card' | 'yape' | 'plin' | 'transferencia';
+type PaymentStep = 'method' | 'qr' | 'bank' | 'processing' | 'success' | 'error';
+type PaymentMethodType = 'whatsapp' | 'yape' | 'plin' | 'transferencia';
 
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
 
@@ -60,13 +59,27 @@ export default function CheckoutClient() {
 
   const handleMethodSelect = useCallback((method: PaymentMethodType) => {
     setSelectedMethod(method);
-    if (method === 'card') setStep('card');
+    if (method === 'whatsapp') {
+      const productLines = cart.map((item, idx) => `  ${idx + 1}. *${item.product?.name || 'Equipo'}* (x${item.quantity}) — ${formatPrice((item.product?.price || 0) * item.quantity)}`).join('\n');
+      const lines = [
+        '¡Hola iTech Perú! 🇵🇪 Deseo realizar la compra de los siguientes productos de mi carrito:',
+        '',
+        productLines,
+        '',
+        `💰 *Total a pagar:* ${formatPrice(cartTotal)}`,
+        '📦 *Despacho:* Envío 100% seguro por Shalom a todo el Perú con Boleta de Venta',
+        '',
+        '¿Me brindan los datos para coordinar el pago por Yape o BCP y coordinar el envío? ¡Muchas gracias!'
+      ];
+      const targetPhone = typeof whatsappNum !== 'undefined' ? whatsappNum : '51907674693';
+      window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+    }
     else if (method === 'yape' || method === 'plin') {
       setSelectedQR(method);
       setStep('qr');
     }
     else if (method === 'transferencia') setStep('bank');
-  }, []);
+  }, [cart, cartTotal, typeof whatsappNum !== 'undefined' ? whatsappNum : null]);
 
   // Validate card
   const validateCard = useCallback(() => {
@@ -196,10 +209,10 @@ export default function CheckoutClient() {
                 <motion.div key="method" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3">
                   <h2 className="text-lg font-bold text-foreground mb-4">Elige tu metodo de pago</h2>
                   {[
-                    { id: 'card' as const, icon: CreditCard, title: 'Tarjeta de Credito / Debito', desc: 'Visa, Mastercard, AMEX — Pago seguro y en linea', color: 'bg-blue-50 border-blue-100' },
-                    { id: 'yape' as const, icon: QrCode, title: 'Yape', desc: 'Transferencia instantanea con QR', color: 'bg-purple-50 border-purple-100' },
-                    { id: 'plin' as const, icon: QrCode, title: 'Plin', desc: 'Transferencia instantanea con QR', color: 'bg-green-50 border-green-100' },
-                    { id: 'transferencia' as const, icon: Building2, title: 'Transferencia Bancaria', desc: 'BCP, Interbank, Banco de la Nacion', color: 'bg-zinc-50 border-zinc-200' },
+                    { id: 'whatsapp' as const, icon: MessageCircle, title: 'WhatsApp Directo', desc: 'Atención personalizada y confirmación inmediata con tu asesor', color: 'bg-emerald-50 border-emerald-100' },
+                    { id: 'yape' as const, icon: QrCode, title: 'Yape', desc: 'Transferencia instantánea con QR o número móvil 907 674 693', color: 'bg-purple-50 border-purple-100' },
+                    { id: 'plin' as const, icon: QrCode, title: 'Plin', desc: 'Transferencia instantánea con QR o número móvil 907 674 693', color: 'bg-cyan-50 border-cyan-100' },
+                    { id: 'transferencia' as const, icon: Building2, title: 'Transferencia BCP / Interbancaria (CCI)', desc: 'Cuenta Corriente BCP o código CCI desde cualquier entidad bancaria', color: 'bg-zinc-50 border-zinc-200' },
                   ].map((method) => (
                     <motion.button
                       key={method.id}
@@ -218,79 +231,6 @@ export default function CheckoutClient() {
                       <ChevronRight className="w-5 h-5 text-foreground/20" />
                     </motion.button>
                   ))}
-                </motion.div>
-              )}
-
-              {/* Step: Card Payment */}
-              {step === 'card' && (
-                <motion.div key="card" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <button onClick={() => setStep('method')} className="inline-flex items-center gap-1 text-xs text-foreground/40 hover:text-primary mb-4">
-                    <ArrowLeft className="w-3.5 h-3.5" /> Volver a metodos
-                  </button>
-                  <h2 className="text-lg font-bold text-foreground mb-1">Pago con Tarjeta</h2>
-                  <p className="text-xs text-foreground/40 mb-6">Tus datos estan protegidos con encriptacion SSL de 256 bits</p>
-
-                  <div className="p-5 rounded-2xl bg-white border border-zinc-100 shadow-sm space-y-4">
-                    <div>
-                      <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Numero de Tarjeta</label>
-                      <input
-                        type="text"
-                        value={cardNumber}
-                        onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-                        placeholder="0000 0000 0000 0000"
-                        maxLength={19}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm font-mono tracking-wider bg-background transition-colors ${cardErrors.cardNumber ? 'border-red-400 bg-red-50' : 'border-zinc-200 focus:border-primary focus:ring-1 focus:ring-primary/20'} outline-none`}
-                      />
-                      {cardErrors.cardNumber && <p className="text-[11px] text-red-500 mt-1">{cardErrors.cardNumber}</p>}
-                    </div>
-                    <div>
-                      <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Nombre del Titular</label>
-                      <input
-                        type="text"
-                        value={cardName}
-                        onChange={(e) => setCardName(e.target.value)}
-                        placeholder="COMO APARECE EN TU TARJETA"
-                        className={`w-full px-4 py-3 rounded-xl border text-sm uppercase bg-background transition-colors ${cardErrors.cardName ? 'border-red-400 bg-red-50' : 'border-zinc-200 focus:border-primary focus:ring-1 focus:ring-primary/20'} outline-none`}
-                      />
-                      {cardErrors.cardName && <p className="text-[11px] text-red-500 mt-1">{cardErrors.cardName}</p>}
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Expiracion</label>
-                        <input
-                          type="text"
-                          value={cardExpiry}
-                          onChange={(e) => setCardExpiry(formatExpiry(e.target.value))}
-                          placeholder="MM/YY"
-                          maxLength={5}
-                          className={`w-full px-4 py-3 rounded-xl border text-sm font-mono bg-background transition-colors ${cardErrors.cardExpiry ? 'border-red-400 bg-red-50' : 'border-zinc-200 focus:border-primary focus:ring-1 focus:ring-primary/20'} outline-none`}
-                        />
-                        {cardErrors.cardExpiry && <p className="text-[11px] text-red-500 mt-1">{cardErrors.cardExpiry}</p>}
-                      </div>
-                      <div>
-                        <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">CVV</label>
-                        <input
-                          type="text"
-                          value={cardCvv}
-                          onChange={(e) => setCardCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                          placeholder="123"
-                          maxLength={4}
-                          className={`w-full px-4 py-3 rounded-xl border text-sm font-mono bg-background transition-colors ${cardErrors.cardCvv ? 'border-red-400 bg-red-50' : 'border-zinc-200 focus:border-primary focus:ring-1 focus:ring-primary/20'} outline-none`}
-                        />
-                        {cardErrors.cardCvv && <p className="text-[11px] text-red-500 mt-1">{cardErrors.cardCvv}</p>}
-                      </div>
-                    </div>
-                  </div>
-
-                  <motion.button
-                    onClick={handleCardPay}
-                    className="w-full mt-6 flex items-center justify-center gap-2 bg-primary text-white py-3.5 rounded-xl font-semibold text-sm shadow-lg shadow-turquoise-500/20 hover:bg-turquoise-600 transition-colors"
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <ShieldCheck className="w-4 h-4" />
-                    Pagar {formatPrice(cartTotal)}
-                  </motion.button>
                 </motion.div>
               )}
 

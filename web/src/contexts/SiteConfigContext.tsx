@@ -35,7 +35,7 @@ const defaultSiteConfig: SiteConfig = {
   social: [
     { platform: 'instagram', url: 'https://instagram.com/itechperu' },
     { platform: 'facebook', url: 'https://facebook.com/itechperu' },
-    { platform: 'tiktok', url: 'https://tiktok.com/@itechperu' },
+    { platform: 'tiktok', url: 'https://tiktok.com/@itechperuu' },
   ],
 };
 

@@ -11,6 +11,7 @@ import { ve } from '@/lib/ve';
 import InfiniteMarquee from '@/components/maia/InfiniteMarquee';
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import ProductCardImage from '@/components/ProductCardImage';
+import OfficialWhatsAppIcon from '@/components/OfficialWhatsAppIcon';
 
 // ─── Types ─────────────────────────────────────────────────────
 export interface SanityHeroSlide {
@@ -223,8 +224,9 @@ export default function HomePage({ data }: { data: HomeData }) {
         </div>
 
         {/* Ambient Dark Scrim for High-Contrast Readable Typography */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/85 via-black/35 via-45% to-transparent md:from-black/75 md:via-black/30 md:to-black/70 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-20 z-10 bg-gradient-to-t from-background via-background/30 to-transparent pointer-events-none" />
+        {/* Ambient Dark Scrim: Left-to-Right on Desktop for crystal clear product view */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/80 via-black/25 to-transparent md:bg-gradient-to-r md:from-black/90 md:via-black/40 md:via-45% md:to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-14 z-10 bg-gradient-to-t from-[#080C14]/90 to-transparent pointer-events-none" />
 
         <div className="absolute bottom-20 sm:bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 md:left-16 lg:left-24 md:translate-x-0 z-20 flex items-center gap-2">
           {heroSlides.map((slide, i) => (
@@ -440,13 +442,13 @@ export default function HomePage({ data }: { data: HomeData }) {
             })}
           </div>
 
-          {/* ═══ SECCIÓN SEPARADA: PRODUCTOS AGOTADOS / PRÓXIMO LOTE ═══ */}
+          {/* ═══ SECCIÓN SEPARADA: PRODUCTOS SIN STOCK ═══ */}
           {outOfStock.length > 0 && (
             <div className="mt-14 pt-12 border-t border-zinc-200/70">
               <div className="text-center mb-10">
                 <span className="text-[11px] font-black tracking-widest uppercase text-rose-600 inline-flex items-center gap-1.5 bg-rose-50 px-3.5 py-1.5 rounded-full border border-rose-200">
                   <span className="w-2 h-2 rounded-full bg-rose-600 animate-ping" />
-                  Próximo Lote de Importación • Agotados
+                  Equipos Sin Stock • Próximos a Ingresar
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-bold text-foreground mt-3">
                   Equipos en <span className="text-rose-600">Espera de Reposición</span>
@@ -513,8 +515,9 @@ export default function HomePage({ data }: { data: HomeData }) {
                           <span className="text-base sm:text-lg font-black text-zinc-900 tracking-tight">
                             {formatPrice(product.price)}
                           </span>
-                          <span className="inline-flex items-center gap-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 py-1.5 px-3 rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95">
-                            Reservar por WhatsApp →
+                          <span className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20BD5A] text-white py-1.5 px-2.5 sm:px-3 rounded-full text-[11px] sm:text-xs font-bold shadow-sm transition-all hover:scale-105 active:scale-95">
+                            <OfficialWhatsAppIcon className="w-3.5 h-3.5 fill-current flex-shrink-0" />
+                            <span>WhatsApp</span>
                           </span>
                         </div>
                       </Link>

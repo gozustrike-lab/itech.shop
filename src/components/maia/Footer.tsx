@@ -9,7 +9,7 @@ import {
   MapPin,
   Truck,
   ShieldCheck,
-  CreditCard,
+  Banknote,
   MessageCircle,
   ChevronRight,
   ArrowRight,
@@ -73,9 +73,9 @@ const defaultTrustItems = [
     desc: 'Comprobante electrónico por cada compra',
   },
   {
-    icon: CreditCard,
+    icon: Banknote,
     label: 'Pago 100% Seguro',
-    desc: 'BCP, Interbank, Yape, Plin y tarjetas',
+    desc: 'WhatsApp, Yape, Plin y BCP / CCI',
   },
 ];
 
@@ -191,7 +191,7 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
   const siteConfig = useSiteConfig();
   const whatsappNumber = siteConfig.whatsapp || '51907674693';
   const instagramLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('instagram'))?.url || 'https://instagram.com/itechperu';
-  const tiktokLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('tiktok'))?.url || 'https://tiktok.com/@itechperu';
+  const tiktokLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('tiktok'))?.url || 'https://tiktok.com/@itechperuu';
 
   return (
     <footer id="footer" className="relative bg-[#070A10] text-white scroll-mt-16 pt-12 sm:pt-16 pb-10">
@@ -345,7 +345,7 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
                 Medios de Pago Aceptados
               </p>
               <div className="flex flex-wrap gap-1.5">
-                {['BCP', 'Interbank', 'Yape', 'Plin', 'Visa', 'Mastercard'].map((method) => (
+                {['WhatsApp', 'Yape', 'Plin', 'BCP', 'CCI Interbancario'].map((method) => (
                   <span
                     key={method}
                     className="text-[10px] font-bold px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300"

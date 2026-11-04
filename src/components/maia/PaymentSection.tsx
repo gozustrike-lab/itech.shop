@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
   MessageCircle,
-  CreditCard,
+  Landmark,
   QrCode,
   Building2,
   ShieldCheck,
@@ -16,39 +16,39 @@ const paymentMethods = [
     icon: MessageCircle,
     title: 'WhatsApp Directo',
     description:
-      'Haz tu pedido directamente por WhatsApp y recibe atención personalizada. Te enviamos fotos, precios y confirmación al instante.',
+      'Haz tu pedido directamente por WhatsApp y recibe atención personalizada. Te enviamos fotos y videos reales del equipo y confirmación al instante.',
     cta: 'Chatear Ahora',
-    href: 'https://wa.me/51907674693?text=Hola%20Maia%20Store!%20Quisiera%20hacer%20un%20pedido',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Per%C3%BA!%20Quisiera%20hacer%20un%20pedido',
     color: 'bg-green-50 text-green-600 hover:bg-green-100 border-green-100 hover:border-green-200',
     iconBg: 'bg-green-100',
-  },
-  {
-    icon: CreditCard,
-    title: 'Tarjeta de Crédito/Débito',
-    description:
-      'Paga de forma segura con tu tarjeta Visa, Mastercard o American Express a través de nuestra pasarela de pagos en línea certificada.',
-    cta: 'Pagar en Línea',
-    href: '#',
-    color: 'bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-100 hover:border-blue-200',
-    iconBg: 'bg-blue-100',
   },
   {
     icon: QrCode,
     title: 'Yape / Plin',
     description:
-      'Transferencias instantáneas a través de Yape o Plin. Solo escanea el código QR o realiza la transferencia directamente.',
-    cta: 'Escanear QR',
-    href: '#',
+      'Transferencias instantáneas a través de Yape o Plin. Solo escanea nuestro código QR oficial o transfiere directamente al número registrado.',
+    cta: 'Pedir QR',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Per%C3%BA!%20Deseo%20el%20QR%20para%20pagar%20por%20Yape%20/%20Plin',
     color: 'bg-purple-50 text-purple-600 hover:bg-purple-100 border-purple-100 hover:border-purple-200',
     iconBg: 'bg-purple-100',
   },
   {
     icon: Building2,
-    title: 'Transferencia Bancaria',
+    title: 'Transferencia BCP',
     description:
-      'Realiza tu pago por transferencia bancaria a nuestras cuentas en BCP, Interbank o Banco de la Nación. Envíanos el comprobante por WhatsApp.',
-    cta: 'Ver Cuentas',
-    href: 'https://wa.me/51907674693?text=Hola!%20Necesito%20los%20datos%20para%20transferencia%20bancaria',
+      'Pago directo e inmediato mediante Banca Móvil BCP o agentes BCP a nombre de nuestra razón social oficial.',
+    cta: 'Solicitar Cuenta',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Per%C3%BA!%20Deseo%20el%20n%C3%BAmero%20de%20cuenta%20BCP',
+    color: 'bg-blue-50 text-blue-600 hover:bg-blue-100 border-blue-100 hover:border-blue-200',
+    iconBg: 'bg-blue-100',
+  },
+  {
+    icon: Landmark,
+    title: 'Transferencia Interbancaria (CCI)',
+    description:
+      'Paga desde cualquier entidad financiera nacional vía Código de Cuenta Interbancario (CCI) de forma 100% segura.',
+    cta: 'Ver Código CCI',
+    href: 'https://wa.me/51907674693?text=Hola%20iTech%20Per%C3%BA!%20Deseo%20el%20c%C3%B3digo%20CCI%20para%20transferencia%20interbancaria',
     color: 'bg-amber-50 text-amber-600 hover:bg-amber-100 border-amber-100 hover:border-amber-200',
     iconBg: 'bg-amber-100',
   },
