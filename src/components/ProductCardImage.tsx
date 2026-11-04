@@ -125,31 +125,26 @@ export default function ProductCardImage({
             e.stopPropagation();
           }}
         >
-          {/* Mobile Touch Indicator Dots & Active Label */}
-          <div className="flex md:hidden items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full shadow-md border border-white/10">
-            <span className="text-[9px] font-bold text-turquoise-300 pr-0.5">
-              {currentView.label}
-            </span>
-            <div className="flex items-center gap-1">
-              {views.map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setManualViewSelected(true);
-                    setActiveView(idx);
-                  }}
-                  className={`transition-all duration-200 ${
-                    idx === currentViewIndex
-                      ? 'w-3 h-1.5 rounded-full bg-white shadow-sm'
-                      : 'w-1.5 h-1.5 rounded-full bg-white/40'
-                  }`}
-                  aria-label={`Vista ${idx + 1}`}
-                />
-              ))}
-            </div>
+          {/* Mobile Touch Indicator Dots */}
+          <div className="flex md:hidden items-center gap-1 bg-black/50 backdrop-blur-md px-2 py-0.5 rounded-full shadow-sm border border-white/10">
+            {views.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setManualViewSelected(true);
+                  setActiveView(idx);
+                }}
+                className={`transition-all duration-200 ${
+                  idx === currentViewIndex
+                    ? 'w-2.5 h-1 rounded-full bg-white shadow-sm'
+                    : 'w-1 h-1 rounded-full bg-white/40'
+                }`}
+                aria-label={`Vista ${idx + 1}`}
+              />
+            ))}
           </div>
 
           {/* Desktop Hover Pill Bar */}

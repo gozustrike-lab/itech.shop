@@ -339,7 +339,7 @@ export default function HomePage({ data }: { data: HomeData }) {
 
               // Refined single stock badge text
               const stockBadgeText = isOutOfStock
-                ? 'Próximo lote'
+                ? 'Sin Stock'
                 : cleanTitle.toLowerCase().includes('dell latitude') || cleanTitle.toLowerCase().includes('3330')
                 ? '⚡ Solo 2 unidades'
                 : cleanTitle.toLowerCase().includes('ipad 9')
@@ -416,7 +416,7 @@ export default function HomePage({ data }: { data: HomeData }) {
                     {/* Bottom Row: Price & Minimal Action */}
                     <div className="pt-2 border-t border-zinc-100/90 mt-1 flex items-center justify-between gap-2 px-0.5">
                       <div className="flex items-baseline gap-1.5 flex-wrap">
-                        <span {...ve(product._id, 'product', 'price')} className="text-base sm:text-lg font-black text-zinc-900 tracking-tight">
+                        <span {...ve(product._id, 'product', 'price')} className="text-base sm:text-lg font-black text-zinc-900 tracking-tight whitespace-nowrap">
                           {formatPrice(product.price)}
                         </span>
                         {product.compareAtPrice && product.compareAtPrice > product.price && (
@@ -487,8 +487,7 @@ export default function HomePage({ data }: { data: HomeData }) {
                           <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none">
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide bg-zinc-900/85 backdrop-blur-md text-white border border-white/10 shadow-sm">
                               <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                              Próximo lote
-                            </span>
+                              Sin Stock</span>
                           </div>
                         </div>
 
@@ -512,7 +511,7 @@ export default function HomePage({ data }: { data: HomeData }) {
 
                         {/* Bottom Row: Price & WhatsApp Reservation */}
                         <div className="pt-2 border-t border-zinc-100/90 mt-1 flex items-center justify-between gap-2 px-0.5">
-                          <span className="text-base sm:text-lg font-black text-zinc-900 tracking-tight">
+                          <span className="text-base sm:text-lg font-black text-zinc-900 tracking-tight whitespace-nowrap">
                             {formatPrice(product.price)}
                           </span>
                           <span className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20BD5A] text-white py-1.5 px-2.5 sm:px-3 rounded-full text-[11px] sm:text-xs font-bold shadow-sm transition-all hover:scale-105 active:scale-95">

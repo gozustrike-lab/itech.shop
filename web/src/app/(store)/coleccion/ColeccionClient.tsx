@@ -90,9 +90,9 @@ export default function ColeccionClient({ products, categories, useFallback }: C
 
       let giftBadge = '';
       if (isLaptop) {
-        giftBadge = '🎁 Incluye funda portalaptop de regalo';
+        giftBadge = 'Incluye funda portalaptop de regalo';
       } else if (isTablet) {
-        giftBadge = '🎁 Pack: Lápiz + Soporte + Cable';
+        giftBadge = 'Pack: Lápiz + Soporte + Cable';
       }
 
       const isItemInStock = p.inStock !== false;
@@ -149,7 +149,7 @@ export default function ColeccionClient({ products, categories, useFallback }: C
   const gridClass =
     viewMode === 'single'
       ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-8'
-      : 'grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6';
+      : 'grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3.5 lg:gap-5';
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -287,7 +287,7 @@ export default function ColeccionClient({ products, categories, useFallback }: C
               >
                 <div>
                   {/* Studio Canvas Image Stage (Borderless) */}
-                  <div className="relative aspect-square w-full rounded-2xl bg-[#F6F7F9] overflow-hidden transition-all duration-300 group-hover:bg-[#F0F2F5] mb-3">
+                  <div className="relative aspect-square w-full rounded-2xl bg-[#F6F7F9] overflow-hidden mb-2.5 group-hover:bg-[#F0F2F5] transition-colors">
                     <Link href={`/coleccion/${product.slug}`} className="block w-full h-full">
                       <ProductCardImage
                         product={product}
@@ -299,14 +299,14 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                     </Link>
 
                     {/* Single Minimalist Pill (Top Left) */}
-                    <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none">
+                    <div className="absolute top-2 left-2 z-20 pointer-events-none">
                       {product.isOutOfStock ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide bg-zinc-900/85 backdrop-blur-md text-white border border-white/10 shadow-sm">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wide bg-zinc-900/90 backdrop-blur-md text-white border border-white/10 shadow-sm">
                           <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
                           {stockBadgeText}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-white/95 backdrop-blur-md text-zinc-800 border border-zinc-200/70 shadow-sm">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wide bg-white/95 backdrop-blur-md text-zinc-800 border border-zinc-200/70 shadow-sm">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                           {stockBadgeText}
                         </span>
@@ -320,7 +320,7 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                         e.stopPropagation();
                         toggleFavorite(product._id);
                       }}
-                      className="absolute top-2.5 right-2.5 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md shadow-sm border border-zinc-200/60 flex items-center justify-center transition-all hover:scale-110 active:scale-90 opacity-90 group-hover:opacity-100"
+                      className="absolute top-2 right-2 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-md shadow-sm border border-zinc-200/60 flex items-center justify-center transition-all hover:scale-110 active:scale-90 opacity-90 group-hover:opacity-100"
                       aria-label="Guardar favorito"
                     >
                       <Heart
@@ -336,52 +336,53 @@ export default function ColeccionClient({ products, categories, useFallback }: C
 
                   {/* Micro-Brand & Category */}
                   <div className="flex items-center gap-1.5 mb-1 px-0.5">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-400">
+                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">
                       {brandLabel}
                     </span>
-                    <span className="text-[10px] text-zinc-300">•</span>
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-zinc-400">
+                    <span className="text-[9px] sm:text-[10px] text-zinc-300">•</span>
+                    <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.1em] text-zinc-400 truncate">
                       {product.category?.name || 'Equipo'}
                     </span>
                   </div>
 
-                  {/* Commercial Title */}
+                  {/* Commercial Title — Fixed height of 2 lines for perfect symmetry */}
                   <Link href={`/coleccion/${product.slug}`}>
                     <h3
                       {...ve(product._id, 'product', 'name')}
-                      className="text-sm sm:text-[15px] font-bold text-zinc-900 group-hover:text-turquoise-600 transition-colors leading-snug line-clamp-2 min-h-[2.5rem] tracking-tight mb-1.5 px-0.5"
+                      className="text-xs sm:text-[14px] font-bold text-zinc-900 group-hover:text-turquoise-600 transition-colors leading-snug line-clamp-2 h-8 sm:h-10 mb-1 px-0.5 tracking-tight"
                     >
                       {product.cleanName}
                     </h3>
                   </Link>
 
-                  {/* Gift Tag if Applicable */}
-                  {product.giftBadge && (
-                    <div className="mb-2.5 px-0.5">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-800 bg-emerald-50/90 border border-emerald-200/70 px-2 py-0.5 rounded-md leading-tight">
-                        🎁 {product.giftBadge}
+                  {/* Gift Tag slot (Reserved height so rows stay 100% aligned) */}
+                  <div className="h-5 sm:h-6 mb-2 px-0.5 flex items-center">
+                    {product.giftBadge ? (
+                      <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-semibold text-emerald-800 bg-emerald-50/90 border border-emerald-200/70 px-1.5 sm:px-2 py-0.5 rounded-md leading-tight truncate">
+                        🎁 {product.giftBadge.replace(/^(🎁\s*)+/, '')}
                       </span>
-                    </div>
-                  )}
+                    ) : null}
+                  </div>
                 </div>
 
-                {/* Bottom Row: Price & Actions */}
-                <div className="pt-2 border-t border-zinc-100/90 mt-1 flex items-center justify-between gap-2 px-0.5">
+                {/* Bottom Row: Price & Actions Tiered for 2-column mobile perfection */}
+                <div className="pt-2 border-t border-zinc-100/90 mt-auto flex flex-col gap-2 px-0.5">
+                  {/* Price Tier */}
                   <div className="flex items-baseline gap-1.5 flex-wrap">
                     <span
                       {...ve(product._id, 'product', 'price')}
-                      className="text-base sm:text-lg font-black text-zinc-900 tracking-tight"
+                      className="text-sm sm:text-base font-black text-zinc-900 tracking-tight whitespace-nowrap"
                     >
                       {formatPrice(product.price)}
                     </span>
                     {product.compareAtPrice && product.compareAtPrice > product.price && (
-                      <span className="text-[11px] text-zinc-400 line-through font-normal">
+                      <span className="text-[10px] sm:text-[11px] text-zinc-400 line-through font-normal whitespace-nowrap">
                         {formatPrice(product.compareAtPrice)}
                       </span>
                     )}
                   </div>
 
-                  {/* Action Buttons */}
+                  {/* Actions Tier (WhatsApp & Shopping Bag) */}
                   {product.isOutOfStock ? (
                     <button
                       onClick={(e) => {
@@ -389,21 +390,21 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                         e.stopPropagation();
                         window.open(waUrl, '_blank');
                       }}
-                      className="inline-flex items-center gap-1.5 bg-zinc-900 hover:bg-black text-white py-1.5 px-2.5 sm:px-3 rounded-full text-[11px] sm:text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-sm"
+                      className="w-full h-8 sm:h-9 bg-zinc-900 hover:bg-black text-white rounded-xl text-[11px] sm:text-xs font-bold inline-flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all"
                       title="Reservar por WhatsApp (Sin Stock)"
                     >
                       <OfficialWhatsAppIcon className="w-3.5 h-3.5 fill-current flex-shrink-0" />
                       <span>Reservar</span>
                     </button>
                   ) : (
-                    <div className="flex items-center gap-1 sm:gap-1.5">
+                    <div className="flex items-center gap-1.5 w-full">
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           window.open(waUrl, '_blank');
                         }}
-                        className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20BD5A] text-white py-1.5 px-2.5 sm:px-3 rounded-full text-[11px] sm:text-xs font-bold shadow-sm transition-all hover:scale-105 active:scale-95"
+                        className="flex-1 h-8 sm:h-9 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-xl text-[11px] sm:text-xs font-bold inline-flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all"
                         title="Pedir por WhatsApp"
                       >
                         <OfficialWhatsAppIcon className="w-3.5 h-3.5 fill-current flex-shrink-0" />
@@ -437,7 +438,7 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                             collection: product.collection || '',
                           } as any);
                         }}
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-zinc-900 hover:bg-black text-white flex items-center justify-center transition-all hover:scale-110 active:scale-90 shadow-sm flex-shrink-0"
+                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-zinc-900 hover:bg-black text-white flex items-center justify-center flex-shrink-0 shadow-sm active:scale-95 transition-all"
                         aria-label="Agregar al carrito"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
