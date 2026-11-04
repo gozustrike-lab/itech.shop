@@ -8,9 +8,9 @@ import { products, formatPrice } from '@/lib/store-data';
 
 export default function FavoritosPage() {
   const { navigate } = useRouter();
-  const { favorites, toggleFavorite, addToCart } = useStore();
+  const { favorites, favoriteItems, toggleFavorite, addToCart } = useStore();
 
-  const favoriteProducts = products.filter((p) => favorites.includes(String(p.id)));
+  const favoriteProducts = (favoriteItems && favoriteItems.length > 0) ? favoriteItems : products.filter((p) => favorites.includes(String(p.id)));
 
   return (
     <div id="favoritos-contenido" className="relative pt-20 pb-32 sm:pb-24 px-4 min-h-screen scroll-mt-16">
@@ -25,7 +25,7 @@ export default function FavoritosPage() {
           </button>
           <h1 className="text-3xl font-bold text-foreground">Mis Favoritos</h1>
           <p className="text-sm text-foreground/50 mt-1">
-            {favoriteProducts.length} {favoriteProducts.length === 1 ? 'joya guardada' : 'joyas guardadas'}
+            {favoriteProducts.length} {favoriteProducts.length === 1 ? 'equipo guardado' : 'equipos guardados'}
           </p>
         </div>
 
@@ -36,7 +36,7 @@ export default function FavoritosPage() {
             </div>
             <p className="text-foreground/40 text-lg mb-2">Sin favoritos aún</p>
             <p className="text-foreground/30 text-sm mb-6">
-              Explora la colección y guarda las joyas que te encantan
+              Explora la colección y guarda los equipos y laptops que más te interesen
             </p>
             <motion.button
               onClick={() => navigate('#/coleccion')}

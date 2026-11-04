@@ -387,7 +387,7 @@ export default function HomePage({ data }: { data: HomeData }) {
                       {/* Floating Minimal Favorite Button */}
                       <div className="absolute top-2.5 right-2.5 z-20 opacity-90 group-hover:opacity-100">
                         <motion.button
-                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(product._id); }}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(product._id, product); }}
                           className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-md shadow-sm border border-zinc-200/60 flex items-center justify-center transition-all hover:scale-110 active:scale-90"
                           whileTap={{ scale: 0.85 }}
                           aria-label="Guardar favorito"

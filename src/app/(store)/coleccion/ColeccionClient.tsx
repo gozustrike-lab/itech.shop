@@ -318,7 +318,7 @@ export default function ColeccionClient({ products, categories, useFallback }: C
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        toggleFavorite(product._id);
+                        toggleFavorite(product._id, product);
                       }}
                       className="absolute top-2 right-2 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-md shadow-sm border border-zinc-200/60 flex items-center justify-center transition-all hover:scale-110 active:scale-90 opacity-90 group-hover:opacity-100"
                       aria-label="Guardar favorito"
