@@ -289,7 +289,7 @@ export default function CatalogoShowroomPage() {
   const [loading, setLoading] = useState(true);
   const [copiedLink, setCopiedLink] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<'todos' | 'laptops' | 'tablets' | 'accesorios'>('todos');
+  const [selectedCategory, setSelectedCategory] = useState<'todos' | 'laptops' | 'tablets' | 'cargadores' | 'accesorios'>('todos');
 
   const CATALOG_URL = 'https://www.itechperu.shop/catalogo';
 
@@ -385,15 +385,31 @@ export default function CatalogoShowroomPage() {
     [groupedProducts]
   );
 
-  const otherItems = useMemo(
+  const cargadores = useMemo(
     () =>
       groupedProducts.filter(
         (p) =>
-          !laptops.some((l) => l.groupKey === p.groupKey) &&
-          !tablets.some((t) => t.groupKey === p.groupKey)
+          p.categorySlug === 'cargadores' ||
+          p.cleanTitle.toLowerCase().includes('cargador') ||
+          p.slug.toLowerCase().includes('cargador')
       ),
-    [groupedProducts, laptops, tablets]
+    [groupedProducts]
   );
+
+  const accesorios = useMemo(
+    () =>
+      groupedProducts.filter(
+        (p) =>
+          p.categorySlug === 'accesorios' ||
+          p.categorySlug === 'cargadores' ||
+          p.cleanTitle.toLowerCase().includes('cargador') ||
+          p.cleanTitle.toLowerCase().includes('pack') ||
+          p.cleanTitle.toLowerCase().includes('funda')
+      ),
+    [groupedProducts]
+  );
+
+  const otherItems = accesorios;
 
   const totalStockUnits = useMemo(
     () => groupedProducts.reduce((acc, curr) => acc + curr.stockCount, 0),
@@ -406,7 +422,8 @@ export default function CatalogoShowroomPage() {
 
     if (selectedCategory === 'laptops') list = laptops;
     if (selectedCategory === 'tablets') list = tablets;
-    if (selectedCategory === 'accesorios') list = otherItems;
+    if (selectedCategory === 'cargadores') list = cargadores;
+    if (selectedCategory === 'accesorios') list = accesorios;
 
     if (!searchQuery.trim()) return list;
 
@@ -591,7 +608,7 @@ export default function CatalogoShowroomPage() {
                   <Package className="w-5 h-5 text-emerald-400 shrink-0" />
                   <div>
                     <h4 className="text-xs font-bold text-white">Envíos Todo Perú</h4>
-                    <p className="text-[10px] text-slate-400">Shalom & Olva Courier</p>
+                    <p className="text-[10px] text-slate-400">Envíos únicamente por Shalom</p>
                   </div>
                 </div>
                 <div className="bg-white/5 rounded-xl p-3 border border-white/10 flex items-center gap-2.5">
@@ -642,6 +659,16 @@ export default function CatalogoShowroomPage() {
                 >
                   📱 iPads & Tablets ({tablets.reduce((a, b) => a + b.stockCount, 0)})
                 </button>
+                                <button
+                  onClick={() => setSelectedCategory('cargadores')}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                    selectedCategory === 'cargadores'
+                      ? 'bg-teal-500 text-slate-950 shadow-md shadow-teal-500/20'
+                      : 'bg-[#0D1525] text-slate-300 hover:text-white border border-slate-800'
+                  }`}
+                >
+                  ⚡ Cargadores ({cargadores.reduce((a, b) => a + b.stockCount, 0)})
+                </button>
                 <button
                   onClick={() => setSelectedCategory('accesorios')}
                   className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
@@ -650,7 +677,7 @@ export default function CatalogoShowroomPage() {
                       : 'bg-[#0D1525] text-slate-300 hover:text-white border border-slate-800'
                   }`}
                 >
-                  🔌 Accesorios ({otherItems.reduce((a, b) => a + b.stockCount, 0)})
+                  🔌 Accesorios ({accesorios.reduce((a, b) => a + b.stockCount, 0)})
                 </button>
               </div>
 

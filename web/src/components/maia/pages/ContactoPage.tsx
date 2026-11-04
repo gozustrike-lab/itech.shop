@@ -52,7 +52,7 @@ export default function ContactoPage() {
             { icon: Phone, title: 'WhatsApp', detail: '+51 907 674 693', desc: 'Respuesta inmediata. Lunes a Sabado de 9am a 8pm.', href: 'https://wa.me/51907674693?text=Hola%20Maia%20Store!', color: 'bg-green-50 border-green-100' },
             { icon: Instagram, title: 'Instagram', detail: '@itechperu', desc: 'Siguenos para nuevas colecciones y ofertas exclusivas.', href: 'https://instagram.com/itechperu', color: 'bg-pink-50 border-pink-100' },
             { icon: TikTokIcon, title: 'TikTok', detail: '@itechperu', desc: 'Nuestra red social oficial. Videos de nuestras joyas y contenido exclusivo.', href: 'https://tiktok.com/@itechperu', color: 'bg-slate-50 border-slate-100' },
-            { icon: MapPin, title: 'Ubicacion', detail: 'Peru', desc: 'Envios a todo el pais a traves de Olva Courier y Shalom Express.', href: '#', color: 'bg-turquoise-50 border-turquoise-100' },
+            { icon: MapPin, title: 'Ubicacion', detail: 'Peru', desc: 'Envíos a todo el país únicamente a través de Shalom.', href: '#', color: 'bg-turquoise-50 border-turquoise-100' },
           ].map((card, i) => (
             <motion.a
               key={card.title}

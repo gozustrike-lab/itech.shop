@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { getProductImages } from '@/lib/catalog-images';
 
 interface ProductCardImageProps {
@@ -27,6 +27,10 @@ export default function ProductCardImage({
   const [isCardHovered, setIsCardHovered] = useState<boolean>(false);
   const [manualViewSelected, setManualViewSelected] = useState<boolean>(false);
 
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
+  const hasSwiped = useRef<boolean>(false);
+
   const imageSet = getProductImages(product);
   const views = [
     { label: 'Frontal', url: imageSet.main },
@@ -44,15 +48,52 @@ export default function ProductCardImage({
   const currentView = views[currentViewIndex] || views[0];
   const title = alt || product.cleanName || product.name || 'Producto iTech';
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    hasSwiped.current = false;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (views.length <= 1) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+
+    // Minimum swipe threshold 30px, and horizontal dominant
+    if (Math.abs(deltaX) > 28 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      hasSwiped.current = true;
+      if (deltaX < 0) {
+        // Swiped left -> next photo
+        setManualViewSelected(true);
+        setActiveView((prev) => (prev + 1) % views.length);
+      } else {
+        // Swiped right -> prev photo
+        setManualViewSelected(true);
+        setActiveView((prev) => (prev - 1 + views.length) % views.length);
+      }
+    }
+  };
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (hasSwiped.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      hasSwiped.current = false;
+    }
+  };
+
   return (
     <div
-      className={`relative aspect-square w-full rounded-xl bg-white border border-zinc-100 flex items-center justify-center overflow-hidden group/image transition-all ${className}`}
+      className={`relative aspect-square w-full rounded-2xl bg-[#F6F7F9] border-0 flex items-center justify-center overflow-hidden group/image transition-all select-none touch-pan-y ${className}`}
       onMouseEnter={() => setIsCardHovered(true)}
       onMouseLeave={() => {
         setIsCardHovered(false);
         setManualViewSelected(false);
         setActiveView(0);
       }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onClickCapture={handleClickCapture}
     >
       {/* Pre-rendered Layers for smooth, instantaneous crossfade */}
       {views.map((view, idx) => {
@@ -62,29 +103,20 @@ export default function ProductCardImage({
             key={`${view.url}-${idx}`}
             src={view.url}
             alt={`${title} - Vista ${view.label}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ${
+            className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 pointer-events-none ${
               isCurrent
                 ? 'opacity-100 scale-100 z-10'
-                : 'opacity-0 scale-95 pointer-events-none z-0'
+                : 'opacity-0 scale-95 z-0'
             }`}
             loading="lazy"
             onError={(e) => {
-              // Graceful fallback to placeholder if needed
               (e.currentTarget as HTMLImageElement).src = '/images/placeholder.webp';
             }}
           />
         );
       })}
 
-      {/* Top Floating Badge on Card Hover */}
-      <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none transition-opacity duration-200 opacity-0 group-hover/image:opacity-100">
-        <span className="bg-zinc-900/80 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1">
-          <span>Vista {currentViewIndex + 1}/3:</span>
-          <span className="text-turquoise-300 font-semibold">{currentView.label}</span>
-        </span>
-      </div>
-
-      {/* Interactive 3-View Switcher (Mobile dots + Desktop pills) */}
+      {/* Interactive 3-View Switcher (Mobile touch dots + Desktop pills) */}
       {views.length > 1 && (
         <div
           className="absolute bottom-2 inset-x-0 z-20 flex items-center justify-center gap-1.5 px-3 py-1 pointer-events-auto"
@@ -93,26 +125,31 @@ export default function ProductCardImage({
             e.stopPropagation();
           }}
         >
-          {/* Mobile Touch Indicator Dots */}
-          <div className="flex md:hidden items-center gap-1.5 bg-black/45 backdrop-blur-md px-2.5 py-1 rounded-full shadow-sm">
-            {views.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setManualViewSelected(true);
-                  setActiveView(idx);
-                }}
-                className={`transition-all duration-200 ${
-                  idx === currentViewIndex
-                    ? 'w-3.5 h-1.5 rounded-full bg-white shadow-sm'
-                    : 'w-1.5 h-1.5 rounded-full bg-white/45'
-                }`}
-                aria-label={`Vista ${idx + 1}`}
-              />
-            ))}
+          {/* Mobile Touch Indicator Dots & Active Label */}
+          <div className="flex md:hidden items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full shadow-md border border-white/10">
+            <span className="text-[9px] font-bold text-turquoise-300 pr-0.5">
+              {currentView.label}
+            </span>
+            <div className="flex items-center gap-1">
+              {views.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setManualViewSelected(true);
+                    setActiveView(idx);
+                  }}
+                  className={`transition-all duration-200 ${
+                    idx === currentViewIndex
+                      ? 'w-3 h-1.5 rounded-full bg-white shadow-sm'
+                      : 'w-1.5 h-1.5 rounded-full bg-white/40'
+                  }`}
+                  aria-label={`Vista ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
 
           {/* Desktop Hover Pill Bar */}

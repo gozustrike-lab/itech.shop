@@ -18,12 +18,12 @@ export default async function HomePage() {
   const hasSanityProducts = sanityProducts.length > 0;
   const hasSanityTestimonials = sanityTestimonials.length > 0;
 
-  // Use Sanity data if available, else fall back to store-data
-  const filteredFeatured = hasSanityProducts
-    ? (sanityProducts as any[]).filter(p => p.featured)
-    : [];
-  const featuredProducts: any[] = filteredFeatured.length > 0
-    ? filteredFeatured.slice(0, 6)
+  // Prioritize in-stock products for the main showcase
+  const inStockSanity = (sanityProducts as any[]).filter(p => p.inStock !== false);
+  const outOfStockSanity = (sanityProducts as any[]).filter(p => p.inStock === false);
+
+  const featuredProducts: any[] = inStockSanity.length > 0
+    ? inStockSanity.slice(0, 6)
     : hasSanityProducts
     ? (sanityProducts as any[]).slice(0, 6)
     : storeProducts.slice(0, 6).map((p: any) => ({
@@ -62,6 +62,7 @@ export default async function HomePage() {
   const data: HomeData = {
     heroSlides,
     featuredProducts,
+    outOfStockProducts: outOfStockSanity.slice(0, 6),
     testimonials,
     useFallback: !hasSanityProducts,
   };

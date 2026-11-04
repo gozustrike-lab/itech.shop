@@ -72,7 +72,40 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
   };
 
   const switchVariant = useCallback((variant: ProductData) => { setActiveVariant(variant); setSelectedImageIndex(0); router.replace(`/coleccion/${variant.slug}`, { scroll: false }); }, [router]);
-  const handleMainImageClick = useCallback(() => { if (!activeVariant) return; setLightboxIndex(selectedImageIndex); setIsLightboxOpen(true); }, [activeVariant, selectedImageIndex]);
+  const mainTouchStartX = useRef<number>(0);
+  const mainTouchStartY = useRef<number>(0);
+  const mainHasSwiped = useRef<boolean>(false);
+
+  const handleMainTouchStart = (e: React.TouchEvent) => {
+    mainTouchStartX.current = e.touches[0].clientX;
+    mainTouchStartY.current = e.touches[0].clientY;
+    mainHasSwiped.current = false;
+  };
+
+  const handleMainTouchEnd = (e: React.TouchEvent) => {
+    if (variantImages.length <= 1) return;
+    const deltaX = e.changedTouches[0].clientX - mainTouchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - mainTouchStartY.current;
+
+    if (Math.abs(deltaX) > 28 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      mainHasSwiped.current = true;
+      if (deltaX < 0) {
+        setSelectedImageIndex((prev) => (prev + 1) % variantImages.length);
+      } else {
+        setSelectedImageIndex((prev) => (prev - 1 + variantImages.length) % variantImages.length);
+      }
+    }
+  };
+
+  const handleMainImageClick = useCallback(() => {
+    if (!activeVariant) return;
+    if (mainHasSwiped.current) {
+      mainHasSwiped.current = false;
+      return;
+    }
+    setLightboxIndex(selectedImageIndex);
+    setIsLightboxOpen(true);
+  }, [activeVariant, selectedImageIndex]);
   const handleThumbnailClick = useCallback((index: number) => { setSelectedImageIndex(index); }, []);
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => { if (!imageRef.current) return; const rect = imageRef.current.getBoundingClientRect(); setZoomPos({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 }); };
 
@@ -117,10 +150,29 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
         <div id="producto-detalle" className="grid lg:grid-cols-2 gap-8 lg:gap-16 mb-20 lg:mb-28 scroll-mt-16">
           {/* Image Gallery */}
           <div className="detail-animate">
-            <div ref={imageRef} {...ve(displayProduct._id, 'product', 'mainImage')} className="relative aspect-square rounded-2xl overflow-hidden bg-white border border-zinc-200/80 p-4 flex items-center justify-center cursor-zoom-in shadow-sm" onClick={handleMainImageClick} onMouseEnter={() => setIsZooming(true)} onMouseLeave={() => setIsZooming(false)} onMouseMove={handleMouseMove}>
+            <div ref={imageRef} {...ve(displayProduct._id, 'product', 'mainImage')} className="relative aspect-square rounded-2xl overflow-hidden bg-white border border-zinc-200/80 p-4 flex items-center justify-center cursor-zoom-in shadow-sm select-none touch-pan-y" onTouchStart={handleMainTouchStart} onTouchEnd={handleMainTouchEnd} onClick={handleMainImageClick} onMouseEnter={() => setIsZooming(true)} onMouseLeave={() => setIsZooming(false)} onMouseMove={handleMouseMove}>
               <AnimatePresence mode="wait">
                 <motion.img key={currentMainImage} src={currentMainImage} alt={displayProduct.name} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="w-full h-full object-contain transition-transform duration-300" style={isZooming ? { transform: 'scale(1.8)', transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` } : { transform: 'scale(1)' }} />
               </AnimatePresence>
+              {variantImages.length > 1 && (
+                <div className="md:hidden absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full shadow-md pointer-events-none z-10">
+                  <span className="text-[9px] font-bold text-turquoise-300 pr-0.5">
+                    {variantImages[selectedImageIndex]?.label}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {variantImages.map((_, idx) => (
+                      <span
+                        key={idx}
+                        className={`transition-all duration-200 ${
+                          idx === selectedImageIndex
+                            ? 'w-3 h-1.5 rounded-full bg-white shadow-sm'
+                            : 'w-1.5 h-1.5 rounded-full bg-white/40'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg border border-zinc-200/60">
                 <ZoomIn className="w-5 h-5 text-foreground/60" />
               </div>
@@ -181,6 +233,12 @@ export default function ProductDetailClient({ product: initialProduct, allProduc
                   <p className="text-lg text-foreground/30 line-through">{formatPrice(displayProduct.compareAtPrice)}</p>
                 )}
               </div>
+
+              <div className="mb-3.5 inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/90 text-amber-900 text-xs">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
+                <span><strong>Promo Live:</strong> Separa con S/ 50 en Lima y S/ 100 en Provincia • Envíos solo por Shalom</span>
+              </div>
+
               <p {...ve(displayProduct._id, 'product', 'longDescription')} className="text-sm text-foreground/60 leading-relaxed">{displayProduct.longDescription || displayProduct.description}</p>
             </div>
 

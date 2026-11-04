@@ -38,6 +38,27 @@ export default function Lightbox({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const lastTapRef = useRef<number>(0);
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (scale > 1.05) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+
+    if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      if (deltaX < 0) {
+        goNext();
+      } else {
+        goPrev();
+      }
+    }
+  };
 
   // Reset state when opening
   useEffect(() => {
@@ -188,9 +209,11 @@ export default function Lightbox({
           {/* Main image area */}
           <div
             ref={containerRef}
-            className="flex-1 flex items-center justify-center overflow-hidden relative cursor-zoom-in"
+            className="flex-1 flex items-center justify-center overflow-hidden relative cursor-zoom-in touch-pan-y"
             onClick={handleDoubleTap}
             onWheel={handleWheel}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             <AnimatePresence mode="wait">
               <motion.img

@@ -8,7 +8,7 @@ export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: 'Buscar | iTech Peru',
-  description: 'Busca smartphones, laptops, consolas y accesorios certificados en iTech Peru.',
+  description: 'Busca laptops, tablets, cargadores y accesorios certificados en iTech Peru.',
 };
 
 export default async function SearchRoute() {

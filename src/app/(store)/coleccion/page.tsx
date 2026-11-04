@@ -48,12 +48,38 @@ export default async function ColeccionPage() {
     gallery: p.images.map(img => ({ url: img.original, alt: p.name })),
   }));
 
-  const cats = hasSanityData && Array.isArray(sanityCategories) && sanityCategories.length > 0
-    ? [
-        { id: 'todos', label: 'Todos', slug: 'todos', count: sanityProducts.length },
-        ...sanityCategories.map((c: any) => ({ id: c.slug, label: c.name, slug: c.slug, count: c.count || 0 })),
-      ]
-    : storeCategories.map(c => ({ id: c.id, label: c.label, slug: c.id, count: c.count }));
+    // Allowed categories requested by user: Laptops, Tablets, Cargadores, Accesorios
+  const allowedCategories = [
+    { id: 'todos', label: 'Todos', slug: 'todos' },
+    { id: 'laptops', label: 'Laptops', slug: 'laptops' },
+    { id: 'tablets', label: 'Tablets', slug: 'tablets' },
+    { id: 'cargadores', label: 'Cargadores', slug: 'cargadores' },
+    { id: 'accesorios', label: 'Accesorios', slug: 'accesorios' },
+  ];
+
+  const cats = allowedCategories.map(cat => {
+    if (cat.slug === 'todos') {
+      return { ...cat, count: allProducts.length };
+    }
+    const count = allProducts.filter((p: any) => {
+      const slug = p.category?.slug || '';
+      const name = (p.name || '').toLowerCase();
+      if (cat.slug === 'laptops') {
+        return slug === 'laptops' || name.includes('macbook') || name.includes('dell') || name.includes('laptop');
+      }
+      if (cat.slug === 'tablets') {
+        return slug === 'tablets' || name.includes('ipad') || name.includes('tablet');
+      }
+      if (cat.slug === 'cargadores') {
+        return slug === 'cargadores' || name.includes('cargador');
+      }
+      if (cat.slug === 'accesorios') {
+        return slug === 'accesorios' || slug === 'cargadores' || name.includes('cargador') || name.includes('funda') || name.includes('pack');
+      }
+      return slug === cat.slug;
+    }).length;
+    return { ...cat, count };
+  });
 
   return (
     <Suspense fallback={<ColeccionSkeleton />}>

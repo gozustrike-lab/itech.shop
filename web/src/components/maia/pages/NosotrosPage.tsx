@@ -96,7 +96,7 @@ export default function NosotrosPage({ data }: { data?: AboutPageData | null }) 
             ) : (
               <>
                 <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.15 }} className="text-sm text-foreground/60 leading-relaxed" {...ve('aboutPage', 'aboutPage', 'storyParagraphs')}>
-                  En <strong className="text-foreground">iTech Peru</strong>, somos especialistas en tecnología renovada y certificada de alta gama. Nuestra misión es democratizar el acceso a los mejores smartphones, laptops, consolas y accesorios con calidad impecable, boleta de venta y precios transparentes.
+                  En <strong className="text-foreground">iTech Peru</strong>, somos especialistas en tecnología renovada y certificada de alta gama. Nuestra misión es democratizar el acceso a las mejores laptops, tablets, cargadores y accesorios con calidad impecable, boleta de venta y precios transparentes.
                 </motion.p>
                 <motion.p initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.2 }} className="text-sm text-foreground/60 leading-relaxed" {...ve('aboutPage', 'aboutPage', 'storyParagraphs')}>
                   Cada dispositivo atraviesa un riguroso protocolo de diagnóstico en 30 puntos clave: evaluamos salud de batería, rendimiento de CPU/GPU, pantalla original, cámaras, conectividad y estado estético para asegurar que recibas una experiencia como nueva.

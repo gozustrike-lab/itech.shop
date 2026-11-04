@@ -68,6 +68,49 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
           <span className="text-foreground/60 font-medium">Cómo Comprar</span>
         </motion.nav>
 
+        
+        {/* Banner Reserva de Promociones Live */}
+        <div className="mb-10 p-5 sm:p-7 rounded-2xl bg-gradient-to-r from-slate-900 via-zinc-900 to-turquoise-950 border border-turquoise-500/30 text-white shadow-xl relative overflow-hidden">
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-black uppercase tracking-wider mb-2.5">
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+              Precios Exclusivos de Live
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
+              ¿Cómo acceder a las promociones y separar tu equipo?
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-300 max-w-2xl mb-4 leading-relaxed">
+              Para congelar el precio promocional y asegurar tu unidad tal como lo explicamos en nuestras transmisiones en vivo (TikTok Live):
+            </p>
+
+            <div className="grid sm:grid-cols-2 gap-3 max-w-xl mb-4">
+              <div className="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-turquoise-300 uppercase tracking-wide">📍 Lima Metropolitana</span>
+                  <span className="text-base font-black text-white px-2 py-0.5 rounded bg-turquoise-500/20 border border-turquoise-500/30">S/ 50</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-snug">
+                  Separas con <strong>S/ 50</strong>. El saldo se cancela contraentrega o previo a la entrega.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-bold text-amber-300 uppercase tracking-wide">📦 Provincias</span>
+                  <span className="text-base font-black text-white px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/30">S/ 100</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-snug">
+                  Separas con <strong>S/ 100</strong>. El saldo se cancela para despachar tu paquete por Shalom.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-zinc-400">
+              <span>🚚 Envíos a todo el Perú realizados <strong>únicamente por Shalom</strong> con número de guía y seguimiento.</span>
+            </div>
+          </div>
+        </div>
+
         {/* Payment Methods */}
         <div className="grid sm:grid-cols-2 gap-4 mb-14">
           {paymentMethods.map((method, index) => {
@@ -117,7 +160,7 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
         <div className="grid sm:grid-cols-2 gap-4 mb-14">
           {[
             { icon: ShieldCheck, title: 'Pago 100% Seguro', desc: 'Todas las transacciones estan protegidas con encriptacion SSL de 256 bits y verificacion en tiempo real.' },
-            { icon: Truck, title: 'Envio a Todo el Peru', desc: 'Realizamos envios a traves de Olva Courier y Shalom Express a todas las ciudades del pais.' },
+            { icon: Truck, title: 'Envio a Todo el Peru', desc: 'Realizamos todos nuestros envíos exclusivamente a través de Shalom a nivel nacional con retiro en agencia o despacho asegurado.' },
           ].map((item, i) => (
             <motion.div
               key={item.title}
@@ -144,7 +187,7 @@ export default function ComprarClient({ data }: { data?: HowToBuyData | null }) 
         </div>
         <div className="max-w-2xl mx-auto space-y-3">
           {[
-            { q: '¿Cuánto tiempo tarda el envío?', a: 'Los envíos a Lima metropolitana toman de 24 a 48 horas hábiles. A provincias, de 2 a 4 días hábiles mediante Olva Courier o Shalom con número de seguimiento en tiempo real.' },
+            { q: '¿Cuánto tiempo tarda el envío?', a: 'Los envíos a Lima metropolitana toman de 24 a 48 horas hábiles. A provincias, de 2 a 4 días hábiles mediante únicamente por Shalom con número de seguimiento en tiempo real.' },
             { q: '¿Cómo es el control de calidad de los equipos?', a: 'Todos nuestros dispositivos cuentan testeado en 30 puntos técnicos contra cualquier falla técnica o defecto de hardware. Si se presenta algún inconveniente, lo reparamos o reemplazamos sin costo.' },
             { q: '¿Los equipos son originales y liberados?', a: 'Sí, el 100% de nuestros equipos son originales y están liberados de fábrica para cualquier operador del Perú (Claro, Movistar, Entel, Bitel), listos para usar.' },
           ].map((faq, i) => (

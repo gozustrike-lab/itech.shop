@@ -100,7 +100,7 @@ export default function ComprarPage() {
         <div className="grid sm:grid-cols-2 gap-4 mb-14">
           {[
             { icon: ShieldCheck, title: 'Pago 100% Seguro', desc: 'Todas las transacciones estan protegidas con encriptacion SSL de 256 bits y verificacion en tiempo real.' },
-            { icon: Truck, title: 'Envio a Todo el Peru', desc: 'Realizamos envios a traves de Olva Courier y Shalom Express a todas las ciudades del pais.' },
+            { icon: Truck, title: 'Envio a Todo el Peru', desc: 'Realizamos envios a traves de Shalom Empresarial a todas las ciudades del pais.' },
           ].map((item, i) => (
             <motion.div
               key={item.title}

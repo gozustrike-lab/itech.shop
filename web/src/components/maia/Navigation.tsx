@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Search } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -28,7 +28,9 @@ import { useSiteConfig } from '@/contexts/SiteConfigContext';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const lastScrollY = useRef(0);
   const pathname = usePathname();
   const router = useRouter();
   const siteConfig = useSiteConfig();
@@ -37,10 +39,39 @@ export default function Navigation() {
   const isHomePage = pathname === '/';
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 30);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 30);
+
+      // Do not hide if mobile drawer menu is open
+      if (isMobileOpen) {
+        setIsVisible(true);
+        return;
+      }
+
+      // Always visible near top
+      if (currentScrollY < 50) {
+        setIsVisible(true);
+        lastScrollY.current = currentScrollY;
+        return;
+      }
+
+      const diff = currentScrollY - lastScrollY.current;
+      // Scrolling down -> hide navbar (eBay / Facebook / Instagram pattern)
+      if (diff > 8 && currentScrollY > 70) {
+        setIsVisible(false);
+      }
+      // Scrolling up -> show navbar
+      else if (diff < -8) {
+        setIsVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMobileOpen]);
 
   // When route changes, reset scroll state
   useEffect(() => {
@@ -79,7 +110,7 @@ export default function Navigation() {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerClass}`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${headerClass} ${isVisible ? "translate-y-0" : "-translate-y-full shadow-none pointer-events-none"}`}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">

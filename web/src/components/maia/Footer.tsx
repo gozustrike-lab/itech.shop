@@ -7,11 +7,14 @@ import {
   Music,
   Phone,
   MapPin,
-  Heart,
   Truck,
   ShieldCheck,
-  Star,
+  CreditCard,
+  MessageCircle,
   ChevronRight,
+  ArrowRight,
+  Sparkles,
+  FileText,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -50,27 +53,29 @@ export interface FooterProps {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// TRUST BAND — Banda de confianza CRO (2x2 mobile)
+// TRUST BAND — Banda de Confianza y Calidad Tech
 // ═══════════════════════════════════════════════════════════════
-
-const defaultTrustIcons = [ShieldCheck, Truck, Star, ShieldCheck];
 
 const defaultTrustItems = [
   {
-    label: '100% Certificado',
-    desc: 'Inspección técnica en 30 puntos',
+    icon: ShieldCheck,
+    label: '100% Testeado',
+    desc: 'Inspección técnica en 30 puntos clave',
   },
   {
+    icon: Truck,
     label: 'Envíos a Todo el Perú',
-    desc: 'Olva Courier y Shalom',
+    desc: 'Despacho asegurado únicamente por Shalom',
   },
   {
-    label: 'Emitimos Boleta',
-    desc: 'Comprobante legal por tu compra',
+    icon: FileText,
+    label: 'Boleta de Venta Legal',
+    desc: 'Comprobante electrónico por cada compra',
   },
   {
-    label: 'Pago Seguro',
-    desc: 'Tarjetas, Yape, Plin y transferencia',
+    icon: CreditCard,
+    label: 'Pago 100% Seguro',
+    desc: 'BCP, Interbank, Yape, Plin y tarjetas',
   },
 ];
 
@@ -80,29 +85,30 @@ function TrustBand({ items }: { items?: Array<{ label: string; desc: string }> }
   const displayItems = items && items.length > 0 ? items : defaultTrustItems;
 
   return (
-    <div ref={ref} className="bg-warm-50 border-y border-warm-200/60" {...ve('footerSettings', 'footerSettings', 'trustItems')}>
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-12 xl:px-16 py-10 sm:py-12 lg:py-14">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
-          {displayItems.map((item, i) => {
-            const Icon = defaultTrustIcons[i % defaultTrustIcons.length];
+    <div ref={ref} className="bg-[#0C101A] border-y border-zinc-800/80 relative z-10" {...ve('footerSettings', 'footerSettings', 'trustItems')}>
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-12 xl:px-16 py-8 sm:py-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {displayItems.map((item: any, i) => {
+            const Icon = defaultTrustItems[i % defaultTrustItems.length].icon;
             return (
               <motion.div
                 key={item.label + i}
-                {...ve('footerSettings', 'footerSettings', `trustItems[${i}].label`)}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center text-center group cursor-pointer"
+                transition={{ duration: 0.35, delay: i * 0.06 }}
+                className="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:border-turquoise-500/30 hover:bg-white/[0.04] transition-all duration-300"
               >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-warm-200 flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:-translate-y-0.5 transition-all duration-300 mb-3">
-                  <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-warm-500" />
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-turquoise-500/10 border border-turquoise-500/20 flex items-center justify-center flex-shrink-0 text-turquoise-400">
+                  <Icon className="w-5 h-5" />
                 </div>
-                <h3 className="text-xs sm:text-sm font-bold text-deep-800 mb-0.5" {...ve('footerSettings', 'footerSettings', `trustItems[${i}].label`)}>
-                  {item.label}
-                </h3>
-                <p className="text-[10px] sm:text-xs text-foreground/40" {...ve('footerSettings', 'footerSettings', `trustItems[${i}].desc`)}>
-                  {item.desc}
-                </p>
+                <div className="min-w-0">
+                  <h4 className="text-xs sm:text-sm font-bold text-white truncate">
+                    {item.label}
+                  </h4>
+                  <p className="text-[11px] text-zinc-400 mt-0.5 line-clamp-1 leading-snug">
+                    {item.desc}
+                  </p>
+                </div>
               </motion.div>
             );
           })}
@@ -113,78 +119,62 @@ function TrustBand({ items }: { items?: Array<{ label: string; desc: string }> }
 }
 
 // ═══════════════════════════════════════════════════════════════
-// STORYTELLING — "Tecnología que Renueva"
+// TECH STORYTELLING / BANNER — Asesoría Directa por WhatsApp
 // ═══════════════════════════════════════════════════════════════
 
 function Storytelling({ storytelling }: { storytelling?: NonNullable<FooterProps['footerSettings']>['storytelling'] }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-60px' });
   const router = useRouter();
+  const siteConfig = useSiteConfig();
+  const whatsappNumber = siteConfig.whatsapp || '51907674693';
 
-  const badge = storytelling?.badge || 'TECNOLOGÍA CERTIFICADA EN PERÚ';
-  const title = storytelling?.title || 'Cada equipo iTech Peru es probado y 100% operativo';
-  const subtitle = storytelling?.subtitle || 'Dispositivos renovados grado A testeado en 30 puntos técnicos. Rendimiento como nuevo y hasta 40% de ahorro.';
-  const ctaLabel = storytelling?.ctaLabel || 'Explorar Catálogo';
-  const ctaLink = storytelling?.ctaLink || '/coleccion';
+  const badge = storytelling?.badge || 'IMPORTACIÓN DIRECTA USA • ASESORÍA PERSONALIZADA';
+  const title = storytelling?.title || '¿Deseas Asesoría o Buscas un Equipo Específico?';
+  const subtitle = storytelling?.subtitle || 'Te enviamos fotos reales, salud de batería en vivo y resolvemos cualquier consulta al instante.';
 
   return (
-    <div ref={ref} className="relative bg-deep-800 overflow-hidden" {...ve('footerSettings', 'footerSettings', 'storytelling')}>
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-      }} />
+    <div ref={ref} className="relative bg-gradient-to-b from-[#0C101A] via-[#090D16] to-[#070A10] overflow-hidden py-14 sm:py-20 border-b border-zinc-800/80">
+      {/* Ambient Tech Glow Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-turquoise-500/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-warm-400/40 to-transparent" />
-
-      <div className="relative max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-12 xl:px-16 py-16 sm:py-20 lg:py-24 text-center">
+      <div className="relative max-w-4xl mx-auto px-5 text-center z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-2xl mx-auto"
+          transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-8 h-px bg-warm-400/40" />
-            <div className="w-1.5 h-1.5 rotate-45 border border-warm-400/60" />
-            <div className="w-8 h-px bg-warm-400/40" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-turquoise-500/10 border border-turquoise-500/20 text-turquoise-400 text-xs font-semibold mb-4">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{badge}</span>
           </div>
 
-          <p
-            {...ve('footerSettings', 'footerSettings', 'storytelling.badge')}
-            className="text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-warm-400 mb-4 cursor-pointer"
-          >
-            {badge}
-          </p>
-
-          <h2
-            {...ve('footerSettings', 'footerSettings', 'storytelling.title')}
-            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-5 cursor-pointer"
-          >
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight mb-4">
             {title}
           </h2>
 
-          <p
-            {...ve('footerSettings', 'footerSettings', 'storytelling.subtitle')}
-            className="text-sm sm:text-base text-white/50 leading-relaxed mb-8 max-w-lg mx-auto cursor-pointer"
-          >
+          <p className="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto mb-8 leading-relaxed">
             {subtitle}
           </p>
 
-          <motion.button
-            {...ve('footerSettings', 'footerSettings', 'storytelling.ctaLabel')}
-            onClick={() => router.push(ctaLink)}
-            initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 bg-warm-400 hover:bg-warm-500 text-deep-800 px-7 sm:px-8 py-3.5 rounded-full text-sm font-bold shadow-lg shadow-warm-500/20 hover:shadow-warm-500/30 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
-          >
-            {ctaLabel}
-            <ChevronRight className="w-4 h-4" />
-          </motion.button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
+            <a
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('¡Hola iTech Perú! Deseo asesoría sobre los equipos disponibles.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20BD5A] text-white px-7 py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-green-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Chatear por WhatsApp (+51 907 674 693)</span>
+            </a>
 
-          <div className="flex items-center justify-center gap-3 mt-10">
-            <div className="w-12 h-px bg-warm-400/20" />
-            <div className="w-1.5 h-1.5 rotate-45 border border-warm-400/30" />
-            <div className="w-12 h-px bg-warm-400/20" />
+            <button
+              onClick={() => router.push('/coleccion')}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-zinc-800/80 hover:bg-zinc-700/80 text-zinc-200 border border-zinc-700/80 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <span>Ver Catálogo Completo</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         </motion.div>
       </div>
@@ -193,7 +183,7 @@ function Storytelling({ storytelling }: { storytelling?: NonNullable<FooterProps
 }
 
 // ═══════════════════════════════════════════════════════════════
-// FOOTER — Premium 4-column layout
+// FOOTER CONTENT — Modern 4-Column Tech Layout
 // ═══════════════════════════════════════════════════════════════
 
 function FooterContent({ footerSettings }: { footerSettings?: FooterProps['footerSettings'] }) {
@@ -204,168 +194,199 @@ function FooterContent({ footerSettings }: { footerSettings?: FooterProps['foote
   const tiktokLink = siteConfig.social?.find(s => s.platform?.toLowerCase().includes('tiktok'))?.url || 'https://tiktok.com/@itechperu';
 
   return (
-    <footer id="footer" className="relative bg-deep-900 text-white scroll-mt-16">
-      <div className="absolute top-0 left-0 right-0 overflow-hidden leading-[0]">
-        <svg
-          className="relative block w-full h-[60px] sm:h-[80px] lg:h-[100px]"
-          viewBox="0 0 1440 100"
-          preserveAspectRatio="none"
-          fill="none"
-        >
-          <path
-            d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,100 L0,100 Z"
-            fill="#043f4a"
-          />
-          <path
-            d="M0,70 C360,90 720,40 1080,70 C1260,85 1380,55 1440,70 L1440,100 L0,100 Z"
-            fill="#032e36"
-            opacity="0.5"
-          />
-        </svg>
-      </div>
-
-      <div className="relative max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-12 xl:px-16 pt-16 sm:pt-20 lg:pt-24 pb-10">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 mb-12 sm:mb-14">
-          {/* Column 1 — Brand */}
-          <div className="col-span-2 lg:col-span-1">
-            <Link href="/" className="mb-4 block group">
-              <span className="text-2xl font-extrabold text-white group-hover:text-warm-400 transition-colors duration-300">iTech</span>
-              <span className="text-2xl font-extralight tracking-[0.2em] text-warm-400 ml-1.5 group-hover:text-warm-300 transition-colors duration-300">PERU</span>
+    <footer id="footer" className="relative bg-[#070A10] text-white scroll-mt-16 pt-12 sm:pt-16 pb-10">
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-12 xl:px-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 pb-12 border-b border-zinc-800/60">
+          
+          {/* Column 1 — Brand & Trust */}
+          <div className="col-span-2 sm:col-span-1">
+            <Link href="/" className="inline-flex items-baseline gap-1.5 mb-4 group">
+              <span className="text-2xl font-black tracking-tight text-white group-hover:text-turquoise-400 transition-colors">
+                iTech
+              </span>
+              <span className="text-xs font-black tracking-[0.2em] text-turquoise-400 uppercase px-1.5 py-0.5 rounded bg-turquoise-500/10 border border-turquoise-500/20">
+                PERÚ
+              </span>
             </Link>
-            <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs" {...ve('siteSettings', 'siteSettings', 'footerText')}>
-              {siteConfig.footerText || siteConfig.description || 'Compra inteligente: tecnología de segunda mano verificada por técnicos, con boleta de venta y testeado al 100% y envío seguro a todo el Perú.'}
+
+            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-5 max-w-xs">
+              {footerSettings?.brandDescription || siteConfig.footerText || siteConfig.description || 'Especialistas en importación directa de tecnología seminueva seleccionada. Laptops, iPads y accesorios testeados en 30 puntos técnicos con boleta de venta legal y envío seguro a todo el Perú.'}
             </p>
-            {/* Social Icons */}
-            <div className="flex gap-2.5">
-              {[
-                { icon: Instagram, href: instagramLink, hoverBg: 'hover:bg-pink-500/20 hover:text-pink-300', label: 'Instagram' },
-                { icon: Music, href: tiktokLink, hoverBg: 'hover:bg-slate-400/20 hover:text-slate-300', label: 'TikTok' },
-                { icon: Phone, href: `https://wa.me/${whatsappNumber}`, hoverBg: 'hover:bg-green-500/20 hover:text-green-300', label: 'WhatsApp' },
-              ].map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-white/50 ${social.hoverBg} hover:border-white/10 transition-all duration-300 hover:-translate-y-0.5`}
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-[18px] h-[18px]" />
-                </a>
-              ))}
+
+            <div className="flex items-center gap-2">
+              <a
+                href={instagramLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-pink-400 hover:border-pink-500/40 hover:bg-pink-500/10 transition-all"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href={tiktokLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 hover:bg-zinc-800 transition-all"
+                aria-label="TikTok"
+              >
+                <Music className="w-4 h-4" />
+              </a>
+              <a
+                href={`https://wa.me/${whatsappNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-green-400 hover:border-green-500/40 hover:bg-green-500/10 transition-all"
+                aria-label="WhatsApp"
+              >
+                <Phone className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
-          {/* Column 2 — Tienda */}
+          {/* Column 2 — Catálogo Tech */}
           <div>
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4">Catálogo</h4>
-            <ul className="space-y-2.5">
-              {[
-                { label: 'Smartphones', href: '/coleccion?categoria=smartphones' },
-                { label: 'Laptops', href: '/coleccion?categoria=laptops' },
-                { label: 'Tablets', href: '/coleccion?categoria=tablets' },
-                { label: 'Gaming', href: '/coleccion?categoria=gaming' },
-                { label: 'Audio', href: '/coleccion?categoria=audio' },
-                { label: 'Accesorios', href: '/coleccion?categoria=accesorios' },
-                { label: 'Catálogo Digital (Showroom)', href: '/catalogo' },
-                { label: 'Ver Todo', href: '/coleccion' },
-              ].map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/40 hover:text-warm-400 transition-colors duration-300 inline-flex items-center gap-1 group"
-                  >
-                    <span className="w-0 group-hover:w-2 h-px bg-warm-400 transition-all duration-300" />
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-zinc-300 mb-4">
+              Catálogo
+            </h4>
+            <ul className="space-y-2.5 text-xs sm:text-sm">
+              <li>
+                <Link href="/coleccion?categoria=laptops" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  Laptops & MacBooks
+                </Link>
+              </li>
+              <li>
+                <Link href="/coleccion?categoria=tablets" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  iPads & Tablets
+                </Link>
+              </li>
+              <li>
+                <Link href="/coleccion?categoria=cargadores" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  Cargadores Originales
+                </Link>
+              </li>
+              <li>
+                <Link href="/coleccion?categoria=accesorios" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  Accesorios y Fundas
+                </Link>
+              </li>
+              <li>
+                <Link href="/catalogo" className="text-turquoise-400 font-semibold hover:underline inline-flex items-center gap-1">
+                  <span>Showroom Digital</span>
+                  <ChevronRight className="w-3 h-3" />
+                </Link>
+              </li>
+              <li>
+                <Link href="/coleccion" className="text-zinc-400 hover:text-white transition-colors">
+                  Ver Todo el Inventario
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Column 3 — Informacion */}
+          {/* Column 3 — Información y Respaldo */}
           <div>
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4">Informacion</h4>
-            <ul className="space-y-2.5">
-              {[
-                { label: 'Nosotros', href: '/nosotros' },
-                { label: 'Envios', href: '/comprar' },
-                { label: 'Contacto', href: '/contacto' },
-              ].map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/40 hover:text-warm-400 transition-colors duration-300 inline-flex items-center gap-1 group"
-                  >
-                    <span className="w-0 group-hover:w-2 h-px bg-warm-400 transition-all duration-300" />
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-zinc-300 mb-4">
+              Información
+            </h4>
+            <ul className="space-y-2.5 text-xs sm:text-sm">
+              <li>
+                <Link href="/nosotros" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  Sobre Nosotros
+                </Link>
+              </li>
+              <li>
+                <Link href="/comprar" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  Cómo Comprar y Envíos
+                </Link>
+              </li>
+              <li>
+                <Link href="/comprar" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  Test de 30 Puntos Técnicos
+                </Link>
+              </li>
+              <li>
+                <Link href="/contacto" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  Emisión de Boleta de Venta
+                </Link>
+              </li>
+              <li>
+                <Link href="/contacto" className="text-zinc-400 hover:text-turquoise-400 transition-colors">
+                  Centro de Contacto
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Column 4 — Contacto */}
+          {/* Column 4 — Contacto Directo & Pagos */}
           <div className="col-span-2 sm:col-span-1">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-warm-400/80 mb-4">Contacto</h4>
-            <ul className="space-y-3 mb-6">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-zinc-300 mb-4">
+              Atención Directa
+            </h4>
+            <ul className="space-y-3 mb-5 text-xs sm:text-sm">
               <li>
                 <a
                   href={`tel:${siteConfig.phone || '+51 907 674 693'}`}
-                  className="flex items-center gap-2.5 text-sm text-white/40 hover:text-warm-400 transition-colors duration-300"
+                  className="flex items-center gap-2 text-zinc-300 hover:text-turquoise-400 transition-colors font-medium"
                 >
-                  <Phone className="w-4 h-4 flex-shrink-0" />
-                  {siteConfig.phone || '+51 907 674 693'}
+                  <Phone className="w-4 h-4 text-turquoise-400 flex-shrink-0" />
+                  <span>{siteConfig.phone || '+51 907 674 693'}</span>
                 </a>
               </li>
-              <li className="flex items-center gap-2.5 text-sm text-white/40">
-                <MapPin className="w-4 h-4 flex-shrink-0" />
-                {siteConfig.schedule || 'Lun a Sáb: 10:00 - 20:00'}
+              <li className="flex items-center gap-2 text-zinc-400 text-xs">
+                <MapPin className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+                <span>{siteConfig.schedule || 'Lun a Sáb: 10:00 - 20:00'}</span>
               </li>
             </ul>
-            {/* WhatsApp quick action */}
-            <a
-              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hola iTech Peru! Quisiera hacer una consulta')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#25D366]/10 border border-[#25D366]/20 hover:bg-[#25D366]/20 text-[#25D366] px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              Escribenos
-            </a>
+
+            {/* Payment methods badges */}
+            <div>
+              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-2">
+                Medios de Pago Aceptados
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {['BCP', 'Interbank', 'Yape', 'Plin', 'Visa', 'Mastercard'].map((method) => (
+                  <span
+                    key={method}
+                    className="text-[10px] font-bold px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300"
+                  >
+                    {method}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Bottom credits bar */}
-        <div className="pt-6 border-t border-white/5">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-[11px] text-white/25 text-center sm:text-left" {...ve('footerSettings', 'footerSettings', 'copyright')}>
-              &copy; {currentYear} iTech Peru. Todos los derechos reservados.
-            </p>
-            {/* HARDCODED FastPagePro Credit (NEVER in CMS) */}
-            <p className="text-[11px] text-white/25 text-center sm:text-right">
-              Desarrollado por{' '}
-              <a
-                href="https://www.fastpagepro.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#c9a86c] hover:text-warm-300 transition-colors font-semibold"
-              >
-                FastPagePro
-              </a>
-            </p>
+        {/* Bottom Bar: Copyright & Compliance */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-zinc-500">
+          <div className="flex items-center gap-2">
+            <span>&copy; {currentYear} iTech Perú E.I.R.L.</span>
+            <span>•</span>
+            <span>Comprobante de Venta Electrónica</span>
+          </div>
+          <div>
+            <span>Desarrollado con alto rendimiento por </span>
+            <a
+              href="https://www.fastpagepro.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-turquoise-400 hover:underline font-semibold"
+            >
+              FastPagePro
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Mobile bottom safe area for BottomAppBar */}
-      <div className="h-20 sm:h-0" />
+      {/* Mobile bottom safe area */}
+      <div className="h-16 sm:h-0" />
     </footer>
   );
 }
 
 // ═══════════════════════════════════════════════════════════════
-// EXPORTED FOOTER — Composite of all sections
+// EXPORTED COMPONENT
 // ═══════════════════════════════════════════════════════════════
 
 export default function Footer({ footerSettings }: FooterProps) {

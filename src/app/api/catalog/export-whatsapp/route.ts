@@ -38,6 +38,8 @@ export async function GET() {
     const validItems = items.filter((p: any) => {
       const name = (p.name || '').toLowerCase();
       if (name.includes('pantalla') || name.includes('display')) return false;
+      // Solo productos con stock físico disponible para el catálogo de WhatsApp Business
+      if (p.inStock === false) return false;
       return true;
     });
 
